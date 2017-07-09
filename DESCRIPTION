@@ -1,0 +1,32 @@
+Package: miRsponge
+Type: Package
+Title: Identification and analysis of miRNA sponge interaction networks and modules
+Version: 0.99.0
+Author: Junpeng Zhang
+Maintainer: Junpeng Zhang <zhangjunpeng_411@yahoo.com>
+Description: This package provides methods to study miRNA sponge (also called ceRNA or miRNA decoy), including popular methods for identifying miRNA sponge interactions, integrate method to integrate miRNA sponge interactions from different methods, function to validate miRNA sponge interactions, function to infer miRNA sponge modules, functions to conduct enrichment analysis of modules, function to make survival analysis of modules.
+Depends: R (>= 3.4.1)
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+biocViews: GeneExpression, BiomedicalInformatics, 
+           NetworkEnrichment, Survival, Microarray, Software 
+RoxygenNote: 6.0.1
+Imports: corpcor,
+    parallel,
+    igraph,
+    ProNet,
+    clusterProfiler,
+    ReactomePA,
+    DOSE,
+    survival,
+    grDevices,
+    graphics,
+    stats,
+    utils
+Suggests:BiocStyle, 
+    knitr,
+    rmarkdown,
+    testthat,
+    org.Hs.eg.db
+VignetteBuilder: knitr
