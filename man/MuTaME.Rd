@@ -15,22 +15,24 @@ MuTaME(miR2Target, MREs, minSharedmiR = 3, padjustvaluecutoff
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{miR2Target}{
+    \item{miR2Target}{
 Putative miRNA-target interactions.
 }
-  \item{MREs}{
-Putative MiRNA Response Elements (MREs) dataset, each row contains five elements: Mirna, Target, energy, gap_l, gap_r.
+    \item{MREs}{
+Putative MiRNA Response Elements (MREs) dataset, each row contains
+five elements: Mirna, Target, energy, gap_l, gap_r.
 }
-  \item{minSharedmiR}{
+    \item{minSharedmiR}{
 The minimum number of shared miRNAs between targets.
 }
-  \item{padjustvaluecutoff}{
+    \item{padjustvaluecutoff}{
 A cutoff value of adjusted p-values.
 }
-  \item{padjustmethod}{
-Adjusted method of p-values, can select one of "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none".
+    \item{padjustmethod}{
+Adjusted method of p-values, can select one of "holm", "hochberg",
+"hommel", "bonferroni", "BH", "BY", "fdr", "none".
 }
-  \item{scorecutoff}{
+    \item{scorecutoff}{
 A cutoff value of normalized score (range from 0 to 1).
 }
 }
@@ -40,7 +42,9 @@ A list of identified miRNA sponge interactions.
 }
 
 \references{
-Tay Y, Kats L, Salmena L, et al. Coding-independent regulation of the tumor suppressor PTEN by competing endogenous mRNAs. Cell. 2011, 147(2):344-57.
+Tay Y, Kats L, Salmena L, et al. Coding-independent regulation of
+the tumor suppressor PTEN by competing endogenous mRNAs. Cell,
+2011, 147(2):344-57.
 }
 \author{
 Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})

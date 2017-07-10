@@ -2,21 +2,25 @@
 \alias{Integrate}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Integrate method for identifying miRNA sponge interactions by integrating different methods
+Integrate method for identifying miRNA sponge interactions
+by integrating different methods
 }
 \description{
-Integrate method for identifying miRNA sponge interactions by integrating different methods.
+Integrate method for identifying miRNA sponge interactions
+by integrating different methods.
 }
 \usage{
 Integrate(Interlist, Intersect_num)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{Interlist}{
+    \item{Interlist}{
 List object, a list of miRNA sponge interactions from different methods.
 }
-  \item{Intersect_num}{
-The least number of different methods intersected for integration. The value of 1 means the union of miRNA sponge interactions from different methods.
+    \item{Intersect_num}{
+The least number of different methods intersected for integration.
+The value of 1 means the union of miRNA sponge interactions
+from different methods.
 }
 }
 

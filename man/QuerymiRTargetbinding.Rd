@@ -2,22 +2,27 @@
 \alias{QuerymiRTargetbinding}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Query miRNA-target interactions by combining expression data and putative miRNA-target interactions
+Query miRNA-target interactions by combining expression data
+and putative miRNA-target interactions
 %%  ~~function to do ... ~~
 }
 \description{
-Query miRNA-target interactions by combining expression data and putative miRNA-target interactions.
+Query miRNA-target interactions by combining expression data
+and putative miRNA-target interactions.
 }
 \usage{
 QuerymiRTargetbinding(ExpDatacsv, miRTargetbinding)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{ExpDatacsv}{
-An input gene expression dataset in .csv format, the rows are samples and the columns are genes.
+    \item{ExpDatacsv}{
+An input gene expression dataset in .csv format, the rows are samples
+and the columns are genes.
 }
-  \item{miRTargetbinding}{
-An input miRNA-target interaction dataset in .csv format, the first column is miRNA with name "mir" and the second column is target with name "gene".
+    \item{miRTargetbinding}{
+An input miRNA-target interaction dataset in .csv format, the first
+column is miRNA with name "mir" and the second column is target
+with name "gene".
 }
 }
 

@@ -12,8 +12,8 @@ Header(dataset)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{dataset}{
-     the input dataset in .csv format.
+    \item{dataset}{
+    the input dataset in .csv format.
 }
 }
 

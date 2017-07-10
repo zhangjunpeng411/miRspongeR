@@ -5,17 +5,19 @@
 Validation of computationally predicted miRNA sponge interactions
 }
 \description{
-Validation of computationally predicted miRNA sponge interactions. The groundtruth of miRNA sponge interactions are from miRSponge v2.0 (\url{http://www.bio-bigdata.net/miRSponge/}).
+Validation of computationally predicted miRNA sponge interactions.
+The groundtruth of miRNA sponge interactions are from
+miRSponge v2.0 (\url{http://www.bio-bigdata.net/miRSponge/}).
 }
 \usage{
 SpongeValidate(spongenetwork, Groundtruthcsv)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{spongenetwork}{
+    \item{spongenetwork}{
 Input miRNA sponge interaction network.
 }
-  \item{Groundtruthcsv}{
+    \item{Groundtruthcsv}{
 The groundtruth of miRNA sponge interactions.
 }
 }

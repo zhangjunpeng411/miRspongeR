@@ -15,28 +15,31 @@ padjustvaluecutoff = 0.01, padjustmethod = "BH", scorecutoff = 0.5)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{miR2Target}{
+    \item{miR2Target}{
 Putative miRNA-target interactions.
 }
-  \item{MREs}{
-Putative MiRNA Response Elements (MREs) dataset, each row contains five elements: Mirna, Target, energy, gap_l, gap_r.
+    \item{MREs}{
+Putative MiRNA Response Elements (MREs) dataset, each row
+contains five elements: Mirna, Target, energy, gap_l, gap_r.
 }
-  \item{ExpDatacsv}{
-An input expression dataset, the columns are genes and the rows are samples.
+    \item{ExpDatacsv}{
+An input expression dataset, the columns are genes and
+the rows are samples.
 }
-  \item{minSharedmiR}{
+    \item{minSharedmiR}{
 The minimum number of shared miRNAs between targets.
 }
-  \item{poscorcutoff}{
+    \item{poscorcutoff}{
 A cutoff value of positive correlation.
 }
-  \item{padjustvaluecutoff}{
+    \item{padjustvaluecutoff}{
 A cutoff value of adjusted p-values.
 }
-  \item{padjustmethod}{
-Adjusted method of p-values, can select one of "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none".
+    \item{padjustmethod}{
+Adjusted method of p-values, can select one of "holm",
+"hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none".
 }
-  \item{scorecutoff}{
+    \item{scorecutoff}{
 A cutoff value of normalized score (range from 0 to 1).
 }
 }
@@ -45,7 +48,9 @@ A cutoff value of normalized score (range from 0 to 1).
 A list of identified miRNA sponge interactions.
 }
 \references{
-Sardina DS, Alaimo S, Ferro A, et al. A novel computational method for inferring competing endogenous interactions. Brief Bioinform. 2016, DOI: 10.1093/bib/bbw084.
+Sardina DS, Alaimo S, Ferro A, et al. A novel computational method
+for inferring competing endogenous interactions. Brief Bioinform.,
+2016, DOI: 10.1093/bib/bbw084.
 }
 \author{
 Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})

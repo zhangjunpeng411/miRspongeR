@@ -5,7 +5,11 @@
 Disease enrichment analysis of modules
 }
 \description{
-Disease enrichment analysis of modules. The disease ontology databases have three types including DO: Disease Ontology database (\url{http://disease-ontology.org/}), DGN: DisGeNET database (\url{http://www.disgenet.org/}), and NCG: Network of Cancer Genes database (\url{http://ncg.kcl.ac.uk/}).
+Disease enrichment analysis of modules. The disease ontology
+databases have three types including DO: Disease Ontology database
+(\url{http://disease-ontology.org/}), DGN: DisGeNET database
+(\url{http://www.disgenet.org/}), and NCG: Network of Cancer
+Genes database (\url{http://ncg.kcl.ac.uk/}).
 }
 \usage{
 ModuleDEA(Modulelist, OrgDb = "org.Hs.eg.db", ont = "DO",
@@ -13,25 +17,23 @@ padjustvaluecutoff = 0.05, padjustedmethod = "BH",plot = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{Modulelist}{
+    \item{Modulelist}{
 A list of miRNA sponge modules.
 }
-  \item{OrgDb}{
+    \item{OrgDb}{
 OrgDb
 }
-  \item{ont}{
+    \item{ont}{
 One of "DO", and "DOLite" subontologies.
 }
-
-  \item{padjustvaluecutoff}{
+    \item{padjustvaluecutoff}{
 A cutoff value of adjusted p-values.
 }
-
-  \item{padjustedmethod}{
-Adjusted method of p-values, can select one of "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none".
+    \item{padjustedmethod}{
+Adjusted method of p-values, can select one of "holm", "hochberg",
+"hommel", "bonferroni", "BH", "BY", "fdr", "none".
 }
-
-  \item{plot}{
+    \item{plot}{
 A logical value, plot or not.
 }
 }
@@ -40,7 +42,9 @@ A logical value, plot or not.
 A list of disease enrichment analysis results.
 }
 \references{
-Yu G, Wang L, Yan G, et al. DOSE: an R/Bioconductor package for Disease Ontology Semantic and Enrichment analysis. Bioinformatics, 2015, 31(4):608-609.
+Yu G, Wang L, Yan G, et al. DOSE: an R/Bioconductor package for
+Disease Ontology Semantic and Enrichment analysis. Bioinformatics, 2015,
+31(4):608-609.
 }
 \author{
 Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})

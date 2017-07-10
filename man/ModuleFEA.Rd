@@ -5,7 +5,11 @@
 Functional GO, KEGG and Reactome enrichment analysis of modules
 }
 \description{
-Functional GO, KEGG and Reactome enrichment analysis of modules. GO: Gene Ontology database (\url{http://www.geneontology.org/}), KEGG: Kyoto Encyclopedia of Genes and Genomes Pathway Database (\url{http://www.genome.jp/kegg/}) and Reactome: Reactome Pathway Database (\url{http://reactome.org/}).
+Functional GO, KEGG and Reactome enrichment analysis of modules.
+GO: Gene Ontology database (\url{http://www.geneontology.org/}),
+KEGG: Kyoto Encyclopedia of Genes and Genomes Pathway Database
+(\url{http://www.genome.jp/kegg/}) and Reactome: Reactome
+Pathway Database (\url{http://reactome.org/}).
 }
 \usage{
 ModuleFEA(Modulelist, ont = "BP", KEGGorganism = "hsa",
@@ -14,28 +18,31 @@ padjustvaluecutoff = 0.05, padjustedmethod = "BH", plot = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{Modulelist}{
+    \item{Modulelist}{
 A list of miRNA sponge modules.
 }
-  \item{ont}{
+    \item{ont}{
 One of "MF", "BP", and "CC" subontologies.
 }
-  \item{KEGGorganism}{
-Organism, supported organism listed in \url{http://www.genome.jp/kegg/catalog/org_list.html}
+    \item{KEGGorganism}{
+Organism, supported organism listed in
+\url{http://www.genome.jp/kegg/catalog/org_list.html}
 }
-  \item{Reactomeorganism}{
-Organism, one of "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly".
+    \item{Reactomeorganism}{
+Organism, one of "human", "rat", "mouse", "celegans", "yeast",
+"zebrafish", "fly".
 }
-  \item{OrgDb}{
+    \item{OrgDb}{
 OrgDb
 }
-  \item{padjustvaluecutoff}{
+    \item{padjustvaluecutoff}{
 A cutoff value of adjusted p-values.
 }
-  \item{padjustedmethod}{
-Adjusted method of p-values, can select one of "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none".
+    \item{padjustedmethod}{
+Adjusted method of p-values, can select one of "holm", "hochberg",
+"hommel", "bonferroni", "BH", "BY", "fdr", "none".
 }
-  \item{plot}{
+    \item{plot}{
 A logical value, plot or not.
 }
 }
@@ -44,9 +51,13 @@ A logical value, plot or not.
 A list of functional GO, KEGG and Reactome enrichment analysis results.
 }
 \references{
-1. Yu G, Wang L, Han Y, et al. clusterProfiler: an R package for comparing biological themes among gene clusters. OMICS: A Journal of Integrative Biology, 2012, 16(5):284-287.
+1. Yu G, Wang L, Han Y, et al. clusterProfiler: an R package for
+comparing biological themes among gene clusters. OMICS: A Journal
+of Integrative Biology, 2012, 16(5):284-287.
 
-2. Yu G and He Q. ReactomePA: an R/Bioconductor package for reactome pathway analysis and visualization. Molecular BioSystems, 2016, 12(12), pp. 477-479.
+2. Yu G and He Q. ReactomePA: an R/Bioconductor package for reactome
+pathway analysis and visualization. Molecular BioSystems, 2016,
+12(12), pp. 477-479.
 }
 \author{
 Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})

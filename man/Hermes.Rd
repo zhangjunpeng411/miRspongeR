@@ -6,7 +6,8 @@ Identifying miRNA sponge interactions using Hermes method
 
 }
 \description{
-Identifying miRNA sponge interactions based on using Hermes method (\url{http://califano.c2b2.columbia.edu/hermes}).
+Identifying miRNA sponge interactions based on using Hermes method
+(\url{http://califano.c2b2.columbia.edu/hermes}).
 }
 \usage{
 Hermes(miR2Target, ExpDatacsv, minSharedmiR = 3,
@@ -14,23 +15,24 @@ num_perm = 100, padjustvaluecutoff = 0.01, padjustmethod = "BH")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{miR2Target}{
+    \item{miR2Target}{
 Putative miRNA-target interactions.
 }
-  \item{ExpDatacsv}{
+    \item{ExpDatacsv}{
 An input expression dataset, the columns are genes and the rows are samples.
 }
-  \item{minSharedmiR}{
+    \item{minSharedmiR}{
 The minimum number of shared miRNAs between targets.
 }
-  \item{num_perm}{
+    \item{num_perm}{
 The number of permutations.
 }
-  \item{padjustvaluecutoff}{
+    \item{padjustvaluecutoff}{
 A cutoff value of adjusted p-values.
 }
-  \item{padjustmethod}{
-Adjusted method of p-values, can select one of "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none".
+    \item{padjustmethod}{
+Adjusted method of p-values, can select one of "holm", "hochberg",
+"hommel", "bonferroni", "BH", "BY", "fdr", "none".
 }
 }
 
@@ -38,7 +40,9 @@ Adjusted method of p-values, can select one of "holm", "hochberg", "hommel", "bo
 A list of identified miRNA sponge interactions.
 }
 \references{
-Sumazin P, Yang X, Chiu HS, et al. An extensive microRNA-mediated network of RNA-RNA interactions regulates established oncogenic pathways in glioblastoma. Cell, 2011, 147(2):370-81.
+Sumazin P, Yang X, Chiu HS, et al. An extensive microRNA-mediated
+network of RNA-RNA interactions regulates established oncogenic
+pathways in glioblastoma. Cell, 2011, 147(2):370-81.
 }
 \author{
 Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
