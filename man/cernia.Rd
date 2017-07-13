@@ -56,11 +56,12 @@ for inferring competing endogenous interactions. Brief Bioinform.,
 Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 }
 \examples{
+\dontrun{
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 MREs <- system.file("extdata", "MREs.csv", package="miRsponge")
 ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
 cerniaceRInt <- cernia(miR2Target, MREs,ExpData)
 }
-
+}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
