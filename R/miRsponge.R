@@ -435,7 +435,7 @@ dtHybrid <- function(miRTarget) {
     }
     
     # Make projection from bipartite network using DT-hybrid sources
-    cl <- makeCluster(detectCores() - 2)
+    cl <- makeCluster(detectCores() - 1)
     M <- recommendation(A, cl = cl)
     W <- graphWeights(nrow(M), ncol(M), M, cl = cl)
     
