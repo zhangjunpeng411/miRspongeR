@@ -55,8 +55,8 @@ To accelerate the research of miRNA sponge, we develop an R package
 analysis of miRNA sponge network and module.
     
 # Identification of miRNA sponge interactions
-We implement seven popular methods (miRHomology [13, 14], PC [15, 16], 
-SPPC [17], PPC [11], Hermes [18], MuTaME [19], and CERNIA [20]) to 
+We implement seven popular methods (miRHomology [13, 14], pc [15, 16], 
+sppc [17], ppc [11], hermes [18], muTaME [19], and cernia [20]) to 
 identify miRNA sponge interactions. The seven methods should meet a 
 basic condition: the significance of sharing of miRNAs by each RNA-RNA 
 pair (e.g. adjusted p-value < 0.01). Each method has its own merit due 
@@ -74,69 +74,69 @@ head(miRHomologyceRInt)
 ```
 
 
-## PC function
+## pc function
 
-'PC' function consider expression data based on 'miRHomology' function. 
+'pc' function consider expression data based on 'miRHomology' function. 
 Significantly positive miRNA sponge interaction pairs are reserved. 
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-PCceRInt <- PC(miR2Target, ExpData)
-head(PCceRInt)
+pcceRInt <- pc(miR2Target, ExpData)
+head(pcceRInt)
 ```
 
 
-## SPPC function
+## sppc function
 
-In miRsponge package, we implement 'SPPC' function based on sensitivity 
+In miRsponge package, we implement 'sppc' function based on sensitivity 
 correlation (difference between the Pearson and partial 
 correlation coefficients).
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-SPPCceRInt <- SPPC(miR2Target, ExpData)
-head(SPPCceRInt)
+sppcceRInt <- sppc(miR2Target, ExpData)
+head(sppcceRInt)
 ```
 
 
-## Hermes function
+## hermes function
 
-In miRsponge package, 'Hermes' function predicts competing endogenous RNAs 
+In miRsponge package, 'hermes' function predicts competing endogenous RNAs 
 via evidence for competition for miRNA regulation based on conditional 
 mutual information.
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-HermesceRInt <- Hermes(miR2Target, ExpData, num_perm =5)
-head(HermesceRInt)
+hermesceRInt <- hermes(miR2Target, ExpData, num_perm =5)
+head(hermesceRInt)
 ```
 
 Parameter 'num_perm' is used to set the number of permutations of 
 input expression data. The larger the number is, the slower the calculation is.
 
 
-## PPC function
+## ppc function
 
-In miRsponge package, 'PPC' function is a variant of 'Hermes' function. 
+In miRsponge package, 'ppc' function is a variant of 'hermes' function. 
 However, it predicts competing endogenous RNAs via evidence for competition 
 for miRNA regulation based on Partial Pearson Correlation.
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-PPCceRInt <- PPC(miR2Target, ExpData, num_perm =5)
-head(PPCceRInt)
+ppcceRInt <- ppc(miR2Target, ExpData, num_perm =5)
+head(ppcceRInt)
 ```
 
 Parameter 'num_perm' is used to set the number of permutations of input 
 expression data. The larger the number is, the slower the calculation is.
 
-## MuTaME function
+## muTaME function
 
-In miRsponge package, we implement 'MuTaME' function based on the logarithm 
+In miRsponge package, we implement 'muTaME' function based on the logarithm 
 of four scores: (1) the fraction of coomon miRNAs, (2) the density of the 
 MREs for all shared miRNAs, (3) the distribution of MREs of the putative 
 RNA-RNA pairs and (4) the relation between the overall number of MREs for 
@@ -149,14 +149,14 @@ scores to obtain normalized scores with interval [0 1].
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 MREs <- system.file("extdata", "MREs.csv", package="miRsponge")
-MuTaMEceRInt <- MuTaME(miR2Target,MREs)
-head(MuTaMEceRInt)
+muTaMEceRInt <- muTaME(miR2Target,MREs)
+head(muTaMEceRInt)
 ```
 
 
-## CERNIA function
+## cernia function
 
-In miRsponge package, we implement 'CERNIA' function based on the 
+In miRsponge package, we implement 'cernia' function based on the 
 logarithm of seven scores: (1) the fraction of coomon miRNAs, (2) 
 the density of the MREs for all shared miRNAs, (3) the distribution 
 of MREs of the putative RNA-RNA pairs, (4) the relation between the 
@@ -174,42 +174,42 @@ combined scores to obtain normalized scores with interval [0 1].
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 MREs <- system.file("extdata", "MREs.csv", package="miRsponge")
 ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-CERNIAceRInt <- CERNIA(miR2Target, MREs,ExpData)
-head(CERNIAceRInt)
+cerniaceRInt <- cernia(miR2Target, MREs,ExpData)
+head(cerniaceRInt)
 ```
 
 
-## Integrate function
+## integrateMethod function
 
 To obtain a list high-confidence miRNA sponge interactions, we 
-implement 'Integrate' function to integrate results of different methods. 
+implement 'integrateMethod' function to integrate results of different methods. 
 
 ```{r}
 ExpData <- system.file("extdata","ExpData.csv",package="miRsponge")
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 miRHomologyceRInt <- miRHomology(miR2Target)
-PCceRInt <- PC(miR2Target, ExpData)
-SPPCceRInt <- SPPC(miR2Target, ExpData)
-Interlist <- list(miRHomologyceRInt[,1:2], PCceRInt[,1:2], SPPCceRInt[,1:2])
-IntegrateceRInt <- Integrate(Interlist, Intersect_num=3)
+pcceRInt <- pc(miR2Target, ExpData)
+sppcceRInt <- sppc(miR2Target, ExpData)
+Interlist <- list(miRHomologyceRInt[,1:2], pcceRInt[,1:2], sppcceRInt[,1:2])
+IntegrateceRInt <- integrateMethod(Interlist, Intersect_num=3)
 head(IntegrateceRInt)
 ```
 
 Parameter 'Intersect_num' is used to set the least number of methods 
 intersected for integration. That is to say, we only reserve those 
-miRNA sponge interactions predicted at least 'Intersect_num' methods. 
+miRNA sponge interactions predicted by at least 'Intersect_num' methods. 
 
 # Validation of miRNA sponge interactions
 
 To validate the predicted miRNA sponge interactions, we implement 
-'SpongeValidate' function. The groundtruth of miRNA sponge interactions 
+'spongeValidate' function. The groundtruth of miRNA sponge interactions 
 are from miRSponge v2.0 (<http://www.bio-bigdata.net/miRSponge/>).
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 miRHomologyceRInt <- miRHomology(miR2Target)
 Groundtruth <- system.file("extdata", "Groundtruth.csv", package="miRsponge")
-spongenetwork_validated <- SpongeValidate(miRHomologyceRInt[, 1:2], Groundtruth)
+spongenetwork_validated <- spongeValidate(miRHomologyceRInt[, 1:2], Groundtruth)
 spongenetwork_validated
 ```
 
@@ -217,23 +217,23 @@ spongenetwork_validated
 # Module identification of miRNA sponge interaction network
 
 To further understand the module-level properties of miRNA sponges in 
-cancer, we implement 'NetModule' function to identify miRNA sponge modules. 
+cancer, we implement 'netModule' function to identify miRNA sponge modules. 
 Possible methods include FN [21], MCL [22], LINKCOMM [23] and MCODE [24].
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 miRHomologyceRInt <- miRHomology(miR2Target)
-spongenetwork_Cluster <- NetModule(miRHomologyceRInt[, 1:2])
+spongenetwork_Cluster <- netModule(miRHomologyceRInt[, 1:2])
 spongenetwork_Cluster
 ```
 
 # Disease and functional enrichment analysis of miRNA sponge modules
-We implement 'ModuleDEA' function to make disease enrichment analysis of 
+We implement 'moduleDEA' function to make disease enrichment analysis of 
 modules. Possible disease databases include DO: Disease 
 Ontology database (<http://disease-ontology.org/>), 
 DGN: DisGeNET database (<http://www.disgenet.org/>) 
 and NCG: Network of Cancer Genes database 
-(<http://ncg.kcl.ac.uk/>). Moreover, 'ModuleFEA' function 
+(<http://ncg.kcl.ac.uk/>). Moreover, 'moduleFEA' function 
 is implemented to conduct functional GO, KEGG and Reactome 
 enrichment analysis of modules. Possible ontology databases 
 contain GO: Gene Ontology database 
@@ -245,22 +245,22 @@ Reactome Pathway Database (<http://reactome.org/>).
 ```{r, eval=FALSE, include=TRUE}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 miRHomologyceRInt <- miRHomology(miR2Target)
-spongenetwork_Cluster <- NetModule(miRHomologyceRInt[, 1:2])
-sponge_Module_DEA <- ModuleDEA(spongenetwork_Cluster)
-sponge_Module_FEA <- ModuleFEA(spongenetwork_Cluster)
+spongenetwork_Cluster <- netModule(miRHomologyceRInt[, 1:2])
+sponge_Module_DEA <- moduleDEA(spongenetwork_Cluster)
+sponge_Module_FEA <- moduleFEA(spongenetwork_Cluster)
 ```
 
 # Survival analysis of miRNA sponge modules
 To make survival analysis of miRNA sponge modules, we implement 
-'ModuleSurvival' function. 
+'moduleSurvival' function. 
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
 SurvData <- system.file("extdata", "SurvData.csv", package="miRsponge")
-PCceRInt <- PC(miR2Target, ExpData)
-spongenetwork_Cluster <- NetModule(PCceRInt[, 1:2])
-sponge_Module_Survival <- ModuleSurvival(spongenetwork_Cluster, 
+pcceRInt <- pc(miR2Target, ExpData)
+spongenetwork_Cluster <- netModule(pcceRInt[, 1:2])
+sponge_Module_Survival <- moduleSurvival(spongenetwork_Cluster, 
     ExpData, SurvData)
 sponge_Module_Survival
 ```
