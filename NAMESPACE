@@ -17,7 +17,7 @@
     importFrom("grDevices", "dev.new")
     importFrom("graphics", "legend")
     importFrom("stats", "cor.test", "median", "na.omit", "p.adjust",
-    "pchisq", "phyper", "predict", "qnorm")
+    "pchisq", "phyper", "predict", "qnorm", "quantile")
     importFrom("utils", "read.csv","combn")
     importFrom("parallel","makeCluster","detectCores",
     "stopCluster","clusterApply")
