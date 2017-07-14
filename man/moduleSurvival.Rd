@@ -8,7 +8,8 @@ Survival analysis of modules
 Survival analysis of modules.
 }
 \usage{
-moduleSurvival(Modulelist, ExpDatacsv, SurvDatacsv, plot = FALSE)
+moduleSurvival(Modulelist, ExpDatacsv, SurvDatacsv,
+devidePercentage=.5, plot = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -20,7 +21,10 @@ An input expression dataset, the columns are genes and the rows are samples.
 }
     \item{SurvDatacsv}{
 An input survival dataset, three columns contain the information of sample,
-time and status, respectively.
+time (Months) and status, respectively.
+}
+    \item{devidePercentage}{
+A percentage value, the percentage of high risk group.
 }
     \item{plot}{
 A logical value, plot or not.
