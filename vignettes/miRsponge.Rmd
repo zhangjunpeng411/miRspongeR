@@ -174,7 +174,7 @@ combined scores to obtain normalized scores with interval [0 1].
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 MREs <- system.file("extdata", "MREs.csv", package="miRsponge")
 ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-cerniaceRInt <- cernia(miR2Target, MREs,ExpData)
+cerniaceRInt <- cernia(miR2Target, MREs, ExpData)
 head(cerniaceRInt)
 ```
 
@@ -261,9 +261,11 @@ SurvData <- system.file("extdata", "SurvData.csv", package="miRsponge")
 pcceRInt <- pc(miR2Target, ExpData)
 spongenetwork_Cluster <- netModule(pcceRInt[, 1:2])
 sponge_Module_Survival <- moduleSurvival(spongenetwork_Cluster, 
-    ExpData, SurvData)
+    ExpData, SurvData, devidePercentage=.5)
 sponge_Module_Survival
 ```
+
+Parameter 'devidePercentage' is used to set the percentage of high risk group. 
 
 # Conclusions
 miRsponge package provides methods to study miRNA sponge (also called 
