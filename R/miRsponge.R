@@ -1332,7 +1332,8 @@ moduleFEA <- function(Modulelist, ont = "BP", KEGGorganism = "hsa",
 }
     
 ## Survival analysis of modules
-moduleSurvival <- function(Modulelist, ExpDatacsv, SurvDatacsv, plot = FALSE){    
+moduleSurvival <- function(Modulelist, ExpDatacsv, SurvDatacsv, 
+    devidePercentage=.5, plot = FALSE){    
     
     ExpData <- read.csv(ExpDatacsv, header = TRUE, sep = ",")
     ExpDataNames <- headNames(ExpDatacsv)
@@ -1355,8 +1356,8 @@ moduleSurvival <- function(Modulelist, ExpDatacsv, SurvDatacsv, plot = FALSE){
         Risk_score <- predict(mm, newdata = data.frame(Interin_Data),  type = "risk")
     
         group <- rep("NA", dim(Interin_Data)[1])
-        group[Risk_score > median(Risk_score)] <- "High"
-        group[Risk_score <= median(Risk_score)] <- "Low"
+        group[Risk_score > quantile(Risk_score, probs = devidePercentage)] <- "High"
+        group[Risk_score <= quantile(Risk_score, probs = devidePercentage)] <- "Low"
     
         Data <- cbind(Interin_Data[, 1:2], group)
         myfit[[i]] <- survfit(survival::Surv(time, status) ~ group, data = Data)    
