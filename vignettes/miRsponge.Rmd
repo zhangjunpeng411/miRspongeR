@@ -51,7 +51,7 @@ can help to reveal the biological mechanism in cancer.
 
 
 To accelerate the research of miRNA sponge, we develop an R package 
-‘miRsponge’ to implement popular methods in the identification and 
+'miRsponge' to implement popular methods in the identification and 
 analysis of miRNA sponge network and module.
     
 # Identification of miRNA sponge interactions
