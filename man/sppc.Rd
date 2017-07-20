@@ -50,8 +50,8 @@ sponge interaction network between long non-coding RNAs and messenger
 RNAs in human breast cancer. BMC Syst Biol., 2014, 8:83.
 
 2. Le TD, Zhang J, Liu L, et al. Computational methods for identifying
-miRNA sponge interactions. Brief Bioinform., 2016,
-doi: 10.1093/bib/bbw042.
+miRNA sponge interactions. Brief Bioinform., 2017,
+18(4):577-590.
 
 }
 \author{

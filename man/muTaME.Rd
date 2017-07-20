@@ -6,12 +6,12 @@ Identifying miRNA sponge interactions using MuTaME method
 
 }
 \description{
-Identifying miRNA sponge interactions based on using MuTaME method.
+Identifying miRNA sponge interactions using MuTaME method.
 
 }
 \usage{
 muTaME(miR2Target, MREs, minSharedmiR = 3, padjustvaluecutoff
-= 0.01,padjustmethod = "BH", scorecutoff = 0.5)
+= 0.01, padjustmethod = "BH", scorecutoff = 0.5)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -52,7 +52,7 @@ Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 \examples{
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 MREs <- system.file("extdata", "MREs.csv", package="miRsponge")
-muTaMEceRInt <- muTaME(miR2Target,MREs)
+muTaMEceRInt <- muTaME(miR2Target, MREs)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

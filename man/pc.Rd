@@ -44,8 +44,8 @@ A list of identified miRNA sponge interactions.
 
 \references{
 1. Le TD, Zhang J, Liu L, et al. Computational methods for
-identifying miRNA sponge interactions. Brief Bioinform. 2016,
-DOI: 10.1093/bib/bbw042.
+identifying miRNA sponge interactions. Brief Bioinform. 2017,
+18(4):577-590.
 
 2. Zhou X, Liu J, Wang W, Construction and investigation of
 breast-cancer-specific ceRNA network based on the mRNA and

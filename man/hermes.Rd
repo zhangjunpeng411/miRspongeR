@@ -6,7 +6,7 @@ Identifying miRNA sponge interactions using Hermes method
 
 }
 \description{
-Identifying miRNA sponge interactions based on using Hermes method
+Identifying miRNA sponge interactions using Hermes method
 (\url{http://califano.c2b2.columbia.edu/hermes}).
 }
 \usage{
@@ -48,10 +48,12 @@ pathways in glioblastoma. Cell, 2011, 147(2):370-81.
 Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 }
 \examples{
+
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
 HermesceRInt <- hermes(miR2Target, ExpData, num_perm =5)
 }
+
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
