@@ -307,7 +307,7 @@ as efficient microRNA sponges. Nature, 2013, 495:384–8.
 class of animal RNAs with regulatory potency. Nature, 2013, 495:333–8. 
 
 [11] Le TD, Zhang J, Liu L, et al. Computational methods for identifying 
-miRNA sponge interactions. Brief Bioinform. 2016, DOI: 10.1093/bib/bbw042.
+miRNA sponge interactions. Brief Bioinform. 2017, 18(4):577-590.
 
 [12] Tay Y, Rinn J, Pandolfi PP. The multilayered complexity of 
 ceRNA crosstalk and competition. Nature, 2014, 505:344–52.
@@ -359,7 +359,7 @@ arbitrary size and type. Bioinformatics. 2011, 27(14):2011-2.
 complexes in large protein interaction networks. BMC Bioinformatics, 
 2003, 4:2.
 
-# sessionInfo()
+# Session information
 ```{r}
 sessionInfo()
 ```
