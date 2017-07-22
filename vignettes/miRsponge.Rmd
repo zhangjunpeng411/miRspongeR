@@ -47,70 +47,77 @@ These ceRNAs are also known as miRNA sponges or miRNA decoys, and
 include long non-coding RNAs (lncRNAs), pseudogenes, circular RNAs 
 (circRNAs) and messenger RNAs (mRNAs), etc [7-10]. Recent 
 studies [11, 12] have shown that miRNA sponge network and module 
-can help to reveal the biological mechanism in cancer. 
-
+can help to reveal the biological mechanism in cancer.
 
 To accelerate the research of miRNA sponge, we develop an R package 
 'miRsponge' to implement popular methods in the identification and 
 analysis of miRNA sponge network and module.
     
 # Identification of miRNA sponge interactions
-We implement seven popular methods (miRHomology [13, 14], pc [15, 16], 
-sppc [17], ppc [11], hermes [18], muTaME [19], and cernia [20]) to 
-identify miRNA sponge interactions. The seven methods should meet a 
-basic condition: the significance of sharing of miRNAs by each RNA-RNA 
-pair (e.g. adjusted p-value < 0.01). Each method has its own merit due 
-to different evaluating indicators. Thus, we present an integrate method 
-to combine predicted miRNA sponge interactions from different methods. 
+In 'spongeMethod' function, We implement seven popular methods 
+(miRHomology [13, 14], pc [15, 16], sppc [17], ppc [11], hermes [18], 
+muTaME [19], and cernia [20]) to identify miRNA sponge interactions. 
+The seven methods should meet a basic condition: the significance of
+sharing of miRNAs by each RNA-RNA pair (e.g. adjusted p-value < 0.01).
+Each method has its own merit due to different evaluating indicators. 
+Thus, we present an integrate method to combine predicted miRNA
+sponge interactions from different methods. 
 
-## miRHomology function
+## miRHomology method
 
-In miRsponge package, we implement 'miRHomology' function based on the 
+In miRsponge package, we implement miRHomology method based on the 
 homology of miRNA binding sites present in the 3'UTR sequence.
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-miRHomologyceRInt <- miRHomology(miR2Target)
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")
 head(miRHomologyceRInt)
 ```
 
 
-## pc function
+## pc method
 
-'pc' function consider expression data based on 'miRHomology' function. 
+The pc function consider expression data based on miRHomology method. 
 Significantly positive miRNA sponge interaction pairs are reserved. 
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-pcceRInt <- pc(miR2Target, ExpData)
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRsponge")
+ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
+pcceRInt <- spongeMethod(miRTarget, ExpData, method = "pc")
 head(pcceRInt)
 ```
 
 
-## sppc function
+## sppc method
 
-In miRsponge package, we implement 'sppc' function based on sensitivity 
+In miRsponge package, we implement sppc method based on sensitivity 
 correlation (difference between the Pearson and partial 
 correlation coefficients).
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-sppcceRInt <- sppc(miR2Target, ExpData)
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRsponge")
+ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
+sppcceRInt <- spongeMethod(miRTarget, ExpData, senscorcutoff = 0.1, method = "sppc")
 head(sppcceRInt)
 ```
 
 
-## hermes function
+## hermes method
 
-In miRsponge package, 'hermes' function predicts competing endogenous RNAs 
+In miRsponge package, the hermes method predicts competing endogenous RNAs 
 via evidence for competition for miRNA regulation based on conditional 
 mutual information.
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-hermesceRInt <- hermes(miR2Target, ExpData, num_perm =5)
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRsponge")
+ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
+hermesceRInt <- spongeMethod(miRTarget, ExpData, num_perm = 10, method = "hermes")
 head(hermesceRInt)
 ```
 
@@ -118,25 +125,27 @@ Parameter 'num_perm' is used to set the number of permutations of
 input expression data. The larger the number is, the slower the calculation is.
 
 
-## ppc function
+## ppc method
 
-In miRsponge package, 'ppc' function is a variant of 'hermes' function. 
+In miRsponge package, the ppc method is a variant of the hermes method. 
 However, it predicts competing endogenous RNAs via evidence for competition 
 for miRNA regulation based on Partial Pearson Correlation.
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-ppcceRInt <- ppc(miR2Target, ExpData, num_perm =5)
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRsponge")
+ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
+ppcceRInt <- spongeMethod(miRTarget, ExpData, num_perm = 10, method = "ppc")
 head(ppcceRInt)
 ```
 
 Parameter 'num_perm' is used to set the number of permutations of input 
 expression data. The larger the number is, the slower the calculation is.
 
-## muTaME function
+## muTaME method
 
-In miRsponge package, we implement 'muTaME' function based on the logarithm 
+In miRsponge package, we implement the muTaME method based on the logarithm 
 of four scores: (1) the fraction of coomon miRNAs, (2) the density of the 
 MREs for all shared miRNAs, (3) the distribution of MREs of the putative 
 RNA-RNA pairs and (4) the relation between the overall number of MREs for 
@@ -148,15 +157,17 @@ scores to obtain normalized scores with interval [0 1].
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 MREs <- system.file("extdata", "MREs.csv", package="miRsponge")
-muTaMEceRInt <- muTaME(miR2Target,MREs)
+mres <- read.csv(MREs, header=TRUE, sep=",")
+muTaMEceRInt <- spongeMethod(miRTarget, mres = mres, method = "muTaME")
 head(muTaMEceRInt)
 ```
 
 
-## cernia function
+## cernia method
 
-In miRsponge package, we implement 'cernia' function based on the 
+In miRsponge package, we implement the cernia method based on the 
 logarithm of seven scores: (1) the fraction of coomon miRNAs, (2) 
 the density of the MREs for all shared miRNAs, (3) the distribution 
 of MREs of the putative RNA-RNA pairs, (4) the relation between the 
@@ -172,26 +183,31 @@ combined scores to obtain normalized scores with interval [0 1].
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 MREs <- system.file("extdata", "MREs.csv", package="miRsponge")
-ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-cerniaceRInt <- cernia(miR2Target, MREs, ExpData)
+mres <- read.csv(MREs, header=TRUE, sep=",")
+ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRsponge")
+ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
+cerniaceRInt <- spongeMethod(miRTarget, ExpData, mres, method = "cernia")
 head(cerniaceRInt)
 ```
 
 
-## integrateMethod function
+## integrateMethod method
 
 To obtain a list high-confidence miRNA sponge interactions, we 
 implement 'integrateMethod' function to integrate results of different methods. 
 
 ```{r}
-ExpData <- system.file("extdata","ExpData.csv",package="miRsponge")
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-miRHomologyceRInt <- miRHomology(miR2Target)
-pcceRInt <- pc(miR2Target, ExpData)
-sppcceRInt <- sppc(miR2Target, ExpData)
-Interlist <- list(miRHomologyceRInt[,1:2], pcceRInt[,1:2], sppcceRInt[,1:2])
-IntegrateceRInt <- integrateMethod(Interlist, Intersect_num=3)
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRsponge")
+ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
+miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")
+pcceRInt <- spongeMethod(miRTarget, ExpData, method = "pc")
+sppcceRInt <- spongeMethod(miRTarget, ExpData, method = "sppc")
+Interlist <- list(miRHomologyceRInt[, 1:2], pcceRInt[, 1:2], sppcceRInt[, 1:2])
+IntegrateceRInt <- integrateMethod(Interlist, Intersect_num = 2)
 head(IntegrateceRInt)
 ```
 
@@ -207,8 +223,10 @@ are from miRSponge v2.0 (<http://www.bio-bigdata.net/miRSponge/>).
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-miRHomologyceRInt <- miRHomology(miR2Target)
-Groundtruth <- system.file("extdata", "Groundtruth.csv", package="miRsponge")
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")
+Groundtruthcsv <- system.file("extdata", "Groundtruth.csv", package="miRsponge")
+Groundtruth <- read.csv(Groundtruthcsv, header=TRUE, sep=",")
 spongenetwork_validated <- spongeValidate(miRHomologyceRInt[, 1:2], Groundtruth)
 spongenetwork_validated
 ```
@@ -222,7 +240,8 @@ Possible methods include FN [21], MCL [22], LINKCOMM [23] and MCODE [24].
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-miRHomologyceRInt <- miRHomology(miR2Target)
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")
 spongenetwork_Cluster <- netModule(miRHomologyceRInt[, 1:2])
 spongenetwork_Cluster
 ```
@@ -244,7 +263,8 @@ Reactome Pathway Database (<http://reactome.org/>).
 
 ```{r, eval=FALSE, include=TRUE}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-miRHomologyceRInt <- miRHomology(miR2Target)
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")
 spongenetwork_Cluster <- netModule(miRHomologyceRInt[, 1:2])
 sponge_Module_DEA <- moduleDEA(spongenetwork_Cluster)
 sponge_Module_FEA <- moduleFEA(spongenetwork_Cluster)
@@ -256,9 +276,12 @@ To make survival analysis of miRNA sponge modules, we implement
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-SurvData <- system.file("extdata", "SurvData.csv", package="miRsponge")
-pcceRInt <- pc(miR2Target, ExpData)
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRsponge")
+ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
+SurvDatacsv <- system.file("extdata", "SurvData.csv", package="miRsponge")
+SurvData <- read.csv(SurvDatacsv, header=TRUE, sep=",")
+pcceRInt <- spongeMethod(miRTarget, ExpData, method = "pc")
 spongenetwork_Cluster <- netModule(pcceRInt[, 1:2])
 sponge_Module_Survival <- moduleSurvival(spongenetwork_Cluster, 
     ExpData, SurvData, devidePercentage=.5)
@@ -297,8 +320,8 @@ controls muscle differentiation by functioning as a competing endogenous
 RNA. Cell, 2011, 147:358–69.
 
 [8] Poliseno L, Salmena L, Zhang J, et al. A coding-independent function 
-of gene and pseudogene mRNAs regulates tumour biology. Nature, 2
-010, 465:1033–8.
+of gene and pseudogene mRNAs regulates tumour biology. Nature, 2010,
+465:1033–8.
 
 [9] Hansen TB, Jensen TI, Clausen BH, et al. Natural RNA circles function 
 as efficient microRNA sponges. Nature, 2013, 495:384–8.
@@ -307,7 +330,7 @@ as efficient microRNA sponges. Nature, 2013, 495:384–8.
 class of animal RNAs with regulatory potency. Nature, 2013, 495:333–8. 
 
 [11] Le TD, Zhang J, Liu L, et al. Computational methods for identifying 
-miRNA sponge interactions. Brief Bioinform. 2017, 18(4):577-590.
+miRNA sponge interactions. Brief Bioinform., 2017, 18(4):577-590.
 
 [12] Tay Y, Rinn J, Pandolfi PP. The multilayered complexity of 
 ceRNA crosstalk and competition. Nature, 2014, 505:344–52.
@@ -317,11 +340,11 @@ miRNA-ncRNA and protein-RNA interaction networks from large-scale
 CLIP-Seq data. Nucleic Acids Res., 2014, 42(Database issue):D92-7.
 
 [14] Sarver AL, Subramanian S. Competing endogenous RNA database. 
-Bioinformation,2012, 8(15):731-3.
+Bioinformation, 2012, 8(15):731-3.
 
 [15] Zhou X, Liu J, Wang W, Construction and investigation of 
 breast-cancer-specific ceRNA network based on the mRNA and miRNA 
-expression data. IET Syst Biol. 2014, 8(3):96-103.
+expression data. IET Syst Biol., 2014, 8(3):96-103.
 
 [16] Xu J, Li Y, Lu J, et al. The mRNA related ceRNA-ceRNA landscape 
 and significance across 20 major cancer types. Nucleic Acids Res., 
@@ -329,31 +352,31 @@ and significance across 20 major cancer types. Nucleic Acids Res.,
 
 [17] Paci P, Colombo T, Farina L, Computational analysis identifies a 
 sponge interaction network between long non-coding RNAs and messenger 
-RNAs in human breast cancer. BMC Syst Biol. 2014, 8:83.
+RNAs in human breast cancer. BMC Syst Biol., 2014, 8:83.
 
 [18] Sumazin P, Yang X, Chiu HS, et al. An extensive microRNA-mediated 
 network of RNA-RNA interactions regulates established oncogenic pathways 
 in glioblastoma. Cell, 2011, 147(2):370-81.
 
 [19] Tay Y, Kats L, Salmena L, et al. Coding-independent regulation of 
-the tumor suppressor PTEN by competing endogenous mRNAs. Cell. 
+the tumor suppressor PTEN by competing endogenous mRNAs. Cell, 
 2011, 147(2):344-57.
 
 [20] Sardina DS, Alaimo S, Ferro A, et al. A novel computational method 
-for inferring competing endogenous interactions. Brief Bioinform. 
+for inferring competing endogenous interactions. Brief Bioinform., 
 2016, DOI: 10.1093/bib/bbw084.
 
 [21] Clauset A, Newman ME, Moore C. Finding community structure in 
-very large networks. Phys Rev E Stat Nonlin Soft Matter Phys. 2004, 
+very large networks. Phys Rev E Stat Nonlin Soft Matter Phys., 2004, 
 70(6 Pt 2):066111.
 
 [22] Enright AJ, Van Dongen S, Ouzounis CA. An efficient algorithm for 
-large-scale detection of protein families. Nucleic Acids Res. 2002, 
+large-scale detection of protein families. Nucleic Acids Res., 2002, 
 30(7):1575-84.
 
 [23] Kalinka AT, Tomancak P. linkcomm: an R package for the generation, 
 visualization, and analysis of link communities in networks of 
-arbitrary size and type. Bioinformatics. 2011, 27(14):2011-2.
+arbitrary size and type. Bioinformatics, 2011, 27(14):2011-2.
 
 [24] Bader GD, Hogue CW. An automated method for finding molecular 
 complexes in large protein interaction networks. BMC Bioinformatics, 
