@@ -5,7 +5,8 @@ This package provides methods to study miRNA sponge (also called ceRNA or miRNA 
 
 # Installation
 ```{r echo=FALSE, results='hide', message=FALSE}
-devtools::install_github("zhangjunpeng411/miRsponge")
+source("https://bioconductor.org/biocLite.R")
+biocLite("miRsponge")
 ```
 
 # Usage
