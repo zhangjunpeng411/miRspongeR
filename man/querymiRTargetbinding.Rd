@@ -11,16 +11,16 @@ Query miRNA-target interactions by combining expression data
 and putative miRNA-target interactions.
 }
 \usage{
-querymiRTargetbinding(ExpDatacsv, miRTargetbinding)
+querymiRTargetbinding(ExpData, miRTarget)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-    \item{ExpDatacsv}{
-An input gene expression dataset in .csv format, the rows are samples
+    \item{ExpData}{
+An input gene expression data frame, the rows are samples
 and the columns are genes.
 }
-    \item{miRTargetbinding}{
-An input miRNA-target interaction dataset in .csv format, the first
+    \item{miRTarget}{
+An input miRNA-target interaction data frame, the first
 column is miRNA with name "mir" and the second column is target
 with name "gene".
 }
@@ -36,8 +36,10 @@ Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 
 \examples{
 ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRsponge")
+ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-miR2Target_queried <- querymiRTargetbinding(ExpDatacsv, miR2Target)
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+miR2Target_queried <- querymiRTargetbinding(ExpData, miRTarget)
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

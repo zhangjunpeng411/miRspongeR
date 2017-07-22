@@ -10,14 +10,14 @@ The groundtruth of miRNA sponge interactions are from
 miRSponge v2.0 (\url{http://www.bio-bigdata.net/miRSponge/}).
 }
 \usage{
-spongeValidate(spongenetwork, Groundtruthcsv)
+spongeValidate(spongenetwork, Groundtruth)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
     \item{spongenetwork}{
 Input miRNA sponge interaction network.
 }
-    \item{Groundtruthcsv}{
+    \item{Groundtruth}{
 The groundtruth of miRNA sponge interactions.
 }
 }
@@ -32,8 +32,10 @@ Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 
 \examples{
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-miRHomologyceRInt <- miRHomology(miR2Target)
-Groundtruth <- system.file("extdata", "Groundtruth.csv", package="miRsponge")
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")
+Groundtruthcsv <- system.file("extdata", "Groundtruth.csv", package="miRsponge")
+Groundtruth <- read.csv(Groundtruthcsv, header=TRUE, sep=",")
 spongenetwork_validated <- spongeValidate(miRHomologyceRInt[, 1:2], Groundtruth)
 }
 

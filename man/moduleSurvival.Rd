@@ -8,7 +8,7 @@ Survival analysis of modules
 Survival analysis of modules.
 }
 \usage{
-moduleSurvival(Modulelist, ExpDatacsv, SurvDatacsv,
+moduleSurvival(Modulelist, ExpData, SurvData,
 devidePercentage=.5, plot = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -16,11 +16,11 @@ devidePercentage=.5, plot = FALSE)
     \item{Modulelist}{
 A list of miRNA sponge modules.
 }
-    \item{ExpDatacsv}{
-An input expression dataset, the columns are genes and the rows are samples.
+    \item{ExpData}{
+An input expression data, the columns are genes and the rows are samples.
 }
-    \item{SurvDatacsv}{
-An input survival dataset, three columns contain the information of sample,
+    \item{SurvData}{
+An input survival data, three columns contain the information of sample,
 time (Months) and status, respectively.
 }
     \item{devidePercentage}{
@@ -42,10 +42,13 @@ Extending the Cox Model. Springer, New York. ISBN 0-387-98784-3, 2000.
 Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 }
 \examples{
+ExpDatacsv <- system.file("extdata","ExpData.csv",package="miRsponge")
+ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-ExpData <- system.file("extdata", "ExpData.csv", package="miRsponge")
-SurvData <- system.file("extdata", "SurvData.csv", package="miRsponge")
-pcceRInt <- pc(miR2Target, ExpData)
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+SurvDatacsv <- system.file("extdata", "SurvData.csv", package="miRsponge")
+SurvData <- read.csv(SurvDatacsv, header=TRUE, sep=",")
+pcceRInt <- spongeMethod(miRTarget, ExpData, method = "pc")
 spongenetwork_Cluster <- netModule(pcceRInt[, 1:2])
 sponge_Module_Survival <- moduleSurvival(spongenetwork_Cluster,
 ExpData, SurvData)

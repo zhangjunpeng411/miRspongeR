@@ -64,10 +64,12 @@ Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 }
 \examples{
 \dontrun{
-
+ExpDatacsv <- system.file("extdata","ExpData.csv",package="miRsponge")
+ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
-miRHomologyceRInt <- miRHomology(miR2Target)
-spongenetwork_Cluster <- netModule(miRHomologyceRInt[, 1:2])
+miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
+pcceRInt <- spongeMethod(miRTarget, ExpData, method = "pc")
+spongenetwork_Cluster <- netModule(pcceRInt[, 1:2])
 sponge_Module_FEA <- moduleFEA(spongenetwork_Cluster)
 }
 }
