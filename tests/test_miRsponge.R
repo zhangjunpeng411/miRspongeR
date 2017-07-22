@@ -17,7 +17,6 @@ sppcceRInt <- spongeMethod(miRTarget, ExpData, senscorcutoff = 0.1, method = "sp
 
 
 test_that("Test spongeMethod", {
-    set.seed(12345)
     expect_equal(spongeMethod(miRTarget, method = "miRHomology"), miRHomologyceRInt)
     expect_equal(spongeMethod(miRTarget, ExpData, method = "pc"), pcceRInt)
     expect_equal(spongeMethod(miRTarget, ExpData, senscorcutoff = 0.1, method = "sppc"), sppcceRInt)    
