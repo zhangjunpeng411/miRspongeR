@@ -1226,12 +1226,14 @@ moduleSurvival <- function(Modulelist, ExpData, SurvData, devidePercentage = 0.5
 
     if (plot) {
         for (i in seq_along(myfit)) {
-            dev.new()
-            plot(myfit[[i]], lty = 1, col = c("red", "green"), main = paste("Module", i), xlab = "Time (Months)",
-                ylab = "Probability of survival")
+            if (!is.null(LogRank[[i]])) {
+                dev.new()
+                plot(myfit[[i]], lty = 1, col = c("red", "green"), main = paste("Module", i), xlab = "Time (Months)",
+                    ylab = "Probability of survival")
 
-            legend("topright", legend = c("High risk group", "Low risk group"), lty = seq_len(2),
-                col = c("red", "green"))
+                legend("topright", legend = c("High risk group", "Low risk group"), lty = seq_len(2),
+                    col = c("red", "green"))
+            }
         }
     }
 
@@ -1239,7 +1241,9 @@ moduleSurvival <- function(Modulelist, ExpData, SurvData, devidePercentage = 0.5
 
     if (length(myfit) >= 1) {
         colnames(LogRank_res) <- c("Chi-square", "p-value", "HR", "HRlow95", "HRup95")
-        rownames(LogRank_res) <- unlist(lapply(seq_along(myfit), function(i) paste("Module", i)))
+        names(LogRank) <- seq_along(Modulelist)
+        LogRank[sapply(LogRank, is.null)] <- NULL
+        rownames(LogRank_res) <- paste("Module", names(LogRank))
     }
 
     return(LogRank_res)
