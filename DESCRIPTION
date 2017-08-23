@@ -1,14 +1,14 @@
 Package: miRsponge
 Type: Package
 Title: Identification and analysis of miRNA sponge interaction networks and modules
-Version: 0.99.16
+Version: 0.99.17
 Author: Junpeng Zhang
 Maintainer: Junpeng Zhang <zhangjunpeng_411@yahoo.com>
-Description: This package provides methods to study miRNA sponge (also called ceRNA or miRNA decoy), 
-    including popular methods for identifying miRNA sponge interactions, integrate method to integrate 
-    miRNA sponge interactions from different methods, function to validate miRNA sponge interactions, 
-    function to infer miRNA sponge modules, functions to conduct enrichment analysis of modules, 
-    function to make survival analysis of modules. Internal functions of hermes method are from 
+Description: This package provides several functions to study miRNA sponge (also called ceRNA or miRNA decoy), 
+    including popular methods for identifying miRNA sponge interactions, and the integrative method 
+    to integrate miRNA sponge interactions from different methods, as well as the functions to validate 
+    miRNA sponge interactions, and infer miRNA sponge modules, conduct enrichment analysis of modules, 
+    and conduct survival analysis of modules. Internal functions of hermes method are from 
     <http://califano.c2b2.columbia.edu/hermes>, Copyright Columbia University in the City of 
     New York. Internal functions of cernia method are from <https://github.com/dsardina/cernia>, 
     Copyright 2016 Rosalba Giugno Licensed under the Apache License, Version 2.0.

@@ -63,9 +63,9 @@ Each method has its own merit due to different evaluating indicators.
 Thus, we present an integrate method to combine predicted miRNA
 sponge interactions from different methods. 
 
-## miRHomology method
+## miRHomology
 
-In miRsponge package, we implement miRHomology method based on the 
+We implement miRHomology method based on the 
 homology of miRNA binding sites present in the 3'UTR sequence.
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
@@ -75,10 +75,10 @@ head(miRHomologyceRInt)
 ```
 
 
-## pc method
+## pc
 
 The pc function consider expression data based on miRHomology method. 
-Significantly positive miRNA sponge interaction pairs are reserved. 
+Significantly positive miRNA sponge interaction pairs are regarded as output. 
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
@@ -90,9 +90,9 @@ head(pcceRInt)
 ```
 
 
-## sppc method
+## sppc
 
-In miRsponge package, we implement sppc method based on sensitivity 
+We implement sppc method based on sensitivity 
 correlation (difference between the Pearson and partial 
 correlation coefficients).
 
@@ -106,9 +106,9 @@ head(sppcceRInt)
 ```
 
 
-## hermes method
+## hermes
 
-In miRsponge package, the hermes method predicts competing endogenous RNAs 
+The hermes method predicts competing endogenous RNAs 
 via evidence for competition for miRNA regulation based on conditional 
 mutual information.
 
@@ -125,9 +125,9 @@ Parameter 'num_perm' is used to set the number of permutations of
 input expression data. The larger the number is, the slower the calculation is.
 
 
-## ppc method
+## ppc
 
-In miRsponge package, the ppc method is a variant of the hermes method. 
+The ppc method is a variant of the hermes method. 
 However, it predicts competing endogenous RNAs via evidence for competition 
 for miRNA regulation based on Partial Pearson Correlation.
 
@@ -143,16 +143,16 @@ head(ppcceRInt)
 Parameter 'num_perm' is used to set the number of permutations of input 
 expression data. The larger the number is, the slower the calculation is.
 
-## muTaME method
+## muTaME
 
-In miRsponge package, we implement the muTaME method based on the logarithm 
+We implement the muTaME method based on the logarithm 
 of four scores: (1) the fraction of coomon miRNAs, (2) the density of the 
 MREs for all shared miRNAs, (3) the distribution of MREs of the putative 
 RNA-RNA pairs and (4) the relation between the overall number of MREs for 
 a putative miRNA sponge compared with the number of miRNAs that yield these 
 MREs. There is no reason to decide which score has more contribution than 
 the rest. Thus, we calculate a combined score by adding these four scores. 
-To evaluate the strength of each RNA-RNA pair, we further normalize combined 
+To evaluate the strength of each RNA-RNA pair, we further normalize the combined 
 scores to obtain normalized scores with interval [0 1].
 
 ```{r}
@@ -165,9 +165,9 @@ head(muTaMEceRInt)
 ```
 
 
-## cernia method
+## cernia
 
-In miRsponge package, we implement the cernia method based on the 
+We implement the cernia method based on the 
 logarithm of seven scores: (1) the fraction of coomon miRNAs, (2) 
 the density of the MREs for all shared miRNAs, (3) the distribution 
 of MREs of the putative RNA-RNA pairs, (4) the relation between the 
@@ -179,7 +179,7 @@ correlation between putative RNA-RNA pair expression data. There
 is no reason to decide which score has more contribution than the 
 rest. Thus, we calculate a combined score by adding these seven scores. 
 To evaluate the strength of each RNA-RNA pair, we further normalize 
-combined scores to obtain normalized scores with interval [0 1].
+the combined scores to obtain normalized scores with interval [0 1].
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
@@ -193,7 +193,7 @@ head(cerniaceRInt)
 ```
 
 
-## integrateMethod method
+## integrateMethod
 
 To obtain a list high-confidence miRNA sponge interactions, we 
 implement 'integrateMethod' function to integrate results of different methods. 
@@ -232,11 +232,11 @@ spongenetwork_validated
 ```
 
 
-# Module identification of miRNA sponge interaction network
+# Module identification from miRNA sponge interaction network
 
 To further understand the module-level properties of miRNA sponges in 
 cancer, we implement 'netModule' function to identify miRNA sponge modules. 
-Possible methods include FN [21], MCL [22], LINKCOMM [23] and MCODE [24].
+Users can choose FN [21], MCL [22], LINKCOMM [23] and MCODE [24] for module identification.
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
@@ -248,13 +248,13 @@ spongenetwork_Cluster
 
 # Disease and functional enrichment analysis of miRNA sponge modules
 We implement 'moduleDEA' function to make disease enrichment analysis of 
-modules. Possible disease databases include DO: Disease 
+modules. The disease databases used include DO: Disease 
 Ontology database (<http://disease-ontology.org/>), 
 DGN: DisGeNET database (<http://www.disgenet.org/>) 
 and NCG: Network of Cancer Genes database 
 (<http://ncg.kcl.ac.uk/>). Moreover, 'moduleFEA' function 
 is implemented to conduct functional GO, KEGG and Reactome 
-enrichment analysis of modules. Possible ontology databases 
+enrichment analysis of modules. The ontology databases used
 contain GO: Gene Ontology database 
 (<http://www.geneontology.org/>), KEGG: 
 Kyoto Encyclopedia of Genes and Genomes Pathway Database 
@@ -291,13 +291,7 @@ sponge_Module_Survival
 Parameter 'devidePercentage' is used to set the percentage of high risk group. 
 
 # Conclusions
-miRsponge package provides methods to study miRNA sponge (also called 
-ceRNA or miRNA decoy), including popular methods for identifying miRNA 
-sponge interactions, integrate method to integrate miRNA sponge interactions 
-from different methods, function to validate miRNA sponge interactions, 
-function to infer miRNA sponge modules, functions to conduct enrichment 
-analysis of modules, function to make survival analysis of modules. 
-It could provide a useful tool for the research of miRNA sponge.
+miRsponge provides several functions to study miRNA sponge (also called ceRNA or miRNA decoy), including popular methods for identifying miRNA sponge interactions, and the integrative method to integrate miRNA sponge interactions from different methods, as well as the functions to validate miRNA sponge interactions, and infer miRNA sponge modules, conduct enrichment analysis of modules, and conduct survival analysis of modules. It could provide a useful tool for the research of miRNA sponges.
 
 # References
 [1] Ambros V. microRNAs: tiny regulators with great potential. Cell, 2001, 107:823–6.

@@ -1,7 +1,7 @@
 # miRsponge R package
 
 # Introduction
-This package provides methods to study miRNA sponge (also called ceRNA or miRNA decoy), including popular methods for identifying miRNA sponge interactions, integrate method to integrate miRNA sponge interactions from different methods, function to validate miRNA sponge interactions, function to infer miRNA sponge modules, functions to conduct enrichment analysis of modules, function to make survival analysis of modules.
+This package provides several functions to study miRNA sponge (also called ceRNA or miRNA decoy), including popular methods for identifying miRNA sponge interactions, and the integrative method to integrate miRNA sponge interactions from different methods, as well as the functions to validate miRNA sponge interactions, and infer miRNA sponge modules, conduct enrichment analysis of modules, and conduct survival analysis of modules.
 
 # Installation
 ```{r echo=FALSE, results='hide', message=FALSE}
