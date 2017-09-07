@@ -1036,9 +1036,18 @@ netModule <- function(spongenetwork, method = "MCL", directed = FALSE, save = FA
 
     spongenetwork_Cluster <- ProNet::cluster(graph_from_data_frame(spongenetwork, directed = directed),
         method = method, directed = directed, layout = "fruchterman.reingold")
-
-    spongenetwork_Cluster_result <- lapply(seq_len(max(spongenetwork_Cluster)),
-        function(i) rownames(as.matrix(spongenetwork_Cluster))[which(spongenetwork_Cluster == i)])
+    
+    if (method == "FN" | method == "MCL") {
+        spongenetwork_Cluster_result <- lapply(seq_len(max(spongenetwork_Cluster)),
+            function(i) rownames(as.matrix(spongenetwork_Cluster))[which(spongenetwork_Cluster == i)])
+    } else if (method == "LINKCOMM") {
+        spongenetwork_Cluster_result <- lapply(seq_len(max(c(spongenetwork_Cluster$cluster))), 
+            function(i) as.character(spongenetwork_Cluster$node[which(c(spongenetwork_Cluster$cluster) == i)]))
+    } else if (method == "MCODE") {
+        spongenetwork_Cluster <- spongenetwork_Cluster + 1
+        spongenetwork_Cluster_result <- lapply(seq_len(max(spongenetwork_Cluster)),
+            function(i) rownames(as.matrix(spongenetwork_Cluster))[which(spongenetwork_Cluster == i)])
+    }
 
     if (save) {
         res <- spongenetwork_Cluster
