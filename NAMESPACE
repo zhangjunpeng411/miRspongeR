@@ -22,3 +22,4 @@
     importFrom("survival","coxph","survfit","survdiff")
     importFrom("corpcor","pcor.shrink")
     importFrom("ProNet","cluster")
+    importFrom("varhandle","unfactor")

@@ -410,15 +410,13 @@ miRHomology <- function(miRTarget, minSharedmiR = 3, padjustvaluecutoff = 0.01, 
 pc <- function(miRTarget, ExpData, minSharedmiR = 3, poscorcutoff = 0, padjustvaluecutoff = 0.01,
     padjustmethod = "BH") {
 
-    ExpDataNames <- c(as.matrix(ExpData[1, ]))
     miRTargetCandidate <- querymiRTargetbinding(ExpData, miRTarget)
     miRTargetCandidate <- as.matrix(miRTargetCandidate)
     m1 <- nrow(miRTargetCandidate)
     n1 <- ncol(miRTargetCandidate)
 
     ExpDataNames <- c(as.matrix(ExpData[1, ]))
-    ExpData <- data.matrix(ExpData[-1, ])
-    ExpData <- data.frame(ExpData)
+    ExpData <- unfactor(ExpData[-1, ])    
     colnames(ExpData) <- ExpDataNames
 
     miR <- miRTargetCandidate[, 1]
@@ -496,8 +494,7 @@ sppc <- function(miRTarget, ExpData, minSharedmiR = 3, poscorcutoff = 0, padjust
     n1 <- ncol(miRTargetCandidate)
 
     ExpDataNames <- c(as.matrix(ExpData[1, ]))
-    ExpData <- data.matrix(ExpData[-1, ])
-    ExpData <- data.frame(ExpData)
+    ExpData <- unfactor(ExpData[-1, ])
     colnames(ExpData) <- ExpDataNames
 
     miR <- miRTargetCandidate[, 1]
@@ -580,8 +577,7 @@ ppc <- function(miRTarget, ExpData, minSharedmiR = 3, num_perm = 100, padjustval
     n1 <- ncol(miRTargetCandidate)
 
     ExpDataNames <- c(as.matrix(ExpData[1, ]))
-    ExpData <- data.matrix(ExpData[-1, ])
-    ExpData <- data.frame(ExpData)
+    ExpData <- unfactor(ExpData[-1, ])
     colnames(ExpData) <- ExpDataNames
 
     miR <- miRTargetCandidate[, 1]
@@ -658,8 +654,7 @@ hermes <- function(miRTarget, ExpData, minSharedmiR = 3, num_perm = 100, padjust
     n1 <- ncol(miRTargetCandidate)
 
     ExpDataNames <- c(as.matrix(ExpData[1, ]))
-    ExpData <- data.matrix(ExpData[-1, ])
-    ExpData <- data.frame(ExpData)
+    ExpData <- unfactor(ExpData[-1, ])    
     colnames(ExpData) <- ExpDataNames
 
     miR <- miRTargetCandidate[, 1]
@@ -836,8 +831,7 @@ cernia <- function(miRTarget, ExpData, mres, minSharedmiR = 3, poscorcutoff = 0,
     n1 <- ncol(miRTargetCandidate)
 
     ExpDataNames <- c(as.matrix(ExpData[1, ]))
-    ExpData <- data.matrix(ExpData[-1, ])
-    ExpData <- data.frame(ExpData)
+    ExpData <- unfactor(ExpData[-1, ])    
     colnames(ExpData) <- ExpDataNames
 
     miR <- miRTargetCandidate[, 1]
@@ -1198,8 +1192,7 @@ moduleFEA <- function(Modulelist, ont = "BP", KEGGorganism = "hsa", Reactomeorga
 moduleSurvival <- function(Modulelist, ExpData, SurvData, devidePercentage = 0.5, plot = FALSE) {
 
     ExpDataNames <- c(as.matrix(ExpData[1, ]))
-    ExpData <- data.matrix(ExpData[-1, ])
-    ExpData <- data.frame(ExpData)
+    ExpData <- unfactor(ExpData[-1, ])    
     colnames(ExpData) <- ExpDataNames
     myfit <- list()
     LogRank <- list()
