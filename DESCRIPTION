@@ -1,7 +1,7 @@
 Package: miRsponge
 Type: Package
 Title: Identification and analysis of miRNA sponge interaction networks and modules
-Version: 1.3.1
+Version: 1.3.0
 Author: Junpeng Zhang
 Maintainer: Junpeng Zhang <zhangjunpeng_411@yahoo.com>
 Description: This package provides several functions to study miRNA sponge (also called ceRNA or miRNA decoy), 
