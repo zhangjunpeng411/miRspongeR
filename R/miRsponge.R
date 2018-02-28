@@ -1068,7 +1068,7 @@ netModule <- function(spongenetwork, method = "MCL", directed = FALSE, save = FA
 
 ## Disease enrichment analysis of modules
 moduleDEA <- function(Modulelist, OrgDb = "org.Hs.eg.db", ont = "DO", padjustvaluecutoff = 0.05,
-    padjustedmethod = "BH", plot = FALSE) {
+    padjustedmethod = "BH") {
 
     entrezIDs <- lapply(seq_along(Modulelist), function(i) bitr(Modulelist[[i]], fromType = "SYMBOL",
         toType = "ENTREZID", OrgDb = OrgDb)$ENTREZID)
@@ -1084,49 +1084,12 @@ moduleDEA <- function(Modulelist, OrgDb = "org.Hs.eg.db", ont = "DO", padjustval
     enrichNCGs <- lapply(seq_along(Modulelist), function(i) enrichNCG(entrezIDs[[i]], pvalueCutoff = padjustvaluecutoff,
         pAdjustMethod = padjustedmethod))
 
-    if (plot & length(Modulelist) >= 2) {
-        ModuleID <- paste("M", seq_along(Modulelist), sep = "")
-        names(entrezIDs) <- ModuleID
-
-        try_xx1 <- try(compareCluster(entrezIDs, fun = "enrichDO", ont = ont, pvalueCutoff = padjustvaluecutoff,
-            pAdjustMethod = padjustedmethod), silent = TRUE)
-        if ("try-error" %in% class(try_xx1)) {
-            stop("Enriched modules are not enough!\n")
-        }
-
-        try_xx2 <- try(compareCluster(entrezIDs, fun = "enrichDGN", pvalueCutoff = padjustvaluecutoff,
-            pAdjustMethod = padjustedmethod), silent = TRUE)
-        if ("try-error" %in% class(try_xx2)) {
-            stop("Enriched modules are not enough!\n")
-        }
-
-        try_xx3 <- try(compareCluster(entrezIDs, fun = "enrichNCG", pvalueCutoff = padjustvaluecutoff,
-            pAdjustMethod = padjustedmethod), silent = TRUE)
-        if ("try-error" %in% class(try_xx3)) {
-            stop("Enriched modules are not enough!\n")
-        }
-
-        xx1 <- compareCluster(entrezIDs, fun = "enrichDO", ont = ont, pvalueCutoff = padjustvaluecutoff,
-            pAdjustMethod = padjustedmethod)
-
-        xx2 <- compareCluster(entrezIDs, fun = "enrichDGN", pvalueCutoff = padjustvaluecutoff, pAdjustMethod = padjustedmethod)
-
-        xx3 <- compareCluster(entrezIDs, fun = "enrichNCG", pvalueCutoff = padjustvaluecutoff, pAdjustMethod = padjustedmethod)
-
-        dev.new()
-        plot(xx1, title = "DO enrichment analysis")
-        dev.new()
-        plot(xx2, title = "DGN enrichment analysis")
-        dev.new()
-        plot(xx3, title = "NCG enrichment analysis")
-    }
-
     return(list(enrichDOs, enrichDGNs, enrichNCGs))
 }
 
 ## Functional GO, KEGG and Reactome enrichment analysis of modules
 moduleFEA <- function(Modulelist, ont = "BP", KEGGorganism = "hsa", Reactomeorganism = "human",
-    OrgDb = "org.Hs.eg.db", padjustvaluecutoff = 0.05, padjustedmethod = "BH", plot = FALSE) {
+    OrgDb = "org.Hs.eg.db", padjustvaluecutoff = 0.05, padjustedmethod = "BH") {
 
     entrezIDs <- lapply(seq_along(Modulelist), function(i) bitr(Modulelist[[i]], fromType = "SYMBOL",
         toType = "ENTREZID", OrgDb = OrgDb)$ENTREZID)
@@ -1141,48 +1104,6 @@ moduleFEA <- function(Modulelist, ont = "BP", KEGGorganism = "hsa", Reactomeorga
 
     enrichReactomes <- lapply(seq_along(Modulelist), function(i) enrichPathway(entrezIDs[[i]], organism = Reactomeorganism,
         pvalueCutoff = padjustvaluecutoff, pAdjustMethod = padjustedmethod))
-
-    if (plot & length(Modulelist) >= 2) {
-        ModuleID <- paste("M", seq_along(Modulelist), sep = "")
-        names(entrezIDs) <- ModuleID
-
-        try_xx1 <- try(compareCluster(entrezIDs, fun = "enrichGO", OrgDb = OrgDb, ont = ont, pvalueCutoff = padjustvaluecutoff,
-            pAdjustMethod = padjustedmethod), silent = TRUE)
-
-        if ("try-error" %in% class(try_xx1)) {
-            stop("Enriched modules are not enough!\n")
-        }
-
-        try_xx2 <- try(compareCluster(entrezIDs, fun = "enrichKEGG", organism = KEGGorganism, pvalueCutoff = padjustvaluecutoff,
-            pAdjustMethod = padjustedmethod), silent = TRUE)
-
-        if ("try-error" %in% class(try_xx2)) {
-            stop("Enriched modules are not enough!\n")
-        }
-
-        try_xx3 <- try(compareCluster(entrezIDs, fun = "enrichPathway", organism = Reactomeorganism,
-            pvalueCutoff = padjustvaluecutoff, pAdjustMethod = padjustedmethod), silent = TRUE)
-
-        if ("try-error" %in% class(try_xx3)) {
-            stop("Enriched modules are not enough!\n")
-        }
-
-        xx1 <- compareCluster(entrezIDs, fun = "enrichGO", OrgDb = OrgDb, ont = ont, pvalueCutoff = padjustvaluecutoff,
-            pAdjustMethod = padjustedmethod)
-
-        xx2 <- compareCluster(entrezIDs, fun = "enrichKEGG", organism = KEGGorganism, pvalueCutoff = padjustvaluecutoff,
-            pAdjustMethod = padjustedmethod)
-
-        xx3 <- compareCluster(entrezIDs, fun = "enrichPathway", organism = Reactomeorganism, pvalueCutoff = padjustvaluecutoff,
-            pAdjustMethod = padjustedmethod)
-
-        dev.new()
-        plot(xx1, title = "GO enrichment analysis")
-        dev.new()
-        plot(xx2, title = "KEGG enrichment analysis")
-        dev.new()
-        plot(xx3, title = "Reactome enrichment analysis")
-    }
 
     return(list(enrichGOs, enrichKEGGs, enrichReactomes))
 

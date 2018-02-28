@@ -13,7 +13,7 @@ Genes database (\url{http://ncg.kcl.ac.uk/}).
 }
 \usage{
 moduleDEA(Modulelist, OrgDb = "org.Hs.eg.db", ont = "DO",
-padjustvaluecutoff = 0.05, padjustedmethod = "BH",plot = FALSE)
+padjustvaluecutoff = 0.05, padjustedmethod = "BH")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -33,9 +33,6 @@ A cutoff value of adjusted p-values.
 Adjusted method of p-values, can select one of "holm", "hochberg",
 "hommel", "bonferroni", "BH", "BY", "fdr", "none".
 }
-    \item{plot}{
-A logical value, plot or not.
-}
 }
 
 \value{
@@ -50,6 +47,7 @@ Disease Ontology Semantic and Enrichment analysis. Bioinformatics, 2015,
 Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 }
 \examples{
+# Obtain miRNA-target interaction data file "miR2Target.csv" in csv format
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")

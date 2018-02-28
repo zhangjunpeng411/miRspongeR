@@ -19,37 +19,37 @@ method = c("miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME", "cernia"))
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{miRTarget}{
-Putative miRNA-target interactions.
+Putative miRNA-target interactions. Required option for method "miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME" and "cernia".
 }
   \item{ExpData}{
 An input expression data frame, the columns are genes and
-the rows are samples.
+the rows are samples. Required option for method "pc", "sppc", "ppc", "hermes" and "cernia".
 }
   \item{mres}{
 Putative MiRNA Response Elements (mres) data frame, each row
-contains five elements: Mirna, Target, energy, gap_l, gap_r.
+contains five elements: Mirna, Target, energy, gap_l, gap_r. Required option for method "muTaME" and "cernia".
 }
   \item{minSharedmiR}{
-The minimum number of shared miRNAs between targets.
+The minimum number of shared miRNAs between targets. Required option for method "miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME" and "cernia".
 }
   \item{poscorcutoff}{
-A cutoff value of positive correlation.
+A cutoff value of positive correlation. Required option for method "pc", "sppc" and "cernia".
 }
   \item{num_perm}{
-The number of permutations.
+The number of permutations. Required option for method "ppc" and "hermes".
 }
   \item{padjustvaluecutoff}{
-A cutoff value of adjusted p-values.
+A cutoff value of adjusted p-values. Required option for method "miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME" and "cernia".
 }
   \item{padjustmethod}{
 Adjusted method of p-values, can select one of "holm", "hochberg",
-"hommel", "bonferroni", "BH", "BY", "fdr", "none".
+"hommel", "bonferroni", "BH", "BY", "fdr", "none". Required option for method "miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME" and "cernia".
 }
   \item{senscorcutoff}{
-A cutoff value of sensitivity partial pearson correlation.
+A cutoff value of sensitivity partial pearson correlation. Required option for method "sppc".
 }
   \item{scorecutoff}{
-A cutoff value of normalized score (range from 0 to 1).
+A cutoff value of normalized score (range from 0 to 1). Required option for method "muTaME" and "cernia".
 }
   \item{method}{
 Select a method for identifying miRNA sponge interactions, can select
@@ -98,8 +98,11 @@ for inferring competing endogenous interactions. Brief Bioinform.,
 Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 }
 \examples{
+# Obtain expression data file "ExpData.csv" in csv format
 ExpDatacsv <- system.file("extdata","ExpData.csv",package="miRsponge")
 ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
+
+# Obtain miRNA-target interaction data file "miR2Target.csv" in csv format
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 

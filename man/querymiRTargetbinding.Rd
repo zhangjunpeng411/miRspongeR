@@ -35,8 +35,11 @@ Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 }
 
 \examples{
-ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRsponge")
+# Obtain expression data file "ExpData.csv" in csv format
+ExpDatacsv <- system.file("extdata","ExpData.csv",package="miRsponge")
 ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
+
+# Obtain miRNA-target interaction data file "miR2Target.csv" in csv format
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 miR2Target_queried <- querymiRTargetbinding(ExpData, miRTarget)

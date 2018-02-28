@@ -1,6 +1,6 @@
 ---
 title: "miRsponge: identification and analysis of miRNA sponge 
-    interaction networks and modules"
+    interaction networks and modules" 
 author: "\\
     
     Junpeng Zhang (<zhangjunpeng_411@yahoo.com>)\\
