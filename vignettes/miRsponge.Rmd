@@ -242,7 +242,7 @@ Users can choose FN [21], MCL [22], LINKCOMM [23] and MCODE [24] for module iden
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")
-spongenetwork_Cluster <- netModule(miRHomologyceRInt[, 1:2])
+spongenetwork_Cluster <- netModule(miRHomologyceRInt[, 1:2], modulesize = 2)
 spongenetwork_Cluster
 ```
 
@@ -265,7 +265,7 @@ Reactome Pathway Database (<http://reactome.org/>).
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")
-spongenetwork_Cluster <- netModule(miRHomologyceRInt[, 1:2])
+spongenetwork_Cluster <- netModule(miRHomologyceRInt[, 1:2], modulesize = 2)
 sponge_Module_DEA <- moduleDEA(spongenetwork_Cluster)
 sponge_Module_FEA <- moduleFEA(spongenetwork_Cluster)
 ```
@@ -282,7 +282,7 @@ ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",")
 SurvDatacsv <- system.file("extdata", "SurvData.csv", package="miRsponge")
 SurvData <- read.csv(SurvDatacsv, header=TRUE, sep=",")
 pcceRInt <- spongeMethod(miRTarget, ExpData, method = "pc")
-spongenetwork_Cluster <- netModule(pcceRInt[, 1:2])
+spongenetwork_Cluster <- netModule(pcceRInt[, 1:2], modulesize = 2)
 sponge_Module_Survival <- moduleSurvival(spongenetwork_Cluster, 
     ExpData, SurvData, devidePercentage=.5)
 sponge_Module_Survival

@@ -1026,7 +1026,7 @@ spongeValidate <- function(spongenetwork, Groundtruth) {
 
 ## netModule function for identifying miRNA sponge modules from network.  Possible methods
 ## include FN, MCL, LINKCOMM and MCODE.
-netModule <- function(spongenetwork, method = "MCL", directed = FALSE, save = FALSE) {
+netModule <- function(spongenetwork, method = "MCL", directed = FALSE, modulesize = 3, save = FALSE) {
 
     spongenetwork_Cluster <- ProNet::cluster(graph_from_data_frame(spongenetwork, directed = directed),
         method = method, directed = directed, layout = "fruchterman.reingold")
@@ -1034,17 +1034,27 @@ netModule <- function(spongenetwork, method = "MCL", directed = FALSE, save = FA
     if (method == "FN" | method == "MCL") {
         spongenetwork_Cluster_result <- lapply(seq_len(max(spongenetwork_Cluster)),
             function(i) rownames(as.matrix(spongenetwork_Cluster))[which(spongenetwork_Cluster == i)])
+        size <- unlist(lapply(seq_len(max(spongenetwork_Cluster)), function(i) length(spongenetwork_Cluster_result[[i]])))
+        spongenetwork_Cluster_result <- lapply(which(size >= modulesize), function(i) spongenetwork_Cluster_result[[i]])
     } else if (method == "LINKCOMM") {
         spongenetwork_Cluster_result <- lapply(seq_len(max(c(spongenetwork_Cluster$cluster))), 
             function(i) as.character(spongenetwork_Cluster$node[which(c(spongenetwork_Cluster$cluster) == i)]))
+        size <- unlist(lapply(seq_len(max(spongenetwork_Cluster)), function(i) length(spongenetwork_Cluster_result[[i]])))
+        spongenetwork_Cluster_result <- lapply(which(size >= modulesize), function(i) spongenetwork_Cluster_result[[i]])
     } else if (method == "MCODE") {
         spongenetwork_Cluster <- spongenetwork_Cluster + 1
         spongenetwork_Cluster_result <- lapply(seq_len(max(spongenetwork_Cluster)),
             function(i) rownames(as.matrix(spongenetwork_Cluster))[which(spongenetwork_Cluster == i)])
+        size <- unlist(lapply(seq_len(max(spongenetwork_Cluster)), function(i) length(spongenetwork_Cluster_result[[i]])))
+        spongenetwork_Cluster_result <- lapply(which(size >= modulesize), function(i) spongenetwork_Cluster_result[[i]])
     }
 
     if (save) {
-        res <- spongenetwork_Cluster
+        if (method == "FN" | method == "MCL" | method == "LINKCOMM") {
+            res <- spongenetwork_Cluster
+        } else if (method == "MCODE") {
+            res <- spongenetwork_Cluster + 1
+        }
         fileName <- paste("spongenetwork_Cluster_", method, ".txt", sep = "")
         spongenetwork_Cluster_Name <- list()
         k <- 0

@@ -9,7 +9,7 @@ Identifying miRNA sponge modules from network. Possible methods include
 FN, MCL, LINKCOMM and MCODE.
 }
 \usage{
-netModule(spongenetwork, method = "MCL", directed = FALSE, save = FALSE)
+netModule(spongenetwork, method = "MCL", directed = FALSE, modulesize = 3, save = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,6 +21,9 @@ Cluster method, can select one of FN, MCL, LINKCOMM and MCODE.
 }
     \item{directed}{
 A logical value, the network is directed or not.
+}
+    \item{modulesize}{
+The size cutoff of the identified modules.
 }
     \item{save}{
 A logical value, save the identified modules or not.
