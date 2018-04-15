@@ -29,6 +29,7 @@ Imports: corpcor,
     graphics,
     stats,
     varhandle,
+    linkcomm,
     utils
 Suggests:BiocStyle, 
     knitr,
