@@ -77,7 +77,7 @@ head(miRHomologyceRInt)
 
 ## pc
 
-The pc function consider expression data based on miRHomology method. 
+The pc function considers expression data based on miRHomology method. 
 Significantly positive miRNA sponge interaction pairs are regarded as output. 
 
 ```{r}
@@ -146,7 +146,7 @@ expression data. The larger the number is, the slower the calculation is.
 ## muTaME
 
 We implement the muTaME method based on the logarithm 
-of four scores: (1) the fraction of coomon miRNAs, (2) the density of the 
+of four scores: (1) the fraction of common miRNAs, (2) the density of the 
 MREs for all shared miRNAs, (3) the distribution of MREs of the putative 
 RNA-RNA pairs and (4) the relation between the overall number of MREs for 
 a putative miRNA sponge compared with the number of miRNAs that yield these 
@@ -168,7 +168,7 @@ head(muTaMEceRInt)
 ## cernia
 
 We implement the cernia method based on the 
-logarithm of seven scores: (1) the fraction of coomon miRNAs, (2) 
+logarithm of seven scores: (1) the fraction of common miRNAs, (2) 
 the density of the MREs for all shared miRNAs, (3) the distribution 
 of MREs of the putative RNA-RNA pairs, (4) the relation between the 
 overall number of MREs for a putative miRNA sponge compared with the 
@@ -195,7 +195,7 @@ head(cerniaceRInt)
 
 ## integrateMethod
 
-To obtain a list high-confidence miRNA sponge interactions, we 
+To obtain a list of high-confidence miRNA sponge interactions, we 
 implement 'integrateMethod' function to integrate results of different methods. 
 
 ```{r}
