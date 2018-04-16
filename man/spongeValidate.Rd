@@ -7,15 +7,18 @@ Validation of computationally predicted miRNA sponge interactions
 \description{
 Validation of computationally predicted miRNA sponge interactions.
 The groundtruth of miRNA sponge interactions are from
-miRSponge v2.0 (\url{http://www.bio-bigdata.net/miRSponge/}).
+miRSponge (\url{http://www.bio-bigdata.net/miRSponge/}).
 }
 \usage{
-spongeValidate(spongenetwork, Groundtruth)
+spongeValidate(spongenetwork, directed = FALSE, Groundtruth)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
     \item{spongenetwork}{
 Input miRNA sponge interaction network.
+}
+    \item{directed}{
+A logical value, the network is directed or not.
 }
     \item{Groundtruth}{
 The groundtruth of miRNA sponge interactions.
@@ -39,7 +42,7 @@ miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 Groundtruthcsv <- system.file("extdata", "Groundtruth.csv", package="miRsponge")
 Groundtruth <- read.csv(Groundtruthcsv, header=TRUE, sep=",")
 miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")
-spongenetwork_validated <- spongeValidate(miRHomologyceRInt[, 1:2], Groundtruth)
+spongenetwork_validated <- spongeValidate(miRHomologyceRInt[, 1:2], directed = FALSE, Groundtruth)
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -1014,14 +1014,15 @@ spongeMethod <- function(miRTarget, ExpData = NULL, mres = NULL, minSharedmiR = 
 }
 
 ## Validation of computationally predicted miRNA sponge interactions.
-spongeValidate <- function(spongenetwork, Groundtruth) {
-
-    spongenetwork_graph <- graph_from_data_frame(spongenetwork)
-    Groundtruth_graph <- graph_from_data_frame(Groundtruth)
-    Validated_interactions <- as_data_frame(spongenetwork_graph %s% Groundtruth_graph)
-    colnames(Validated_interactions) <- c("sponge_1", "sponge_2")
-
-    return(Validated_interactions)
+## Validation of computationally predicted miRNA sponge interactions.
+spongeValidate <- function(spongenetwork, directed = FALSE, Groundtruth) {
+  
+  spongenetwork_graph <- graph_from_data_frame(spongenetwork, directed = directed)
+  Groundtruth_graph <- graph_from_data_frame(Groundtruth, directed = directed)
+  Validated_interactions <- as_data_frame(spongenetwork_graph %s% Groundtruth_graph)
+  colnames(Validated_interactions) <- c("sponge_1", "sponge_2")
+  
+  return(Validated_interactions)
 }
 
 ## netModule function for identifying miRNA sponge modules from network.  Possible methods

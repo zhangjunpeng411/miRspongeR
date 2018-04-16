@@ -227,7 +227,7 @@ miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")
 Groundtruthcsv <- system.file("extdata", "Groundtruth.csv", package="miRsponge")
 Groundtruth <- read.csv(Groundtruthcsv, header=TRUE, sep=",")
-spongenetwork_validated <- spongeValidate(miRHomologyceRInt[, 1:2], Groundtruth)
+spongenetwork_validated <- spongeValidate(miRHomologyceRInt[, 1:2], directed = FALSE, Groundtruth)
 spongenetwork_validated
 ```
 
