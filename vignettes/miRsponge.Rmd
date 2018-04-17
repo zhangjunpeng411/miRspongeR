@@ -219,7 +219,7 @@ miRNA sponge interactions predicted by at least 'Intersect_num' methods.
 
 To validate the predicted miRNA sponge interactions, we implement 
 'spongeValidate' function. The groundtruth of miRNA sponge interactions 
-are from miRSponge v2.0 (<http://www.bio-bigdata.net/miRSponge/>).
+are from miRSponge (<http://www.bio-bigdata.net/miRSponge/>) and the experimentally validated miRNA sponge interactions of related literatures.
 
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
@@ -358,7 +358,7 @@ the tumor suppressor PTEN by competing endogenous mRNAs. Cell,
 
 [20] Sardina DS, Alaimo S, Ferro A, et al. A novel computational method 
 for inferring competing endogenous interactions. Brief Bioinform., 
-2016, DOI: 10.1093/bib/bbw084.
+2017, 18(6):1071-1081.
 
 [21] Clauset A, Newman ME, Moore C. Finding community structure in 
 very large networks. Phys Rev E Stat Nonlin Soft Matter Phys., 2004, 
