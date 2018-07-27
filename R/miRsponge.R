@@ -447,7 +447,7 @@ mcode.find.complex <- function(neighbors, neighbors.indx, vertex.weight,
 {
 	  res<-.C("complex",as.integer(neighbors),as.integer(neighbors.indx),
           as.single(vertex.weight),as.single(vwp),as.integer(seed.vertex),
-          seen=as.integer(seen),COMPLEX=as.integer(rep(0,length(seen)))
+          seen=as.integer(seen),COMPLEX=as.integer(rep(0,length(seen))), PACKAGE = "miRsponge"
           )
 	
 	  return(list(seen=res$seen,COMPLEX=which(res$COMPLEX!=0)))

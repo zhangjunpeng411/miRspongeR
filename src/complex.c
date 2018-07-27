@@ -2,6 +2,7 @@
 #include<R.h>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// C function from from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
 // stage2 Molecular Complex Prediction
 //     procedure MCODE-FIND-COMPLEX
 void complex(int* neighbor,int* neighbor_indx,float* vertex_weight,float* D,int* seed_vertex,int* seen,int* COMPLEX)
