@@ -339,6 +339,226 @@ dtHybrid <- function(miRTarget) {
     return(W)
 }
 
+## Network clustering based on different methods from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+cluster <- function(graph, method=c("FN"," MCL", "LINKCOMM", "MCODE"),
+                  expansion = 2, inflation = 2, hcmethod = "average", directed = FALSE, outfile = NULL, ...)
+{
+  method<-match.arg(method)
+  if(method=="FN"){
+	  graph <- simplify(graph)
+	  fc <- fastgreedy.community(graph, merges = TRUE, modularity = TRUE)
+	  membership <- membership(fc)
+	  if(!is.null(V(graph)$name)){
+              names(membership) <- V(graph)$name
+	  }	  
+	  if(!is.null(outfile)){
+	      cluster.save(cbind(names(membership),membership),outfile=outfile)		
+	  }else{
+	      return(membership)
+	  }
+  }else if(method=="LINKCOMM"){
+	  edgelist <- get.edgelist(graph)
+	  if(!is.null(E(graph)$weight)){
+              edgelist <- cbind(edgelist,E(graph)$weight)
+	  }
+	  lc <- getLinkCommunities(edgelist,plot=FALSE,directed=directed,hcmethod=hcmethod)
+	  if(!is.null(outfile)){
+		  cluster.save(lc$nodeclusters,outfile=outfile)		  
+	  }else{		  
+		  return(lc$nodeclusters)
+	  }
+  }else if(method=="MCL"){
+        adj <- matrix(rep(0,length(V(graph))^2),nrow=length(V(graph)),ncol=length(V(graph)))
+        for(i in 1:length(V(graph))){
+            neighbors <- neighbors(graph,v=V(graph)$name[i],mode="all")
+            j <- match(neighbors$name,V(graph)$name,nomatch=0)
+            adj[i,j] = 1
+        }
+        lc <- mcl(adj,addLoops=TRUE,expansion=expansion,inflation=inflation,allow1=TRUE,max.iter=100,ESM=FALSE)
+        lc$name <- V(graph)$name
+        lc$Cluster <- lc$Cluster
+        
+        if(!is.null(outfile)){
+            cluster.save(cbind(lc$name,lc$Cluster),outfile=outfile)		
+        }else{
+        result <- lc$Cluster
+        names(result) <- V(graph)$name
+        return(result)
+        }
+  }else if(method=="MCODE"){
+	  compx <- mcode(graph,vwp=0.9,haircut=T,fluff=T,fdt=0.1)
+	  index <- which(!is.na(compx$score))
+	  membership <- rep(0,vcount(graph))
+	  for(i in 1:length(index)){
+	      membership[compx$COMPLEX[[index[i]]]]<-i
+	  }
+	      if(!is.null(V(graph)$name)) names(membership)<-V(graph)$name	  
+	  if(!is.null(outfile)){
+		  cluster.save(cbind(names(membership),membership),outfile=outfile)
+		  invisible(NULL)
+	  }else{
+		  return(membership)
+	  }
+  }
+}
+
+## Internal function cluster.save from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/) to save the clustering result .
+cluster.save <- function(membership, outfile){
+	wd <- dirname(outfile)
+	wd <- ifelse(wd==".",paste(wd,"/",sep=""),wd)
+	filename <- basename(outfile)
+	if((filename=="")||(grepl(":",filename))){
+		filename <- "membership.txt"
+	}else if(grepl("\\.",filename)){
+		filename <- sub("\\.(?:.*)",".txt", filename)
+	}
+	write.table(membership,file=paste(wd,filename,sep="/"),
+              row.names=FALSE,col.names=c("node","cluster"),quote =FALSE)
+}
+
+## Internal function mcode.vertex.weighting from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+mcode.vertex.weighting<-function(graph, neighbors){	
+	stopifnot(is.igraph(graph))  
+	weight <- lapply(1:vcount(graph),
+                 function(i){
+		              subg<-induced.subgraph(graph,neighbors[[i]])
+		              core<-graph.coreness(subg)
+		              k<-max(core)
+				          ### k-coreness
+				          kcore<-induced.subgraph(subg,which(core==k))
+				          if(vcount(kcore)>1){
+					          if(any(is.loop(kcore))){
+						          k*ecount(kcore)/choose(vcount(kcore)+1,2)						
+					          }else{
+						          k*ecount(kcore)/choose(vcount(kcore),2)
+					          }
+				          }else{
+                                             0
+				          }
+				         }
+			 )
+  
+	return(unlist(weight))
+}
+
+## Internal function mcode.find.complex from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+mcode.find.complex <- function(neighbors, neighbors.indx, vertex.weight,
+                             vwp, seed.vertex, seen)
+{
+	  res<-.C("complex",as.integer(neighbors),as.integer(neighbors.indx),
+          as.single(vertex.weight),as.single(vwp),as.integer(seed.vertex),
+          seen=as.integer(seen),COMPLEX=as.integer(rep(0,length(seen)))
+          )
+	
+	  return(list(seen=res$seen,COMPLEX=which(res$COMPLEX!=0)))
+}
+
+## Internal function mcode.find.complexex from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+mcode.find.complexex <- function(graph, neighbors, vertex.weight, vwp)
+{
+	seen<-rep(0,vcount(graph))
+
+	neighbors<-lapply(neighbors,function(item){item[-1]})
+	neighbors.indx<-cumsum(unlist(lapply(neighbors,length)))
+	
+	neighbors.indx<-c(0,neighbors.indx)
+	neighbors<-unlist(neighbors)-1
+	
+	COMPLEX<-list()
+	n<-1
+        w.order<-order(vertex.weight,decreasing=TRUE)
+	for(i in w.order){
+		if(!(seen[i])){
+			res<-mcode.find.complex(neighbors,neighbors.indx,vertex.weight,vwp,i-1,seen)
+			if(length(res$COMPLEX)>1){
+				COMPLEX[[n]]<-res$COMPLEX
+				seen<-res$seen
+				n<-n+1
+			}
+		}
+	}	
+	rm(neighbors)	
+	return(list(COMPLEX=COMPLEX,seen=seen))
+}
+
+## Internal function mcode.fluff.complex from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+mcode.fluff.complex <- function(graph, vertex.weight, fdt=0.8, complex.g, seen)
+{
+	seq_complex.g<-seq_along(complex.g)
+	for(i in seq_complex.g){
+	    node.neighbor<-unlist(neighborhood(graph,1,complex.g[i]))
+	    if(length(node.neighbor)>1){
+                subg<-induced.subgraph(graph,node.neighbor)
+            if(graph.density(subg, loops=FALSE)>fdt){
+                complex.g<-c(complex.g,node.neighbor)
+       }
+		 }
+	}
+  
+	return(unique(complex.g))
+}
+
+## Internal function mcode.post.process from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+mcode.post.process<-function(graph, vertex.weight, haircut, fluff, fdt=0.8,
+                             set.complex.g, seen)
+{
+	indx<-unlist(lapply(set.complex.g,
+                      function(complex.g){
+		          if(length(complex.g)<=2)
+			      0
+			  else
+		              1
+			  }
+		    ))
+	set.complex.g<-set.complex.g[indx!=0]
+	set.complex.g<-lapply(set.complex.g,
+                        function(complex.g){
+			    coreness<-graph.coreness(induced.subgraph(graph,complex.g))						
+			    if(fluff){
+				complex.g<-mcode.fluff.complex(graph,vertex.weight,fdt,complex.g,seen)
+			    if(haircut){
+				## coreness needs to be recalculated
+				coreness<-graph.coreness(induced.subgraph(graph,complex.g))
+				complex.g<-complex.g[coreness>1]
+				}
+				}else if(haircut){
+				complex.g<-complex.g[coreness>1]
+				}
+				return(complex.g)
+				})
+	set.complex.g<-set.complex.g[lapply(set.complex.g,length)>2]
+	return(set.complex.g)
+}
+
+## Internal function mcode from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+mcode <- function(graph, vwp=0.5, haircut=FALSE, fluff=FALSE, fdt=0.8, loops=TRUE)
+{
+	stopifnot(is.igraph(graph))
+	if(vwp>1 | vwp <0){
+            stop("vwp must be between 0 and 1")
+	}
+	if(!loops){
+            graph<-simplify(graph,remove.multiple=FALSE,remove.loops=TRUE)
+	}
+	neighbors<-neighborhood(graph,1)
+	W<-mcode.vertex.weighting(graph,neighbors)
+	res<-mcode.find.complexex(graph,neighbors=neighbors,vertex.weight=W,vwp=vwp)
+	COMPLEX<-mcode.post.process(graph,vertex.weight=W,haircut=haircut,fluff=fluff,
+                              fdt=fdt,res$COMPLEX,res$seen)		
+	score<-unlist(lapply(COMPLEX,
+                       function(complex.g){
+		           complex.g<-induced.subgraph(graph,complex.g)
+			   if(any(is.loop(complex.g)))
+			   score<-ecount(complex.g)/choose(vcount(complex.g)+1,2)*vcount(complex.g)
+			   else
+			   score<-ecount(complex.g)/choose(vcount(complex.g),2)*vcount(complex.g)
+			   return(score)
+			}
+		    ))
+	order_score<-order(score,decreasing=TRUE)
+	return(list(COMPLEX=COMPLEX[order_score],score=score[order_score]))
+}
+
 ## Utility methods for identifying miRNA sponge interactions For input expression data, the
 ## columns are genes and the rows are samples.  For input miRTarget, the miRNA-target
 ## interactions could be miRNA-mRNA, miRNA-lncRNA, miRNA-circRNA, miRNA-pseudogene, etc.  For
