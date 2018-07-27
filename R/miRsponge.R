@@ -340,8 +340,8 @@ dtHybrid <- function(miRTarget) {
 }
 
 ## Network clustering based on different methods from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
-cluster <- function(graph, method=c("FN"," MCL", "LINKCOMM", "MCODE"),
-                  expansion = 2, inflation = 2, hcmethod = "average", directed = FALSE, outfile = NULL, ...)
+cluster <- function(graph, method="MCL", expansion = 2, inflation = 2, 
+                  hcmethod = "average", directed = FALSE, outfile = NULL, ...)
 {
   method<-match.arg(method)
   if(method=="FN"){
@@ -1250,8 +1250,8 @@ spongeValidate <- function(spongenetwork, directed = FALSE, Groundtruth) {
 netModule <- function(spongenetwork, method = "MCL", directed = FALSE, modulesize = 3, save = FALSE) {
   
   if (method == "FN" | method == "MCL" | method == "MCODE") {
-    spongenetwork_Cluster <- ProNet::cluster(graph_from_data_frame(spongenetwork, directed = directed),
-                                             method = method, directed = directed, layout = "fruchterman.reingold")
+    spongenetwork_Cluster <- cluster(graph_from_data_frame(spongenetwork, directed = directed),
+                                             method = method, directed = directed)
   } else if (method == "LINKCOMM") {
     edgelist <- get.edgelist(graph_from_data_frame(spongenetwork, directed = directed))
     spongenetwork_Cluster <- getLinkCommunities(edgelist, directed = directed)$nodeclusters
