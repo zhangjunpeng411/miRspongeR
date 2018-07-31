@@ -339,7 +339,8 @@ dtHybrid <- function(miRTarget) {
     return(W)
 }
 
-## Network clustering based on different methods from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+## Internal function cluster from ProNet package 
+## (https://github.com/cran/ProNet) with GPL-2 license.
 cluster <- function(graph, method="MCL", expansion = 2, inflation = 2, 
                   hcmethod = "average", directed = FALSE, outfile = NULL, ...)
 {
@@ -369,7 +370,7 @@ cluster <- function(graph, method="MCL", expansion = 2, inflation = 2,
 	  }
   }else if(method=="MCL"){
         adj <- matrix(rep(0,length(V(graph))^2),nrow=length(V(graph)),ncol=length(V(graph)))
-        for(i in 1:length(V(graph))){
+        for(i in seq_along(V(graph))){
             neighbors <- neighbors(graph,v=V(graph)$name[i],mode="all")
             j <- match(neighbors$name,V(graph)$name,nomatch=0)
             adj[i,j] = 1
@@ -389,7 +390,7 @@ cluster <- function(graph, method="MCL", expansion = 2, inflation = 2,
 	  compx <- mcode(graph,vwp=0.9,haircut=T,fluff=T,fdt=0.1)
 	  index <- which(!is.na(compx$score))
 	  membership <- rep(0,vcount(graph))
-	  for(i in 1:length(index)){
+	  for(i in seq_along(index)){
 	      membership[compx$COMPLEX[[index[i]]]]<-i
 	  }
 	      if(!is.null(V(graph)$name)) names(membership)<-V(graph)$name	  
@@ -402,7 +403,8 @@ cluster <- function(graph, method="MCL", expansion = 2, inflation = 2,
   }
 }
 
-## Internal function cluster.save from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/) to save the clustering result .
+## Internal function cluster.save from ProNet package
+## (https://github.com/cran/ProNet) with GPL-2 license.
 cluster.save <- function(membership, outfile){
 	wd <- dirname(outfile)
 	wd <- ifelse(wd==".",paste(wd,"/",sep=""),wd)
@@ -416,10 +418,11 @@ cluster.save <- function(membership, outfile){
               row.names=FALSE,col.names=c("node","cluster"),quote =FALSE)
 }
 
-## Internal function mcode.vertex.weighting from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+## Internal function mcode.vertex.weighting from ProNet package
+## (https://github.com/cran/ProNet) with GPL-2 license.
 mcode.vertex.weighting<-function(graph, neighbors){	
 	stopifnot(is.igraph(graph))  
-	weight <- lapply(1:vcount(graph),
+	weight <- lapply(seq_len(vcount(graph)),
                  function(i){
 		              subg<-induced.subgraph(graph,neighbors[[i]])
 		              core<-graph.coreness(subg)
@@ -441,7 +444,8 @@ mcode.vertex.weighting<-function(graph, neighbors){
 	return(unlist(weight))
 }
 
-## Internal function mcode.find.complex from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+## Internal function mcode.find.complex from ProNet package
+## (https://github.com/cran/ProNet) with GPL-2 license.
 mcode.find.complex <- function(neighbors, neighbors.indx, vertex.weight,
                              vwp, seed.vertex, seen)
 {
@@ -453,7 +457,8 @@ mcode.find.complex <- function(neighbors, neighbors.indx, vertex.weight,
 	  return(list(seen=res$seen,COMPLEX=which(res$COMPLEX!=0)))
 }
 
-## Internal function mcode.find.complexex from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+## Internal function mcode.find.complexex from ProNet package
+## (https://github.com/cran/ProNet) with GPL-2 license.
 mcode.find.complexex <- function(graph, neighbors, vertex.weight, vwp)
 {
 	seen<-rep(0,vcount(graph))
@@ -481,7 +486,8 @@ mcode.find.complexex <- function(graph, neighbors, vertex.weight, vwp)
 	return(list(COMPLEX=COMPLEX,seen=seen))
 }
 
-## Internal function mcode.fluff.complex from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+## Internal function mcode.fluff.complex from ProNet package
+## (https://github.com/cran/ProNet) with GPL-2 license.
 mcode.fluff.complex <- function(graph, vertex.weight, fdt=0.8, complex.g, seen)
 {
 	seq_complex.g<-seq_along(complex.g)
@@ -498,7 +504,8 @@ mcode.fluff.complex <- function(graph, vertex.weight, fdt=0.8, complex.g, seen)
 	return(unique(complex.g))
 }
 
-## Internal function mcode.post.process from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+## Internal function mcode.post.process from ProNet package
+## (https://github.com/cran/ProNet) with GPL-2 license.
 mcode.post.process<-function(graph, vertex.weight, haircut, fluff, fdt=0.8,
                              set.complex.g, seen)
 {
@@ -530,7 +537,8 @@ mcode.post.process<-function(graph, vertex.weight, haircut, fluff, fdt=0.8,
 	return(set.complex.g)
 }
 
-## Internal function mcode from ProNet package (https://cran.r-project.org/src/contrib/Archive/ProNet/).
+## Internal function mcode from ProNet package
+## (https://github.com/cran/ProNet) with GPL-2 license.
 mcode <- function(graph, vwp=0.5, haircut=FALSE, fluff=FALSE, fdt=0.8, loops=TRUE)
 {
 	stopifnot(is.igraph(graph))
