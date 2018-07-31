@@ -7,6 +7,7 @@
     export("querymiRTargetbinding")
     export("spongeMethod")
     export("spongeValidate")
+    importFrom("Rcpp", "evalCpp")
     importFrom("grDevices", "dev.new")
     importFrom("graphics", "legend")
     importFrom("stats", "cor.test", "median", "na.omit", "p.adjust",
