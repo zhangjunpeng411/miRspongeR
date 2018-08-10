@@ -1,127 +1,131 @@
+CHANGES IN VERSION 1.7.5
+-------------------------
+o Update miRsponge.Rmd <2018-08-25, Sat>.
+
 CHANGES IN VERSION 1.7.4
 -------------------------
-Update netModule function <2018-08-10, Fri>.
+o Update netModule function <2018-08-10, Fri>.
 
 CHANGES IN VERSION 1.7.3
 -------------------------
-Update netModule function <2018-07-31, Tues>.
+o Update netModule function <2018-07-31, Tues>.
 
 CHANGES IN VERSION 1.7.2
 -------------------------
-Update netModule function <2018-07-31, Tues>.
+o Update netModule function <2018-07-31, Tues>.
 
 CHANGES IN VERSION 1.7.1
 -------------------------
-Update netModule function <2018-07-29, Sun>.
+o Update netModule function <2018-07-29, Sun>.
 
 CHANGES IN VERSION 1.7.0
 -------------------------
-Update netModule function <2018-07-27, Fri>.
+o Update netModule function <2018-07-27, Fri>.
 
 CHANGES IN VERSION 1.5.2
 -------------------------
-Update ground truth for validation <2018-04-17, Tues>.
+o Update ground truth for validation <2018-04-17, Tues>.
 
 CHANGES IN VERSION 1.5.1
 -------------------------
-Update netModule and spongeValidate function <2018-04-16, Mon>.
+o Update netModule and spongeValidate function <2018-04-16, Mon>.
 
 CHANGES IN VERSION 1.5.0
 -------------------------
-Update Reference Manual <2018-04-15, Sun>.
+o Update Reference Manual <2018-04-15, Sun>.
 
 CHANGES IN VERSION 1.3.3
 -------------------------
-Update netModule function <2018-04-12, Thur>.
+o Update netModule function <2018-04-12, Thur>.
 
 CHANGES IN VERSION 1.3.2
 -------------------------
-Update DESCRIPTION <2018-03-07, Wed>.
+o Update DESCRIPTION <2018-03-07, Wed>.
 
 CHANGES IN VERSION 1.3.1
 -------------------------
-Update Reference Manual <2018-03-03, Sat>.
+o Update Reference Manual <2018-03-03, Sat>.
 
 CHANGES IN VERSION 1.3.0
 -------------------------
-Update Reference Manual <2018-02-28, Wed>.
+o Update Reference Manual <2018-02-28, Wed>.
 
 CHANGES IN VERSION 1.1.1
 -------------------------
-Update miRsponge.R <2017-10-01, Sun>.
+o Update miRsponge.R <2017-10-01, Sun>.
 
 CHANGES IN VERSION 1.1.0
 -------------------------
-Update netModule function <2017-09-07, Thur>.
+o Update netModule function <2017-09-07, Thur>.
 
 CHANGES IN VERSION 0.99.17
 -------------------------
-Update DESCRIPTION <2017-08-23, Wed>.
+o Update DESCRIPTION <2017-08-23, Wed>.
 
 CHANGES IN VERSION 0.99.16
 -------------------------
-Update moduleSurvival function <2017-08-08, Tues>.
+o Update moduleSurvival function <2017-08-08, Tues>.
 
 CHANGES IN VERSION 0.99.15
 -------------------------
-Update test_miRsponge.R <2017-07-22, Sat>.
+o Update test_miRsponge.R <2017-07-22, Sat>.
 
 CHANGES IN VERSION 0.99.14
 -------------------------
-Update test_miRsponge.R <2017-07-22, Sat>.
+o Update test_miRsponge.R <2017-07-22, Sat>.
 
 CHANGES IN VERSION 0.99.13
 -------------------------
-Improve the code of miRsponge.R <2017-07-22, Sat>.
+o Improve the code of miRsponge.R <2017-07-22, Sat>.
 
 CHANGES IN VERSION 0.99.12
 -------------------------
-Update related references in man folder <2017-07-20, Thur>.
+o Update related references in man folder <2017-07-20, Thur>.
 
 CHANGES IN VERSION 0.99.11
 -------------------------
-Improve the code of miRsponge.R <2017-07-20, Thur>.
+o Improve the code of miRsponge.R <2017-07-20, Thur>.
 
 CHANGES IN VERSION 0.99.10
 -------------------------
-Update README.md and miRsponge.Rmd <2017-07-18, Tues>.
+o Update README.md and miRsponge.Rmd <2017-07-18, Tues>.
 
 CHANGES IN VERSION 0.99.9
 -------------------------
-Update moduleSurvival function <2017-07-14, Fri>.
+o Update moduleSurvival function <2017-07-14, Fri>.
 
 CHANGES IN VERSION 0.99.8
 -------------------------
-Update cernia.Rd and hermes.Rd <2017-07-13, Thur>.
+o Update cernia.Rd and hermes.Rd <2017-07-13, Thur>.
 
 CHANGES IN VERSION 0.99.7
 -------------------------
-Update dtHybrid function <2017-07-13, Thur>.
+o Update dtHybrid function <2017-07-13, Thur>.
 
 CHANGES IN VERSION 0.99.6
 -------------------------
-VERSION BUMP REQUIRED <2017-07-13, Thur>.
+o VERSION BUMP REQUIRED <2017-07-13, Thur>.
 
 CHANGES IN VERSION 0.99.5
 -------------------------
-Update DESCRIPTION file <2017-07-13, Thur>.
+o Update DESCRIPTION file <2017-07-13, Thur>.
 
 CHANGES IN VERSION 0.99.4
 -------------------------
-Rename functions in R folder <2017-07-13, Thur>.
+o Rename functions in R folder <2017-07-13, Thur>.
 
 CHANGES IN VERSION 0.99.3
 -------------------------
-Update LICENSE file <2017-07-13, Mon>.
+o Update LICENSE file <2017-07-13, Mon>.
 
 CHANGES IN VERSION 0.99.2
 -------------------------
-Improve the code format of miRsponge.R <2017-07-13, Mon>. 
+o Improve the code format of miRsponge.R <2017-07-13, Mon>. 
 
 CHANGES IN VERSION 0.99.1
 -------------------------
-Improve the code format of miRsponge.R <2017-07-13, Mon>. 
+o Improve the code format of miRsponge.R <2017-07-13, Mon>. 
 
 CHANGES IN VERSION 0.99.0
 -------------------------
-This is the first version of miRsponge package. If any bugs, please let me know. Contact Email: zhangjunpeng_411@yahoo.com
+o This is the first version of miRsponge package. If any bugs, please let me know. Contact Email: zhangjunpeng_411@yahoo.com

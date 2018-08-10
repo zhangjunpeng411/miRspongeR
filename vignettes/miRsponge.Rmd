@@ -66,7 +66,7 @@ sponge interactions from different methods.
 ## miRHomology
 
 We implement miRHomology method based on the 
-homology of miRNA binding sites present in the 3'UTR sequence.
+homology of sharing miRNAs.
 ```{r}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")

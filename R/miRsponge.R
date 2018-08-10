@@ -617,8 +617,7 @@ miRHomology <- function(miRTarget, minSharedmiR = 3, padjustvaluecutoff = 0.01, 
         }
     }
 
-    # Extract RNA-RNA pair based on the homology of miRNA binding sites present in the 3'UTR
-    # sequence
+    # Extract RNA-RNA pair based on the homology of sharing miRNAs
     ceRInt <- ceRInt[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff) == "TRUE"), ]
 
     C <- C[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff) == "TRUE"), ]
@@ -1242,7 +1241,6 @@ spongeMethod <- function(miRTarget, ExpData = NULL, mres = NULL, minSharedmiR = 
 }
 
 ## Validation of computationally predicted miRNA sponge interactions.
-## Validation of computationally predicted miRNA sponge interactions.
 spongeValidate <- function(spongenetwork, directed = FALSE, Groundtruth) {
   
   spongenetwork_graph <- graph_from_data_frame(spongenetwork, directed = directed)
@@ -1310,7 +1308,6 @@ netModule <- function(spongenetwork, method = "MCL", directed = FALSE, modulesiz
   return(spongenetwork_Cluster_result)
   
 }
-
 
 ## Disease enrichment analysis of modules
 moduleDEA <- function(Modulelist, OrgDb = "org.Hs.eg.db", ont = "DO", padjustvaluecutoff = 0.05,
