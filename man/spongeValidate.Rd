@@ -35,11 +35,11 @@ Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 
 \examples{
 # Obtain miRNA-target interaction data file "miR2Target.csv" in csv format
-miR2Target <- system.file("extdata", "miR2Target.csv", package="miRsponge")
+miR2Target <- system.file("extdata", "miR2Target.csv", package="miRspongeR")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 
 # Obtain experimentally validated miRNA sponge interaction data file "Groundtruth.csv" in csv format
-Groundtruthcsv <- system.file("extdata", "Groundtruth.csv", package="miRsponge")
+Groundtruthcsv <- system.file("extdata", "Groundtruth.csv", package="miRspongeR")
 Groundtruth <- read.csv(Groundtruthcsv, header=TRUE, sep=",")
 miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")
 spongenetwork_validated <- spongeValidate(miRHomologyceRInt[, 1:2], directed = FALSE, Groundtruth)

@@ -25,3 +25,4 @@
     importFrom("MCL","mcl")
     importFrom("linkcomm","getLinkCommunities")
     importFrom("varhandle","unfactor")
+    import("org.Hs.eg.db")

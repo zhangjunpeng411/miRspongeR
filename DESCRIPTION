@@ -1,7 +1,7 @@
-Package: miRsponge
+Package: miRspongeR
 Type: Package
 Title: Identification and analysis of miRNA sponge interaction networks and modules
-Version: 1.7.5
+Version: 1.9.1
 Author: Junpeng Zhang
 Maintainer: Junpeng Zhang <zhangjunpeng_411@yahoo.com>
 Description: This package provides several functions to study miRNA sponge (also called ceRNA or miRNA decoy), 
@@ -9,9 +9,9 @@ Description: This package provides several functions to study miRNA sponge (also
     to integrate miRNA sponge interactions from different methods, as well as the functions to validate 
     miRNA sponge interactions, and infer miRNA sponge modules, conduct enrichment analysis of modules, 
     and conduct survival analysis of modules.
-Depends: R (>= 3.4.1)
+Depends: R (>= 3.5.0)
 License: GPL-3
-URL: <https://github.com/zhangjunpeng411/miRsponge>
+URL: <https://github.com/zhangjunpeng411/miRspongeR>
 Encoding: UTF-8
 LazyData: true
 biocViews: GeneExpression, BiomedicalInformatics, 
@@ -31,10 +31,10 @@ Imports: corpcor,
     varhandle,
     linkcomm,
     utils,
-    Rcpp
+    Rcpp,
+    org.Hs.eg.db
 Suggests:BiocStyle, 
     knitr,
     rmarkdown,
-    testthat,
-    org.Hs.eg.db
+    testthat
 VignetteBuilder: knitr
