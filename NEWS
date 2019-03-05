@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.9.2
+-------------------------
+o Add zzz.R file to points users to the new package ‘miRspongeR’ <2019-03-06, Wed>.
+
 CHANGES IN VERSION 1.9.1
 -------------------------
 o Rename the package called miRspongeR <2019-03-05, Tue>.
