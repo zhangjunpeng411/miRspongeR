@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.9.3
+-------------------------
+o Update the Groundtruth of miRNA sponge interactions for validation
+
 CHANGES IN VERSION 1.9.1-1.9.2
 -------------------------
 o Rename the miRsponge package called miRspongeR, and add zzz.R file to points users to the new package ‘miRspongeR’ <2019-03-08, Fri>.
