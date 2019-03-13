@@ -7,7 +7,7 @@ This package provides several functions to study miRNA sponge (also called ceRNA
 ```{r echo=FALSE, results='hide', message=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("miRspongeR", version = "3.8")
+BiocManager::install("miRspongeR", version = "3.9")
 ```
 
 # A quick example to use miRspongeR package

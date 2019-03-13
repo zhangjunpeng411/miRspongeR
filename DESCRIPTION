@@ -1,11 +1,11 @@
 Package: miRspongeR
 Type: Package
 Title: Identification and analysis of miRNA sponge interaction networks and modules
-Version: 1.9.3
+Version: 1.9.4
 Author: Junpeng Zhang
 Maintainer: Junpeng Zhang <zhangjunpeng_411@yahoo.com>
-Description: The previous name of the miRspongeR package is called "miRsponge". This package provides several 
-    functions to study miRNA sponge (also called ceRNA or miRNA decoy), including popular methods 
+Description: This package provides several functions to study miRNA sponge
+    (also called ceRNA or miRNA decoy), including popular methods 
     for identifying miRNA sponge interactions, and the integrative method to integrate miRNA sponge 
     interactions from different methods, as well as the functions to validate 
     miRNA sponge interactions, and infer miRNA sponge modules, conduct enrichment analysis of modules, 
@@ -39,3 +39,4 @@ Suggests:BiocStyle,
     rmarkdown,
     testthat
 VignetteBuilder: knitr
+BugReports: https://github.com/zhangjunpeng411/miRspongeR/issues
