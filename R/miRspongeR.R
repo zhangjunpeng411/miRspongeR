@@ -344,7 +344,7 @@ dtHybrid <- function(miRTarget) {
 cluster <- function(graph, method="MCL", expansion = 2, inflation = 2, 
                   hcmethod = "average", directed = FALSE, outfile = NULL, ...)
 {
-  method<-match.arg(method)
+  #method<-match.arg(method)
   if(method=="FN"){
 	  graph <- simplify(graph)
 	  fc <- fastgreedy.community(graph, merges = TRUE, modularity = TRUE)
