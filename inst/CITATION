@@ -1,0 +1,21 @@
+citHeader("To cite miRspongeR package in publications, please use:")
+citEntry( entry   = "Article",
+          title   = "miRspongeR: an R/Bioconductor package for the identification and analysis of miRNA sponge 
+interaction networks and modules",
+          author  = personList(as.person("Junpeng Zhang"),
+                   as.person("Lin Liu"),
+                   as.person("Taosheng Xu"),
+                   as.person("Yong Xie"),
+                   as.person("Chunwen Zhao"),
+                   as.person("Jiuyong Li"),
+                   as.person("Thuc Duy Le")),
+          journal = "BMC Bioinformatics",
+          year    = "2019",
+          volume  = "20",          
+          pages   = "235",
+          url     = "https://doi.org/10.1186/s12859-019-2861-y",
+
+          textVersion  = paste("Junpeng Zhang, Lin Liu, Taosheng Xu, Yong Xie, Chunwen Zhao, Jiuyong Li and 
+Thuc Duy Le (2019). miRspongeR: an R/Bioconductor package for the identification and analysis of miRNA sponge 
+interaction networks and modules. BMC Bioinformatics. https://doi.org/10.1186/s12859-019-2861-y.")
+)
