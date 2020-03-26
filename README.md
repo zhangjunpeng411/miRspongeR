@@ -7,7 +7,7 @@ This package provides several functions to study miRNA sponge (also called ceRNA
 ```{r echo=FALSE, results='hide', message=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("miRspongeR", version = "3.9")
+BiocManager::install("miRspongeR")
 ```
 
 # A quick example to use miRspongeR package
@@ -33,6 +33,10 @@ sponge_Module_DEA <- moduleDEA(spongenetwork_Cluster)
 sponge_Module_FEA <- moduleFEA(spongenetwork_Cluster)
 
 # Survival analysis of miRNA sponge modules
+ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRspongeR")
+ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",", stringsAsFactors = TRUE)
+SurvDatacsv <- system.file("extdata", "SurvData.csv", package="miRspongeR")
+SurvData <- read.csv(SurvDatacsv, header=TRUE, sep=",")
 sponge_Module_Survival <- moduleSurvival(spongenetwork_Cluster, 
     ExpData, SurvData, devidePercentage=.5)
 ```

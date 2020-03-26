@@ -449,7 +449,8 @@ mcode.vertex.weighting<-function(graph, neighbors){
 mcode.find.complex <- function(neighbors, neighbors.indx, vertex.weight,
                              vwp, seed.vertex, seen)
 {
-	  res<-.C("complex",as.integer(neighbors),as.integer(neighbors.indx),
+    
+    res<-.C("complex",as.integer(neighbors),as.integer(neighbors.indx),
           as.single(vertex.weight),as.single(vwp),as.integer(seed.vertex),
           seen=as.integer(seen),COMPLEX=as.integer(rep(0,length(seen))), PACKAGE = "miRspongeR"
           )

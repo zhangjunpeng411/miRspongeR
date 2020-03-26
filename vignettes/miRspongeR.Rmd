@@ -174,7 +174,7 @@ of MREs of the putative RNA-RNA pairs, (4) the relation between the
 overall number of MREs for a putative miRNA sponge compared with the 
 number of miRNAs that yield these MREs, (5) the density of the 
 hybridization energies related to MREs for all shared miRNAs, (6) 
-the DT-Hybrid recommendation scores and (7) the pairwise Peason 
+the DT-Hybrid recommendation scores and (7) the pairwise Pearson 
 correlation between putative RNA-RNA pair expression data. There 
 is no reason to decide which score has more contribution than the 
 rest. Thus, we calculate a combined score by adding these seven scores. 
