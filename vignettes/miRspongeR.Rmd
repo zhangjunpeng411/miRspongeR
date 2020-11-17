@@ -3,7 +3,7 @@ title: "miRspongeR: identification and analysis of miRNA sponge
     interaction networks and modules" 
 author: "\\
     
-    Junpeng Zhang (<zhangjunpeng_411@yahoo.com>)\\
+    Junpeng Zhang (<zhangjunpeng411@gmail.com>)\\
     
     School of Engineering, Dali University"
 date: '`r Sys.Date()`'
