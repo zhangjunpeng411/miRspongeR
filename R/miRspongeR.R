@@ -619,9 +619,11 @@ miRHomology <- function(miRTarget, minSharedmiR = 3, padjustvaluecutoff = 0.01, 
     }
 
     # Extract RNA-RNA pair based on the homology of sharing miRNAs
-    ceRInt <- ceRInt[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff) == "TRUE"), ]
-
-    C <- C[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff) == "TRUE"), ]
+    C[, 2] <- p.adjust(C[, 2], method = padjustmethod)
+    index <- which(C[, 2] < padjustvaluecutoff)
+    
+    ceRInt <- ceRInt[index, ]
+    C <- C[index, ]
 
     if (is.vector(C)) {
         miRHomologyceRInt <- c(ceRInt, C)
@@ -692,13 +694,13 @@ pc <- function(miRTarget, ExpData, minSharedmiR = 3, poscorcutoff = 0, padjustva
     }
 
     # Extract positive correlated RNA-RNA pairs.
-    ceRInt <- ceRInt[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff & C[,
-        3] > poscorcutoff & p.adjust(C[, 4], method = padjustmethod) < padjustvaluecutoff) == "TRUE"),
-        ]
-
-    C <- C[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff & C[, 3] > poscorcutoff &
-        p.adjust(C[, 4], method = padjustmethod) < padjustvaluecutoff) == "TRUE"), ]
-
+    C[, 2] <- p.adjust(C[, 2], method = padjustmethod)
+    C[, 4] <- p.adjust(C[, 4], method = padjustmethod)
+    index <- which(C[, 2] < padjustvaluecutoff & C[, 3] > poscorcutoff & C[, 4] < padjustvaluecutoff)
+    
+    ceRInt <- ceRInt[index, ]
+    C <- C[index, ]
+    
     if (is.vector(C)) {
         PCceRInt <- c(ceRInt, C)
         names(PCceRInt) <- c("sponge_1", "sponge_2", "#shared miRNAs", "p.adjusted_value of shared miRNAs",
@@ -758,7 +760,7 @@ sppc <- function(miRTarget, ExpData, minSharedmiR = 3, poscorcutoff = 0, padjust
                 tarExpIdx2 <- which(ExpDataNames %in% targetSym[j])
                 miRExpIdx <- which(ExpDataNames %in% intersect(Interin1, Interin2))
 
-                # Calculate sensitivity partial pearson correlation of each RNA-RNA pair
+                # Calculate sensitivity correlation of each RNA-RNA pair
                 M6 <- cor.test(ExpData[, tarExpIdx1], ExpData[, tarExpIdx2])$estimate
                 M7 <- cor.test(ExpData[, tarExpIdx1], ExpData[, tarExpIdx2])$p.value
                 M8 <- M6 - corpcor::pcor.shrink(cbind(ExpData[, tarExpIdx1], ExpData[, tarExpIdx2],
@@ -774,22 +776,22 @@ sppc <- function(miRTarget, ExpData, minSharedmiR = 3, poscorcutoff = 0, padjust
     }
 
     # Extract RNA-RNA pairs with sensitivity correlation more than senscorcutoff.
-    ceRInt <- ceRInt[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff & C[,
-        3] > poscorcutoff & p.adjust(C[, 4], method = padjustmethod) < padjustvaluecutoff & C[,
-        5] > senscorcutoff) == "TRUE"), ]
-
-    C <- C[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff & C[, 3] > poscorcutoff &
-        p.adjust(C[, 4], method = padjustmethod) < padjustvaluecutoff & C[, 5] > senscorcutoff) ==
-        "TRUE"), ]
-
+    C[, 2] <- p.adjust(C[, 2], method = padjustmethod)
+    C[, 4] <- p.adjust(C[, 4], method = padjustmethod)
+    index <- which(C[, 2] < padjustvaluecutoff & C[, 3] > poscorcutoff & C[, 4] < padjustvaluecutoff &
+                   C[, 5] > senscorcutoff)
+    
+    ceRInt <- ceRInt[index, ]
+    C <- C[index, ]
+    
     if (is.vector(C)) {
         SPPCceRInt <- c(ceRInt, C)
         names(SPPCceRInt) <- c("sponge_1", "sponge_2", "#shared miRNAs", "p.adjusted_value of shared miRNAs",
-            "correlation", "p.adjusted_value of positive correlation", "sensitivity partial pearson correlation")
+            "correlation", "p.adjusted_value of positive correlation", "sensitivity correlation")
     } else {
         SPPCceRInt <- cbind(ceRInt, C)
         colnames(SPPCceRInt) <- c("sponge_1", "sponge_2", "#shared miRNAs", "p.adjusted_value of shared miRNAs",
-            "correlation", "p.adjusted_value of positive correlation", "sensitivity partial pearson correlation")
+            "correlation", "p.adjusted_value of positive correlation", "sensitivity correlation")
     }
 
     return(SPPCceRInt)
@@ -852,12 +854,13 @@ ppc <- function(miRTarget, ExpData, minSharedmiR = 3, num_perm = 100, padjustval
     }
 
     # Extract significant RNA-RNA pairs.
-    ceRInt <- ceRInt[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff & p.adjust(C[,
-        3], method = padjustmethod) < padjustvaluecutoff) == "TRUE"), ]
-
-    C <- C[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff & p.adjust(C[, 3],
-        method = padjustmethod) < padjustvaluecutoff) == "TRUE"), ]
-
+    C[, 2] <- p.adjust(C[, 2], method = padjustmethod)
+    C[, 3] <- p.adjust(C[, 3], method = padjustmethod)
+    index <- which(C[, 2] < padjustvaluecutoff & C[, 3] < padjustvaluecutoff)
+    
+    ceRInt <- ceRInt[index, ]
+    C <- C[index, ]
+    
     if (is.vector(C)) {
         PPCceRInt <- c(ceRInt, C)
         names(PPCceRInt) <- c("sponge_1", "sponge_2", "#shared miRNAs", "p.adjusted_value of shared miRNAs",
@@ -928,12 +931,13 @@ hermes <- function(miRTarget, ExpData, minSharedmiR = 3, num_perm = 100, padjust
     }
 
     # Extract significant RNA-RNA pairs.
-    ceRInt <- ceRInt[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff & p.adjust(C[,
-        3], method = padjustmethod) < padjustvaluecutoff) == "TRUE"), ]
-
-    C <- C[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff & p.adjust(C[, 3],
-        method = padjustmethod) < padjustvaluecutoff) == "TRUE"), ]
-
+    C[, 2] <- p.adjust(C[, 2], method = padjustmethod)
+    C[, 3] <- p.adjust(C[, 3], method = padjustmethod)
+    index <- which(C[, 2] < padjustvaluecutoff & C[, 3] < padjustvaluecutoff)
+    
+    ceRInt <- ceRInt[index, ]
+    C <- C[index, ]
+    
     if (is.vector(C)) {
         HermesceRInt <- c(ceRInt, C)
         names(HermesceRInt) <- c("sponge_1", "sponge_2", "#shared miRNAs", "p.adjusted_value of shared miRNAs",
@@ -1030,13 +1034,13 @@ muTaME <- function(miRTarget, mres, minSharedmiR = 3, padjustvaluecutoff = 0.01,
     ceRInt <- ceRInt[apply(ceRInt, 1, function(x) !all(is.na(x))), ]
     C <- C[apply(C, 1, function(x) !all(is.na(x))), ]
     C[, 8] <- (C[, 7] - min(C[, 7]))/(max(C[, 7]) - min(C[, 7]))
-
-    ceRInt <- ceRInt[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff & C[,
-        8] > scorecutoff) == "TRUE"), ]
-
-    C <- C[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff & C[, 8] > scorecutoff) ==
-        "TRUE"), ]
-
+    
+    C[, 2] <- p.adjust(C[, 2], method = padjustmethod)
+    index <- which(C[, 2] < padjustvaluecutoff & C[, 8] > scorecutoff)
+    
+    ceRInt <- ceRInt[index, ]
+    C <- C[index, ]
+    
     if (is.vector(C)) {
         MuTaMEceRInt <- c(ceRInt, C)
         names(MuTaMEceRInt) <- c("sponge_1", "sponge_2", "#shared miRNAs", "p.adjusted_value of shared miRNAs",
@@ -1164,13 +1168,13 @@ cernia <- function(miRTarget, ExpData, mres, minSharedmiR = 3, poscorcutoff = 0,
     ceRInt <- ceRInt[apply(ceRInt, 1, function(x) !all(is.na(x))), ]
     C <- C[apply(C, 1, function(x) !all(is.na(x))), ]
     C[, 11] <- (C[, 10] - min(C[, 10]))/(max(C[, 10]) - min(C[, 10]))
-
-    ceRInt <- ceRInt[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff & C[,
-        11] > scorecutoff) == "TRUE"), ]
-
-    C <- C[which((p.adjust(C[, 2], method = padjustmethod) < padjustvaluecutoff & C[, 11] > scorecutoff) ==
-        "TRUE"), ]
-
+    
+    C[, 2] <- p.adjust(C[, 2], method = padjustmethod)
+    index <- which(C[, 2] < padjustvaluecutoff & C[, 11] > scorecutoff)
+    
+    ceRInt <- ceRInt[index, ]
+    C <- C[index, ]
+    
     if (is.vector(C)) {
         CERNIAceRInt <- c(ceRInt, C)
         names(CERNIAceRInt) <- c("sponge_1", "sponge_2", "#shared miRNAs", "p.adjusted_value of shared miRNAs",
