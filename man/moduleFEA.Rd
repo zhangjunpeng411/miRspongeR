@@ -63,7 +63,7 @@ Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 \dontrun{
 # Obtain expression data file "ExpData.csv" in csv format
 ExpDatacsv <- system.file("extdata","ExpData.csv",package="miRspongeR")
-ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",", stringsAsFactors = TRUE)
+ExpData <- read.csv(ExpDatacsv, header=TRUE, sep=",")
 
 # Obtain miRNA-target interaction data file "miR2Target.csv" in csv format
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRspongeR")

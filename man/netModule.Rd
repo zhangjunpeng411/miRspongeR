@@ -6,7 +6,7 @@ Identifying miRNA sponge modules from network
 }
 \description{
 Identifying miRNA sponge modules from network. Possible methods include
-FN, MCL, LINKCOMM and MCODE.
+FN, MCL, LINKCOMM, MCODE, betweenness, infomap, prop, eigen, louvain, walktrap.
 }
 \usage{
 netModule(spongenetwork, method = "MCL", directed = FALSE, modulesize = 3, save = FALSE)
@@ -17,7 +17,7 @@ netModule(spongenetwork, method = "MCL", directed = FALSE, modulesize = 3, save 
 Input miRNA sponge interaction network.
 }
     \item{method}{
-Cluster method, can select one of FN, MCL, LINKCOMM and MCODE.
+Cluster method, can select one of FN, MCL, LINKCOMM, MCODE, betweenness, infomap, prop, eigen, louvain, walktrap.
 }
     \item{directed}{
 A logical value, the network is directed or not.
@@ -49,6 +49,18 @@ size and type. Bioinformatics, 2011, 27(14):2011-2.
 
 4. Bader GD, Hogue CW. An automated method for finding molecular complexes
 in large protein interaction networks. BMC Bioinformatics, 2003, 4:2.
+
+5. Newman ME, Girvan M. Finding and evaluating community structure in networks. Phys Rev E Stat Nonlin Soft Matter Phys. 2004;69(2 Pt 2):026113. 
+
+6. Rosvall M, Bergstrom CT. Maps of random walks on complex networks reveal community structure. Proc Natl Acad Sci U S A. 2008;105(4):1118-1123.
+
+7. Raghavan UN, Albert R, Kumara S. Near linear time algorithm to detect community structures in large-scale networks. Phys Rev E Stat Nonlin Soft Matter Phys. 2007;76(3 Pt 2):036106.
+
+8. Newman ME. Finding community structure in networks using the eigenvectors of matrices. Phys Rev E Stat Nonlin Soft Matter Phys. 2006;74(3 Pt 2):036104.
+
+9. Blondel VD, Guillaume JL, Lambiotte R, Lefebvre E. Fast unfolding of communities in large networks. Journal of statistical mechanics: theory and experiment, 2008, 2008(10): P10008.
+
+10. Pons P, Latapy M. Computing communities in large networks using random walks. Graph Algorithms Appl. 2006.
 
 }
 \author{

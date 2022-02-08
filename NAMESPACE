@@ -8,6 +8,8 @@
     export("querymiRTargetbinding")
     export("spongeMethod")
     export("spongeValidate")
+    export("sponge_sample_specific")
+    export("sample_cor_network")
     importFrom("Rcpp", "evalCpp")
     importFrom("grDevices", "dev.new")
     importFrom("graphics", "legend")
@@ -25,5 +27,8 @@
     importFrom("corpcor","pcor.shrink")
     importFrom("MCL","mcl")
     importFrom("linkcomm","getLinkCommunities")
-    importFrom("varhandle","unfactor")
     import("org.Hs.eg.db")
+    import("SPONGE")
+    import("doParallel")
+    importFrom("foreach", "foreach", "%dopar%")
+         

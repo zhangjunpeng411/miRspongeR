@@ -34,7 +34,7 @@ sponge_Module_FEA <- moduleFEA(spongenetwork_Cluster)
 
 # Survival analysis of miRNA sponge modules
 ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRspongeR")
-ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",", stringsAsFactors = TRUE)
+ExpData <- read.csv(ExpDatacsv, header=TRUE, sep=",")
 SurvDatacsv <- system.file("extdata", "SurvData.csv", package="miRspongeR")
 SurvData <- read.csv(SurvDatacsv, header=TRUE, sep=",")
 sponge_Module_Survival <- moduleSurvival(spongenetwork_Cluster, 

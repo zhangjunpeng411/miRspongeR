@@ -4,7 +4,7 @@ library(miRspongeR)
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRspongeR")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRspongeR")
-ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",", stringsAsFactors = TRUE)
+ExpData <- read.csv(ExpDatacsv, header=TRUE, sep=",")
 
 # miRHomology method
 miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")

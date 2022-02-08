@@ -2,58 +2,64 @@
 \alias{spongeMethod}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Identifying miRNA sponge interactions using spongeMethod
+Identifying miRNA sponge interactions
 }
 \description{
-Identifying miRNA sponge interactions using spongeMethod. We
-implement seven popular methods (miRHomology, pc, sppc, ppc,
-hermes, muTaME, and cernia) to identify miRNA sponge
-interactions.
+We implement eight popular methods (miRHomology, pc, sppc, ppc,
+hermes, muTaME, cernia, and SPONGE) to identify miRNA sponge
+interactions. The parallel methods ("miRHomology_parallel", "pc_parallel", "sppc_parallel", "ppc_parallel", "hermes_parallel", "muTaME_parallel", "cernia_parallel") are the parallel versions of the original methods ("miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME", "cernia"). 
 }
 \usage{
-spongeMethod(miRTarget, ExpData = NULL, mres = NULL, minSharedmiR = 3,
-poscorcutoff = 0, num_perm = 100, padjustvaluecutoff = 0.01,
-padjustmethod = "BH", senscorcutoff = 0.3, scorecutoff = 0.5,
-method = c("miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME", "cernia"))
+spongeMethod(miRTarget, ExpData = NULL, mres = NULL, consider.miR.expr = "TRUE", minSharedmiR = 3, poscorcutoff = 0, num_perm = 100, padjustvaluecutoff = 0.01,
+padjustmethod = "BH", senscorcutoff = 0.3, scorecutoff = 0.5, null_model, method = c("miRHomology", "miRHomology_parallel", "pc", "pc_parallel", "sppc", "sppc_parallel", "ppc", "ppc_parallel", "hermes", "hermes_parallel", "muTaME", "muTaME_parallel", "cernia", "cernia_parallel", "sponge_parallel"), num.cores = 2)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{miRTarget}{
-Putative miRNA-target interactions. Required option for method "miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME" and "cernia".
+Putative miRNA-target interactions. Required option for method "miRHomology", "miRHomology_parallel", "pc", "pc_parallel", "sppc", "sppc_parallel", "ppc", "ppc_parallel", "hermes", "hermes_parallel", "muTaME", "muTaME_parallel", "cernia", "cernia_parallel", and "sponge_parallel".
 }
   \item{ExpData}{
 An input expression data frame, the columns are genes and
-the rows are samples. Required option for method "pc", "sppc", "ppc", "hermes" and "cernia".
+the rows are samples. Required option for method "pc", "pc_parallel", "sppc", "sppc_parallel", "ppc", "ppc_parallel", "hermes" "hermes_parallel", "cernia", "cernia_parallel", and "sponge_parallel".
 }
   \item{mres}{
 Putative MiRNA Response Elements (mres) data frame, each row
-contains five elements: Mirna, Target, energy, gap_l, gap_r. Required option for method "muTaME" and "cernia".
+contains five elements: Mirna, Target, energy, gap_l, gap_r. Required option for method "muTaME", "muTaME_parallel", "cernia", and "cernia_parallel".
+}
+  \item{consider.miR.expr}{
+Logical value, TRUE for considering miRNA expression data and FALSE for ignoring miRNA expression data
 }
   \item{minSharedmiR}{
-The minimum number of shared miRNAs between targets. Required option for method "miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME" and "cernia".
+The minimum number of shared miRNAs between targets. Required option for method "miRHomology", "miRHomology_parallel", "pc", "pc_parallel", "sppc", "sppc_parallel", "ppc", "ppc_parallel", "hermes", "hermes_parallel", "muTaME", "muTaME_parallel", "cernia", "cernia_parallel", and "sponge_parallel".
 }
   \item{poscorcutoff}{
-A cutoff value of positive correlation. Required option for method "pc", "sppc" and "cernia".
+A cutoff value of positive correlation. Required option for method "pc", "pc_parallel", "sppc", "sppc_parallel", "cernia", "cernia_parallel", and "sponge_parallel".
 }
   \item{num_perm}{
-The number of permutations. Required option for method "ppc" and "hermes".
+The number of permutations. Required option for method "ppc", "ppc_parallel", "hermes", "hermes_parallel".
 }
   \item{padjustvaluecutoff}{
-A cutoff value of adjusted p-values. Required option for method "miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME" and "cernia".
+A cutoff value of adjusted p-values. Required option for method "miRHomology", "miRHomology_parallel", "pc", "pc_parallel", "sppc", "sppc_parallel", "ppc", "ppc_parallel", "hermes", "hermes_parallel", "muTaME", "muTaME_parallel", "cernia", "cernia_parallel", and "sponge_parallel".
 }
   \item{padjustmethod}{
 Adjusted method of p-values, can select one of "holm", "hochberg",
-"hommel", "bonferroni", "BH", "BY", "fdr", "none". Required option for method "miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME" and "cernia".
+"hommel", "bonferroni", "BH", "BY", "fdr", "none". Required option for method "miRHomology", "miRHomology_parallel", "pc", "pc_parallel", "sppc", "sppc_parallel", "ppc", "ppc_parallel", "hermes", "hermes_parallel", "muTaME", "muTaME_parallel", "cernia", "cernia_parallel", and "sponge_parallel".
 }
   \item{senscorcutoff}{
-A cutoff value of sensitivity partial pearson correlation. Required option for method "sppc".
+A cutoff value of sensitivity partial pearson correlation. Required option for method "sppc", "sppc_parallel", and "sponge_parallel".
 }
   \item{scorecutoff}{
-A cutoff value of normalized score (range from 0 to 1). Required option for method "muTaME" and "cernia".
+A cutoff value of normalized score (range from 0 to 1). Required option for method "muTaME", "muTaME_parallel", "cernia", and "cernia_parallel".
+}
+  \item{null_model}{
+Optional, pre-computed null model. Users can also build null model using "sponge_build_null_model" function in SPONGE R package (https://bioconductor.org/packages/SPONGE/). Required option for method "sponge_parallel".  
 }
   \item{method}{
 Select a method for identifying miRNA sponge interactions, can select
-one of "miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME", "cernia".
+one of "miRHomology", "miRHomology_parallel", "pc", "pc_parallel", "sppc", "sppc_parallel", "ppc", "ppc_parallel", "hermes", "hermes_parallel", "muTaME", "muTaME_parallel", "cernia", "cernia_parallel", "sponge_parallel". The seven methods ("miRHomology_parallel", "pc_parallel", "sppc_parallel", "ppc_parallel", "hermes_parallel", "muTaME_parallel", "cernia_parallel") are the parallel versions of the seven original methods ("miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME", "cernia").
+}
+  \item{num.cores}{
+The number of CPU cores to be selected. Required option for method  "miRHomology_parallel", "pc_parallel", "sppc_parallel", "ppc_parallel",  "hermes_parallel", "muTaME_parallel", "cernia_parallel", and "sponge_parallel".
 }
 }
 \value{
@@ -90,9 +96,9 @@ in glioblastoma. Cell, 2011, 147(2):370-81.
 the tumor suppressor PTEN by competing endogenous mRNAs. Cell,
 2011, 147(2):344-57.
 
-9. Sardina DS, Alaimo S, Ferro A, et al. A novel computational method
-for inferring competing endogenous interactions. Brief Bioinform.,
-2016, DOI: 10.1093/bib/bbw084.
+9. Sardina DS, Alaimo S, Ferro A, Pulvirenti A, Giugno R. A novel computational method for inferring competing endogenous interactions. Brief Bioinform. 2017;18(6):1071-1081.
+
+10. List M, Dehghani Amirabad A, Kostka D, Schulz MH. Large-scale inference of competing endogenous RNA networks with sparse partial correlation. Bioinformatics. 2019;35(14):i596-i604.
 }
 \author{
 Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
@@ -100,7 +106,7 @@ Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 \examples{
 # Obtain expression data file "ExpData.csv" in csv format
 ExpDatacsv <- system.file("extdata","ExpData.csv",package="miRspongeR")
-ExpData <- read.csv(ExpDatacsv, header=FALSE, sep=",", stringsAsFactors = TRUE)
+ExpData <- read.csv(ExpDatacsv, header=TRUE, sep=",")
 
 # Obtain miRNA-target interaction data file "miR2Target.csv" in csv format
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRspongeR")
