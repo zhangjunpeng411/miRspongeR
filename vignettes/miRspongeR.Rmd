@@ -229,7 +229,7 @@ Parameter 'Intersect_num' is used to set the least number of methods
 intersected for integration. That is to say, 'miRspongeR' only reserves those 
 miRNA sponge interactions predicted by at least 'Intersect_num' methods. 
 
-## Identifying sample-specific miRNA sponge interaction networks
+# Identifying sample-specific miRNA sponge interaction networks
 
 'miRspongeR' uses a sample control variable strategy to infer sample-specific miRNA sponge interaction network. In the strategy, eight popular methods (miRHomology, pc, sppc, ppc, hermes, muTaME, cernia, and SPONGE) to identify miRNA sponge interactions for each sample.
 
@@ -242,7 +242,7 @@ sponge_sample_specific_net <- sponge_sample_specific(miRTarget, ExpData, senscor
 head(sponge_sample_specific_net)
 ```
 
-## Identifying sample-sample correlation network
+# Identifying sample-sample correlation network
 
 In terms of sample-specific miRNA sponge interaction networks, 'miRspongeR' further identifies sample-sample correlation network. The three similarity methods (Simpson [22], Jaccard [23] and Lin [24]) are used. The significance p-values of similarity are calculated using a hypergeometric distribution test. 
 
