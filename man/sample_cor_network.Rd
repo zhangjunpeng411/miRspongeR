@@ -8,7 +8,8 @@ Identifying sample-sample correlation network
 Identifying sample-sample correlation network in terms of sample-specific miRNA sponge networks. 
 }
 \usage{
-sample_cor_network(ceRNet, genes_num, method = "Simpson", padjustvaluecutoff = 0.01, padjustmethod = "BH", num.cores = 2)
+sample_cor_network(ceRNet, genes_num, method = "Simpson", 
+padjustvaluecutoff = 0.01, padjustmethod = "BH", num.cores = 2)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -36,7 +37,7 @@ The number of CPU cores to be selected.
 A list of sample-sample correlations.
 }
 \references{
-1. Tucker CM, Cadotte MW, Carvalho SB, et al. A guide to phylogenetic metrics for conservation, community ecology and macroecology. Biol Rev Camb Philos Soc. 2017;92(2):698-715.
+1. Tucker CM, Cadotte MW, Carvalho SB, et al. A guide to phylogenetic metrics for conservation, community ecology and macroecology. Biol Rev Camb Philos Soc. 2017;92(2):698-715. 
 2. Jaccard P. The Distribution of the Flora in the Alpine Zone. The New Phytologist 11, no. 2 (1912): 37–50. 
 3. Lin D, et al. An information-theoretic definition of similarity. In: Icml, vol.
 98. 1998. p. 296–304.
@@ -53,10 +54,12 @@ ExpData <- read.csv(ExpDatacsv, header=TRUE, sep=",")
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRspongeR")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 
-# Identifying sample-specific miRNA sponge interactions, the sppc method is used to # identify miRNA sponge interactions
+# Identifying sample-specific miRNA sponge interactions, the sppc method 
+# is used to identify miRNA sponge interactions
 sponge_sample_specific_net <- sponge_sample_specific(miRTarget, ExpData, senscorcutoff = 0.1, method = "sppc")
 
-sample_cor_network_res <- sample_cor_network(sponge_sample_specific_net, genes_num = 31, padjustvaluecutoff = 0.05)
+sample_cor_network_res <- sample_cor_network(sponge_sample_specific_net, 
+genes_num = 31, padjustvaluecutoff = 0.05)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

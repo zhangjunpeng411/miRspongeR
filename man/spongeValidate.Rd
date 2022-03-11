@@ -6,8 +6,10 @@ Validation of computationally predicted miRNA sponge interactions
 }
 \description{
 Validation of computationally predicted miRNA sponge interactions.
-The groundtruth of miRNA sponge interactions are from
-miRSponge (\url{http://www.bio-bigdata.net/miRSponge/}) and the experimentally validated miRNA sponge interactions of related literatures.
+The built-in groundtruth of miRNA sponge interactions 
+are from miRSponge (<http://bio-bigdata.hrbmu.edu.cn/miRSponge/>), 
+lncACTdb (<http://bio-bigdata.hrbmu.edu.cn/LncACTdb/>), 
+LncCeRBase (<http://www.insect-genome.com/LncCeRBase/front/>).
 }
 \usage{
 spongeValidate(spongenetwork, directed = FALSE, Groundtruth)

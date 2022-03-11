@@ -10,8 +10,15 @@ hermes, muTaME, cernia, and SPONGE) to identify miRNA sponge
 interactions. The parallel methods ("miRHomology_parallel", "pc_parallel", "sppc_parallel", "ppc_parallel", "hermes_parallel", "muTaME_parallel", "cernia_parallel") are the parallel versions of the original methods ("miRHomology", "pc", "sppc", "ppc", "hermes", "muTaME", "cernia"). 
 }
 \usage{
-spongeMethod(miRTarget, ExpData = NULL, mres = NULL, consider.miR.expr = "TRUE", minSharedmiR = 3, poscorcutoff = 0, num_perm = 100, padjustvaluecutoff = 0.01,
-padjustmethod = "BH", senscorcutoff = 0.3, scorecutoff = 0.5, null_model, method = c("miRHomology", "miRHomology_parallel", "pc", "pc_parallel", "sppc", "sppc_parallel", "ppc", "ppc_parallel", "hermes", "hermes_parallel", "muTaME", "muTaME_parallel", "cernia", "cernia_parallel", "sponge_parallel"), num.cores = 2)
+spongeMethod(miRTarget, ExpData = NULL, mres = NULL, 
+consider.miR.expr = "TRUE", minSharedmiR = 3, poscorcutoff = 0, num_perm = 100, padjustvaluecutoff = 0.01,
+padjustmethod = "BH", senscorcutoff = 0.3, 
+scorecutoff = 0.5, null_model, 
+method = c("miRHomology", "miRHomology_parallel", "pc", 
+"pc_parallel", "sppc", "sppc_parallel", "ppc", "ppc_parallel", "hermes", "hermes_parallel", 
+"muTaME", "muTaME_parallel", "cernia", 
+"cernia_parallel", "sponge_parallel"), 
+num.cores = 2)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -52,7 +59,8 @@ A cutoff value of sensitivity partial pearson correlation. Required option for m
 A cutoff value of normalized score (range from 0 to 1). Required option for method "muTaME", "muTaME_parallel", "cernia", and "cernia_parallel".
 }
   \item{null_model}{
-Optional, pre-computed null model. Users can also build null model using "sponge_build_null_model" function in SPONGE R package (https://bioconductor.org/packages/SPONGE/). Required option for method "sponge_parallel".  
+Optional, pre-computed null model. Users can also build null model using "sponge_build_null_model" function in SPONGE R package 
+(https://bioconductor.org/packages/SPONGE/). Required option for method "sponge_parallel".  
 }
   \item{method}{
 Select a method for identifying miRNA sponge interactions, can select
