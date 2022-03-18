@@ -62,8 +62,7 @@ A cutoff value of normalized score (range from 0 to 1). Required option for meth
 }
   \item{null_model}{
 Optional, pre-computed null model. Users can also build null model using "sponge_build_null_model" function 
-in SPONGE R package 
-(https://bioconductor.org/packages/SPONGE/). 
+in SPONGE R package. 
 Required option for method "sponge_parallel".  
 }
   \item{method}{

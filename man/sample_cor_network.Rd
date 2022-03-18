@@ -37,8 +37,10 @@ The number of CPU cores to be selected.
 A list of sample-sample correlations.
 }
 \references{
-1. Tucker CM, Cadotte MW, Carvalho SB, et al. A guide to phylogenetic metrics for conservation, community ecology and macroecology. Biol Rev Camb Philos Soc. 2017;92(2):698-715. 
-2. Jaccard P. The Distribution of the Flora in the Alpine Zone. The New Phytologist 11, no. 2 (1912): 37–50. 
+1. Tucker CM, Cadotte MW, Carvalho SB, et al. A guide to phylogenetic metrics for conservation, community ecology and macroecology. Biol Rev Camb Philos Soc. 2017;92(2):698-715.
+
+2. Jaccard P. The Distribution of the Flora in the Alpine Zone. The New Phytologist 11, no. 2 (1912): 37–50.
+
 3. Lin D, et al. An information-theoretic definition of similarity. In: Icml, vol.
 98. 1998. p. 296–304.
 }
