@@ -660,7 +660,7 @@ miRHomology_parallel <- function(miRTarget, minSharedmiR = 3, padjustvaluecutoff
   targetSym <- unique(tar)
   
   m2 <- length(targetSym)
-  index <- t(combn(m2, 2))  
+  index <- t(utils::combn(m2, 2))  
   
   Res <- foreach(i = seq_len(nrow(index))) %dopar% {    
     
@@ -814,7 +814,7 @@ pc_parallel <- function(miRTarget, ExpData, consider.miR.expr = "TRUE", minShare
   targetSym <- unique(tar)
   
   m2 <- length(targetSym)
-  index <- t(combn(m2, 2))    
+  index <- t(utils::combn(m2, 2))    
   
   Res <- foreach(i = seq_len(nrow(index))) %dopar% {	    
     
@@ -971,7 +971,7 @@ sppc_parallel <- function(miRTarget, ExpData, minSharedmiR = 3, poscorcutoff = 0
   targetSym <- unique(tar)
   
   m2 <- length(targetSym)
-  index <- t(combn(m2, 2))
+  index <- t(utils::combn(m2, 2))
   
   Res <- foreach(i = seq_len(nrow(index))) %dopar% {	    
     
@@ -1129,7 +1129,7 @@ ppc_parallel <- function(miRTarget, ExpData, minSharedmiR = 3, num_perm = 100, p
   targetSym <- unique(tar)
   
   m2 <- length(targetSym)
-  index <- t(combn(m2, 2))
+  index <- t(utils::combn(m2, 2))
   
   Res <- foreach(i = seq_len(nrow(index)), .export = c("predCor", "combpvalue")) %dopar% {	    
     
@@ -1278,7 +1278,7 @@ hermes_parallel <- function(miRTarget, ExpData, minSharedmiR = 3, num_perm = 100
   targetSym <- unique(tar)
   
   m2 <- length(targetSym)
-  index <- t(combn(m2, 2))
+  index <- t(utils::combn(m2, 2))
   
   Res <- foreach(i = seq_len(nrow(index)), .export = c("predCor", "combpvalue", "calCMI")) %dopar% {	    
     
@@ -1450,7 +1450,7 @@ muTaME_parallel <- function(miRTarget, mres, minSharedmiR = 3, padjustvaluecutof
   targetSym <- unique(tar)
   
   m2 <- length(targetSym)
-  index <- t(combn(m2, 2))
+  index <- t(utils::combn(m2, 2))
   
   Res <- foreach(i = seq_len(nrow(index))) %dopar% {	    
     
@@ -1699,7 +1699,7 @@ cernia_parallel <- function(miRTarget, ExpData, mres, consider.miR.expr = "TRUE"
   targetSym <- unique(tar)
   
   m2 <- length(targetSym)
-  index <- t(combn(m2, 2))
+  index <- t(utils::combn(m2, 2))
   
   Res <- foreach(i = seq_len(nrow(index)), .export = c("dtHybrid", "makeCluster", "detectCores", "recommendation", 
                                                        "graphWeights", "parMM", "stopCluster", "clusterApply")) %dopar% {	    
@@ -1829,7 +1829,7 @@ sponge_parallel <- function(miRTarget, ExpData, minSharedmiR = 3, poscorcutoff =
   targetSym <- unique(tar)
   
   m2 <- length(targetSym)
-  index <- t(combn(m2, 2))    
+  index <- t(utils::combn(m2, 2))    
    
   Res <- foreach(i = seq_len(nrow(index)), .packages = c("SPONGE")) %dopar% {	    
     
@@ -1911,7 +1911,7 @@ sponge_parallel <- function(miRTarget, ExpData, minSharedmiR = 3, poscorcutoff =
 integrateMethod <- function(Interlist, Intersect_num) {
   
   if (length(Interlist) >= 2 & length(Interlist) >= Intersect_num) {
-    Combcase <- t(combn(length(Interlist), Intersect_num))
+    Combcase <- t(utils::combn(length(Interlist), Intersect_num))
     Combnum <- dim(Combcase)[1]
     Integrate_Inter <- list()
     
@@ -2185,7 +2185,7 @@ sample_cor_network <- function(ceRNet,
   registerDoParallel(cores) 
   
   m <- length(ceRNet)
-  index <- t(combn(m, 2))
+  index <- t(utils::combn(m, 2))
   background <- genes_num * (genes_num - 1)/2
   
   Res <- foreach(i = seq_len(nrow(index)), .packages = c("igraph")) %dopar% {
