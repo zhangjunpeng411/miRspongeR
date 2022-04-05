@@ -9,18 +9,22 @@ Identifying sample-sample correlation network in terms of sample-specific miRNA 
 }
 \usage{
 sample_cor_network(ceRNet, genes_num, method = "Simpson", 
-padjustvaluecutoff = 0.01, padjustmethod = "BH", num.cores = 2)
+simcutoff = 0.5, padjustvaluecutoff = 0.01, 
+padjustmethod = "BH", num.cores = 2)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{ceRNet}{
-List object, igraph input sample-specific miRNA sponge networks.
+List object, input sample-specific miRNA sponge networks.
 }
   \item{genes_num}{
 Number of possible miRNA sponges.
 }
   \item{method}{
-Methods for calculating similatiry between two sample-specific miRNA sponge networks, select one of three methods (Simpson, Jaccard and Lin). Default method is Simpson
+Methods for calculating similatiry between two sample-specific miRNA sponge networks, select one of three methods (Simpson, Jaccard and Lin). Default method is Simpson.
+}
+  \item{simcutoff}{
+A cutoff value of asimilatiry.
 }
   \item{padjustvaluecutoff}{
 A cutoff value of adjusted p-values. 

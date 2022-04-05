@@ -2165,7 +2165,8 @@ sponge_sample_specific <- function(miRTarget,
   
   ceRInt.all.graph <- make_graph(c(t(ceRInt.all[, 1:2])), directed = FALSE)
   ceRInt.single.graph <- lapply(seq(ceRInt.single), function(i) make_graph(c(t(ceRInt.single[[i]][, 1:2])), directed = FALSE))
-  ceRInt <- lapply(seq(ceRInt.single), function(i) (ceRInt.all.graph %m% ceRInt.single.graph[[i]]) %u% (ceRInt.single.graph[[i]] %m% ceRInt.all.graph))
+  ceRInt <- lapply(seq(ceRInt.single), function(i) as_data_frame((ceRInt.all.graph %m% ceRInt.single.graph[[i]]) %u% 
+                                                                   (ceRInt.single.graph[[i]] %m% ceRInt.all.graph)))
   names(ceRInt) <- rownames(ExpData)
   
   return(ceRInt)
@@ -2175,22 +2176,24 @@ sponge_sample_specific <- function(miRTarget,
 ## sample-specific miRNA sponge networks.
 sample_cor_network <- function(ceRNet, 
                                genes_num, 
-                               method = "Simpson", 
+                               method = "Simpson",
+                               simcutoff = 0.5,
                                padjustvaluecutoff = 0.01,
                                padjustmethod = "BH",
                                num.cores = 2){
   
   # get number of cores to run
   cores <- makeCluster(num.cores)
-  registerDoParallel(cores) 
+  registerDoParallel(cores)
   
-  m <- length(ceRNet)
+  ceRNet.graph <- lapply(seq(ceRNet), function(i) graph_from_data_frame(ceRNet[[i]], directed = FALSE))
+  m <- length(ceRNet.graph)
   index <- t(utils::combn(m, 2))
   background <- genes_num * (genes_num - 1)/2
   
   Res <- foreach(i = seq_len(nrow(index)), .packages = c("igraph")) %dopar% {
-    net1 <- ceRNet[[index[i, 1]]]
-    net2 <- ceRNet[[index[i, 2]]]
+    net1 <- ceRNet.graph[[index[i, 1]]]
+    net2 <- ceRNet.graph[[index[i, 2]]]
     overlap <- length(E(net1 %s% net2))
     if (method == "Simpson") {
       sim <- overlap/min(length(E(net1)), length(E(net2)))
@@ -2213,7 +2216,7 @@ sample_cor_network <- function(ceRNet,
   Res <- do.call(rbind, Res)
   
   Res[, 4] <- p.adjust(as.numeric(Res[, 4]), method = padjustmethod)    
-  Res <- Res[which(as.numeric(Res[, 4]) < padjustvaluecutoff), ]    
+  Res <- Res[which(as.numeric(Res[, 3]) > simcutoff & as.numeric(Res[, 4]) < padjustvaluecutoff), ]    
   
   if (is.vector(Res)) {
     names(Res) <- c("sample_1", "sample_2", "similarity", "p.adjusted_value of similarity")

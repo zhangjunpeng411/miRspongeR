@@ -239,7 +239,7 @@ ExpData <- read.csv(ExpDatacsv, header=TRUE, sep=",")
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRspongeR")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 sponge_sample_specific_net <- sponge_sample_specific(miRTarget, ExpData, senscorcutoff = 0.1, method = "sppc")
-head(sponge_sample_specific_net)
+head(sponge_sample_specific_net[[1]])
 ```
 
 # Identifying sample-sample correlation network
