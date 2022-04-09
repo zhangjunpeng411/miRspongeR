@@ -19,3 +19,24 @@ interaction networks and modules",
 Thuc Duy Le (2019). miRspongeR: an R/Bioconductor package for the identification and analysis of miRNA sponge 
 interaction networks and modules. BMC Bioinformatics. https://doi.org/10.1186/s12859-019-2861-y.")
 )
+
+citEntry( entry   = "Article",
+          title   = "miRspongeR 2.0: an enhanced R package for exploring miRNA sponge regulation",
+          author  = personList(as.person("Junpeng Zhang"),
+                   as.person("Lin Liu"),
+                   as.person("Wu Zhang"),
+                   as.person("Xiaomei Li"),
+                   as.person("Chunwen Zhao"),
+		   as.person("Sijing Li"),
+                   as.person("Jiuyong Li"),
+                   as.person("Thuc Duy Le")),
+          journal = "Bioinformatics Advances",
+          year    = "2022",
+          volume  = "2",  
+	  number  = "1",
+          pages   = "vbac063",
+          url     = "https://doi.org/10.1093/bioadv/vbac063",
+
+          textVersion  = paste("Junpeng Zhang, Lin Liu, Wu Zhang, Xiaomei Li, Chunwen Zhao, Sijing Li, Jiuyong Li and 
+Thuc Duy Le (2022). miRspongeR 2.0: an enhanced R package for exploring miRNA sponge regulation. Bioinformatics Advances. https://doi.org/10.1093/bioadv/vbac063.")
+)

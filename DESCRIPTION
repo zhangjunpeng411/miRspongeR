@@ -1,7 +1,7 @@
 Package: miRspongeR
 Type: Package
 Title: Identification and analysis of miRNA sponge regulation
-Version: 1.99.7
+Version: 2.1.1
 Author: Junpeng Zhang
 Maintainer: Junpeng Zhang <zhangjunpeng411@gmail.com>
 Description: This package provides several functions to explore miRNA sponge 
@@ -24,6 +24,7 @@ biocViews: GeneExpression, BiomedicalInformatics,
            Software, SingleCell, Spatial, RNASeq
 RoxygenNote: 6.0.1
 Imports: corpcor,
+    SPONGE,
     parallel,
     igraph,
     MCL,
@@ -38,7 +39,6 @@ Imports: corpcor,
     utils,
     Rcpp,
     org.Hs.eg.db,
-    SPONGE,
     foreach,
     doParallel
 Suggests:BiocStyle, 

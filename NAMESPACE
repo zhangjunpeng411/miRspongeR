@@ -18,6 +18,7 @@
     importFrom("utils", "read.csv","combn", "write.table")
     importFrom("parallel","makeCluster","detectCores",
     "stopCluster","clusterApply")
+    importFrom("SPONGE","sponge_compute_p_values")
     importFrom("clusterProfiler","bitr","enrichGO",
     "enrichKEGG","compareCluster")
     importFrom("DOSE","enrichDO","enrichDGN","enrichNCG")
@@ -28,7 +29,6 @@
     importFrom("MCL","mcl")
     importFrom("linkcomm","getLinkCommunities")
     import("org.Hs.eg.db")
-    import("SPONGE")
     import("doParallel")
     importFrom("foreach", "foreach", "%dopar%")
          

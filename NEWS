@@ -1,3 +1,7 @@
+CHANGES IN VERSION 2.1.1
+-------------------------
+o Add new reference and fix bug <2022-09-22, Thur>.
+
 CHANGES IN VERSION 1.99.0-1.99.7
 -------------------------
 o Parallel version of existing methods, add SPONGE method, add the method of sample-specific miRNA sponge interaction network, and add the function of sample-sample correlation network <2022-04-06, Wed>.
