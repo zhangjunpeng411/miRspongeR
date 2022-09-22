@@ -198,11 +198,12 @@ head(cerniaceRInt_parallel)
 The SPONGE method predicts competing endogenous RNAs with sparse partial correlation.
 
 ```{r}
-library(SPONGE)
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRspongeR")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 ExpDatacsv <- system.file("extdata", "ExpData.csv", package="miRspongeR")
 ExpData <- read.csv(ExpDatacsv, header=TRUE, sep=",")
+null_model_file <- system.file("extdata", "precomputed_null_model.rda", package="miRspongeR")
+load(null_model_file)
 spongeceRInt_parallel <- spongeMethod(miRTarget, ExpData, padjustvaluecutoff = 0.05, senscorcutoff = 0.1, null_model = precomputed_null_model, method = "sponge_parallel")
 head(spongeceRInt_parallel)
 ```

@@ -1,7 +1,7 @@
 Package: miRspongeR
 Type: Package
 Title: Identification and analysis of miRNA sponge regulation
-Version: 2.1.1
+Version: 2.1.2
 Author: Junpeng Zhang
 Maintainer: Junpeng Zhang <zhangjunpeng411@gmail.com>
 Description: This package provides several functions to explore miRNA sponge 
