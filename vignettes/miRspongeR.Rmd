@@ -2,7 +2,7 @@
 title: "Identification and analysis of miRNA sponge regulation" 
 author: "\\
     
-    Junpeng Zhang (<zhangjunpeng411@gmail.com>)\\
+    Junpeng Zhang (<zjp@dali.edu.cn>)\\
     
     School of Engineering, Dali University"
 date: '`r Sys.Date()`'

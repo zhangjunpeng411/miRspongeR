@@ -2311,7 +2311,7 @@ netModule <- function(spongenetwork, method = "MCL", directed = FALSE, modulesiz
 }
 
 ## Disease enrichment analysis of modules
-moduleDEA <- function(Modulelist, OrgDb = "org.Hs.eg.db", ont = "DO", padjustvaluecutoff = 0.05,
+moduleDEA <- function(Modulelist, OrgDb = "org.Hs.eg.db", padjustvaluecutoff = 0.05,
     padjustedmethod = "BH") {
 
     entrezIDs <- lapply(seq_along(Modulelist), function(i) bitr(Modulelist[[i]], fromType = "SYMBOL",
@@ -2319,7 +2319,7 @@ moduleDEA <- function(Modulelist, OrgDb = "org.Hs.eg.db", ont = "DO", padjustval
 
     entrezIDs <- lapply(seq_along(Modulelist), function(i) as.character(entrezIDs[[i]]))
 
-    enrichDOs <- lapply(seq_along(Modulelist), function(i) enrichDO(entrezIDs[[i]], ont = ont, pvalueCutoff = padjustvaluecutoff,
+    enrichDOs <- lapply(seq_along(Modulelist), function(i) enrichDO(entrezIDs[[i]], pvalueCutoff = padjustvaluecutoff,
         pAdjustMethod = padjustedmethod))
 
     enrichDGNs <- lapply(seq_along(Modulelist), function(i) enrichDGN(entrezIDs[[i]], pvalueCutoff = padjustvaluecutoff,
