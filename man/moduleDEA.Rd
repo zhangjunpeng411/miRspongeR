@@ -12,7 +12,7 @@ databases have three types including DO: Disease Ontology database
 Genes database (\url{http://ncg.kcl.ac.uk/}).
 }
 \usage{
-moduleDEA(Modulelist, OrgDb = "org.Hs.eg.db", ont = "DO",
+moduleDEA(Modulelist, OrgDb = "org.Hs.eg.db", 
 padjustvaluecutoff = 0.05, padjustedmethod = "BH")
 }
 %- maybe also 'usage' for other objects documented here.
@@ -22,9 +22,6 @@ A list of miRNA sponge modules.
 }
     \item{OrgDb}{
 OrgDb
-}
-    \item{ont}{
-One of "DO", and "DOLite" subontologies.
 }
     \item{padjustvaluecutoff}{
 A cutoff value of adjusted p-values.
