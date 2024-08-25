@@ -1,7 +1,7 @@
 Package: miRspongeR
 Type: Package
 Title: Identification and analysis of miRNA sponge regulation
-Version: 2.9.1
+Version: 2.13.1
 Authors@R: 
     person(given = "Junpeng", 
            family = "Zhang", 
@@ -38,9 +38,10 @@ Imports: corpcor,
     grDevices,
     graphics,
     stats,
-    linkcomm,
     utils,
     Rcpp,
+    RColorBrewer,
+    grid,
     org.Hs.eg.db,
     foreach,
     doParallel

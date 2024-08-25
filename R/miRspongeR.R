@@ -576,6 +576,894 @@ mcode <- function(graph, vwp=0.5, haircut=FALSE, fluff=FALSE, fdt=0.8, loops=TRU
 	return(list(COMPLEX=COMPLEX[order_score],score=score[order_score]))
 }
 
+## Internal function integer.edgelist from linkcomm package
+## (https://github.com/alextkalinka/linkcomm).
+integer.edgelist <- function(network)
+  # Returns an edge list with integer numbers replacing elements of the network.
+{
+  if(!is.character(network)){
+    cn <- cbind(as.character(network[,1]),as.character(network[,2]))
+  }else{
+    cn <- network
+  }
+  nodes <- unique(as.character(t(cn)))
+  ids <- seq(nodes)
+  names(ids) <- nodes
+  g <- matrix(ids[t(cn)],nrow(cn),ncol(cn),byrow=TRUE)
+  ret <- list()
+  ret$edges <- g
+  ret$nodes <- ids
+  return(ret)
+}
+
+## Internal function edge.duplicates from linkcomm package
+## (https://github.com/alextkalinka/linkcomm).
+edge.duplicates <- function(network, verbose = TRUE)
+  # Finds and removes loops, duplicate edges, and bi-directional edges.
+{
+  xx <- cbind(as.character(network[,1]),as.character(network[,2]))
+  edges <- integer.edgelist(network)$edges
+  ne <- nrow(edges)
+  loops <- rep(0,ne)
+  dups <- rep(0,ne)
+  
+  out <- .C("edgeDuplicates",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(ne), loops = as.integer(loops), dups = as.integer(dups), as.logical(verbose))
+  
+  if(verbose){cat("\n")}
+  
+  loops <- which(out$loops == 1)
+  dups <- which(out$dups == 1)
+  inds <- unique(c(loops,dups))
+  ret <- list()
+  ret$inds <- inds
+  if(length(inds)>0){
+    ret$edges <- xx[-inds,]
+  }else{
+    ret$edges <- xx
+  }
+  if(verbose){
+    if(length(loops)>0){
+      cat("   Found and removed ",length(loops)," loop(s)\n",sep="")
+    }
+    if(length(dups)>0){
+      cat("   Found and removed ",length(dups)," duplicate edge(s)\n",sep="")
+    }
+  }
+  return(ret)
+}
+
+## Internal function getLinkCommunities from linkcomm package
+## (https://github.com/alextkalinka/linkcomm).
+getLinkCommunities <- function(network, hcmethod = "average", use.all.edges = FALSE, edglim = 10^4, directed = FALSE, dirweight = 0.5, bipartite = FALSE, dist = NULL, plot = TRUE, check.duplicates = TRUE, removetrivial = TRUE, verbose = TRUE) 
+  # network is an edge list. Nodes can be ASCII names or integers, but are always treated as character names in R.
+  # If plot is true (default), a dendrogram and partition density score as a function of dendrogram height are plotted side-by-side.
+  # When there are more than "edglim" edges, hierarchical clustering is carried out via temporary files written to disk using compiled C++ code.
+{
+  
+  if(is.character(network) && !is.matrix(network)){
+    if(file.access(network) == -1){
+      stop(cat("\nfile not found: \"",network,"\"\n",sep=""))
+    }else{
+      network <- read.table(file = network, header = FALSE)
+    }
+  }
+  x <- network
+  rm(network)
+  
+  if(ncol(x)==3){
+    wt <- as.numeric(as.character(x[,3]))
+    if(length(which(is.na(wt)==TRUE))>0){
+      stop("\nedge weights must be numerical values\n")
+    }
+    x <- cbind(as.character(x[,1]),as.character(x[,2]))
+  }else if(ncol(x)==2){
+    x <- cbind(as.character(x[,1]),as.character(x[,2]))
+    wt <- NULL
+  }else{
+    stop("\ninput data must be an edge list with 2 or 3 columns\n")
+  }
+  
+  if(check.duplicates){
+    dret <- edge.duplicates(x, verbose = verbose)
+    x <- dret$edges
+    if(!is.null(wt)){
+      if(length(dret$inds) > 0){
+        wt <- wt[-dret$inds]
+      }
+    }
+    rm(dret)
+  }
+  
+  el <- x # Modified edge list returned to user.
+  rm(x)
+  len <- nrow(el) # Number of edges.
+  nnodes <- length(unique(c(as.character(el[,1]),as.character(el[,2])))) # Number of nodes.
+  
+  intel <- integer.edgelist(el) # Edges with numerical node IDs.
+  edges <- intel$edges
+  node.names <- names(intel$nodes)
+  numnodes <- length(node.names)
+  
+  if(bipartite){
+    # Check that network is bipartite.
+    big <- graph_from_edgelist(as.matrix(el), directed = directed)
+    bip.test <- bipartite.mapping(big)
+    if(!bip.test$res){
+      stop("\nnetwork is not bi-partite; change bipartite argument to FALSE\n")
+    }
+    bip <- rep(1,length(bip.test$type))
+    bip[which(bip.test$type==FALSE)] <- 0
+    names(bip) <- V(big)$name
+    bip <- bip[match(node.names, names(bip))]
+    rm(big, bip.test)
+  }else{
+    bip <- 0
+  }
+  
+  rm(intel)
+  
+  # Switch depending on size of network.
+  if(len <= edglim){
+    disk <- FALSE
+    if(is.null(dist)){
+      emptyvec <- rep(1,(len*(len-1))/2)
+      if(!is.null(wt)){ weighted <- TRUE}else{ wt <- 0; weighted <- FALSE}
+      if(!use.all.edges){
+        dissvec <- .C("getEdgeSimilarities",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(len),rowlen=integer(1),weights=as.double(wt),as.logical(directed),as.double(dirweight),as.logical(weighted),as.logical(disk), dissvec = as.double(emptyvec), as.logical(bipartite), as.logical(verbose))$dissvec
+      }else{
+        dissvec <- .C("getEdgeSimilarities_all",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(len),as.integer(numnodes),rowlen=integer(1),weights=as.double(wt),as.logical(FALSE),as.double(dirweight),as.logical(weighted),as.logical(disk), dissvec = as.double(emptyvec), as.logical(bipartite), as.logical(verbose))$dissvec
+      }
+      distmatrix <- matrix(1,len,len)
+      distmatrix[lower.tri(distmatrix)] <- dissvec
+      colnames(distmatrix) <- 1:len
+      rownames(distmatrix) <- 1:len
+      distobj <- as.dist(distmatrix) # Convert into 'dist' object for hclust.
+      rm(distmatrix)
+    }else{	
+      # Did the user provide an adequate distance matrix?
+      if(!inherits(dist,"dist")){
+        stop("\ndistance matrix must be of class \"dist\" (see ?as.dist)\n")
+      }else if(attr(dist,which="Size") != len){
+        stop("\ndistance matrix size must equal the number of edges in the input network\n")
+      }else if(length(dist) != (len*(len-1))/2){
+        stop("\ndistance matrix must be the lower triangular matrix of a square matrix\n")
+      }
+      distobj <- dist
+    }
+    if(verbose){
+      cat("\n   Hierarchical clustering of edges...")
+    }
+    #if(hcmethod=="energy"){
+    #	hcedges <- energy.hclust(distobj)
+    #}else{
+    #	hcedges <- hclust(distobj, method = hcmethod)
+    #	}
+    hcedges <- hclust(distobj, method = hcmethod)
+    hcedges$order <- rev(hcedges$order)
+    rm(distobj)
+    if(verbose){cat("\n")}
+  }else{
+    disk <- TRUE
+    if(!is.null(wt)){ weighted <- TRUE}else{ wt <- 0; weighted <- FALSE}
+    if(!use.all.edges){
+      rowlen <- .C("getEdgeSimilarities",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(len),rowlen=integer(len-1),weights=as.double(wt),as.logical(directed),as.double(dirweight),as.logical(weighted),as.logical(disk), dissvec = double(1), as.logical(bipartite), as.logical(verbose))$rowlen
+    }else{
+      rowlen <- .C("getEdgeSimilarities_all",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(len),as.integer(numnodes),rowlen=integer(len-1),weights=as.double(wt),as.logical(FALSE),as.double(dirweight),as.logical(weighted),as.logical(disk), dissvec = double(1), as.logical(bipartite), as.logical(verbose))$rowlen
+    }
+    if(verbose){cat("\n")}
+    hcobj <- .C("hclustLinkComm",as.integer(len),as.integer(rowlen),heights = single(len-1),hca = integer(len-1),hcb = integer(len-1), as.logical(verbose))
+    if(verbose){cat("\n")}
+    hcedges<-list()
+    hcedges$merge <- cbind(hcobj$hca, hcobj$hcb)
+    hcedges$height <- hcobj$heights
+    
+    hcedges$order <- .C("hclustPlotOrder",as.integer(len),as.integer(hcobj$hca),as.integer(hcobj$hcb),order=integer(len))$order
+    hcedges$order <- rev(hcedges$order)
+    hcedges$method <- "single"
+    class(hcedges) <- "hclust"
+    
+  }
+  
+  # Calculate link densities, cut the tree, and extract optimal clusters.
+  
+  hh <- unique(round(hcedges$height, digits = 5)) # Round to 5 digits to prevent numerical instability affecting community formation.
+  countClusters <- function(x,ht){return(length(which(ht==x)))}
+  clusnums <- sapply(hh, countClusters, ht = round(hcedges$height, digits = 5)) # Number of clusters at each height.
+  numcl <- length(clusnums)
+  
+  ldlist <- .C("getLinkDensities",as.integer(hcedges$merge[,1]), as.integer(hcedges$merge[,2]), as.integer(edges[,1]), as.integer(edges[,2]), as.integer(len), as.integer(clusnums), as.integer(numcl), pdens = double(length(hh)), heights = as.double(hh), pdmax = double(1), csize = integer(1), as.logical(removetrivial), as.logical(bipartite), as.integer(bip), as.logical(verbose))
+  
+  pdens <- c(0,ldlist$pdens)
+  heights <- c(0,hh)
+  pdmax <- ldlist$pdmax
+  csize <- ldlist$csize
+  
+  if(csize == 0){
+    stop("\nno clusters were found in this network; maybe try a larger network\n")
+  }
+  
+  if(verbose){
+    cat("\n   Maximum partition density = ",max(pdens),"\n")
+  }
+  
+  # Read in optimal clusters from a file.
+  clus <- list()
+  for(i in 1:csize){
+    if(verbose){
+      mes<-paste(c("   Finishing up...1/4... ",floor((i/csize)*100),"%"),collapse="")
+      cat(mes,"\r")
+      flush.console()
+    }
+    clus[[i]] <- scan(file = "linkcomm_clusters.txt", nlines = 1, skip = i-1, quiet = TRUE)
+  }
+  
+  file.remove("linkcomm_clusters.txt")
+  
+  # Extract nodes for each edge cluster.
+  ecn <- data.frame()
+  ee <- data.frame()
+  lclus <- length(clus)
+  for(i in 1:lclus){
+    if(verbose){
+      mes<-paste(c("   Finishing up...2/4... ",floor((i/lclus)*100),"%"),collapse="")
+      cat(mes,"\r")
+      flush.console()
+    }
+    ee <- rbind(ee,cbind(el[clus[[i]],],i))
+    nodes <- node.names[unique(c(edges[clus[[i]],]))]
+    both <- cbind(nodes,rep(i,length(nodes)))
+    ecn <- rbind(ecn,both)
+  }
+  colnames(ecn) <- c("node","cluster")
+  colnames(ee) <- c("node1","node2","cluster")
+  
+  # Extract the node-size of each edge cluster and order largest to smallest.
+  ss <- NULL
+  unn <- unique(ecn[,2])
+  lun <- length(unn)
+  for(i in 1:length(unn)){
+    if(verbose){
+      mes<-paste(c("   Finishing up...3/4... ",floor((i/lun)*100),"%"),collapse="")
+      cat(mes,"\r")
+      flush.console()
+    }
+    ss[i] <- length(which(ecn[,2]==unn[i]))
+  }
+  names(ss) <- unn
+  ss <- sort(ss,decreasing=T)
+  
+  # Extract the number of edge clusters that each node belongs to.
+  unn <- unique(ecn[,1])
+  
+  iecn <- as.integer(as.factor(ecn[,1]))
+  iunn <- unique(iecn)
+  lunn <- length(iunn)
+  nrows <- nrow(ecn)
+  
+  oo <- rep(0,lunn)
+  
+  oo <- .C("getNumClusters", as.integer(iunn), as.integer(iecn), counts = as.integer(oo), as.integer(lunn), as.integer(nrows), as.logical(verbose))$counts
+  
+  names(oo) <- unn
+  
+  if(verbose){cat("\n")}
+  
+  pdplot <- cbind(heights,pdens)
+  
+  # Add nodeclusters of size 0.
+  missnames <- setdiff(node.names,names(oo))
+  m <- rep(0,length(missnames))
+  names(m) <- missnames
+  oo <- append(oo,m)
+  
+  all <- list()
+  
+  all$numbers <- c(len,nnodes,length(clus)) # Number of edges, nodes, and clusters.
+  all$hclust <- hcedges # Return the 'hclust' object. To plot the dendrogram: 'plot(lcobj$hclust,hang=-1)'
+  all$pdmax <- pdmax # Partition density maximum height.
+  all$pdens <- pdplot # Add data for plotting Partition Density as a function of dendrogram height.
+  all$nodeclusters <- ecn # n*2 character matrix of node names and the cluster ID they belong to.
+  all$clusters <- clus # Clusters of edge IDs arranged as a list of lists.
+  all$edges <- ee # Edges and the clusters they belong to, arranged so we can easily put them into an edge attribute file for Cytoscape.
+  all$numclusters <- sort(oo,decreasing=TRUE) # The number of clusters that each node belongs to (named vector where the names are node names).
+  all$clustsizes <- ss # Cluster sizes sorted largest to smallest (named vector where names are cluster IDs).
+  all$igraph <- graph_from_edgelist(el, directed = directed) # igraph graph.
+  all$edgelist <- el # Edge list.
+  all$directed <- directed # Logical indicating if graph is directed or not.
+  all$bipartite <- bipartite # Logical indicating if graph is bipartite or not.
+  
+  class(all) <- "linkcomm"
+  
+  if(plot){
+    if(verbose){
+      cat("   Plotting...\n")
+    }
+    if(len < 1500){ # Will be slow to plot dendrograms for large networks.
+      if(len < 500){
+        all <- plot(all, type="summary", droptrivial = removetrivial, verbose = verbose)
+      }else{ # Slow to reverse order of large dendrograms.
+        all <- plot(all, type="summary", right = FALSE, droptrivial = removetrivial, verbose = verbose)
+      }
+    }else if(len <= edglim){
+      oldpar <- par(no.readonly = TRUE)
+      par(mfrow=c(1,2), mar=c(5.1,4.1,4.1,2.1))
+      plot(hcedges,hang=-1,labels=FALSE)
+      abline(pdmax,0,col='red',lty=2)
+      plot(pdens,heights,type='n',xlab='Partition Density',ylab='Height')
+      lines(pdens,heights,col='blue',lwd=2)
+      abline(pdmax,0,col='red',lty=2)
+      par(oldpar)
+    }else{
+      plot(heights,pdens,type='n',xlab='Height',ylab='Partition Density')
+      lines(heights,pdens,col='blue',lwd=2)
+      abline(v = pdmax,col='red',lwd=2)
+    }
+  }
+  
+  return(all)
+  
+}
+
+## Internal function plot.linkcomm from linkcomm package
+## (https://github.com/alextkalinka/linkcomm).
+plot.linkcomm <- function(x, type = "", ...)
+  # S3 method for "plot" generic function.
+  # x is a "linkcomm" object.
+{
+  switch(type,
+         summary = plotLinkCommSumm(x, ...),
+         members = plotLinkCommMembers(x, ...),
+         dend = plotLinkCommDend(x, ...),
+         graph = plotLinkCommGraph(x, ...),
+         commsumm = plotLinkCommSummComm(x, ...)
+  )
+}
+
+## Internal function plotLinkCommSumm from linkcomm package
+## (https://github.com/alextkalinka/linkcomm).
+plotLinkCommSumm <- function(x, col = TRUE, pal = brewer.pal(9,"Set1"), right = TRUE, droptrivial = TRUE, verbose = TRUE, ...)
+  # x is a "linkcomm" object.
+{
+  oldpar <- par(no.readonly = TRUE)
+  # Set up and colour clusters in dendrogram.
+  if(is.null(x$dendr)){
+    dd <- as.dendrogram(x$hclust)
+  }else{
+    dd <- x$dendr
+  }
+  if(col && is.null(x$dendr)){
+    cl <- unlist(x$clusters)
+    crf <- colorRampPalette(pal,bias=1)
+    cols <- crf(length(x$clusters))
+    cols <- sample(cols,length(x$clusters),replace=FALSE)
+    numnodes <- nrow(x$hclust$merge) + length(which(x$hclust$merge[,1]<0)) + length(which(x$hclust$merge[,2]<0))
+    dd <- dendrapply(dd,.COL,height=x$pdmax,clusters=cl,cols=cols,labels=FALSE,numnodes=numnodes,droptrivial = droptrivial,verbose=verbose)
+    if(verbose){cat("\n")}
+    assign("i",0,environment(.COL))
+    assign("memb",0,environment(.COL))
+    assign("first",0,environment(.COL))
+    assign("left",0,environment(.COL))
+  }
+  if(is.null(x$dendr) && right){ dd <- rev(dd)}
+  grid.newpage()
+  plot.new()
+  # Set margin.
+  margin<-unit(0.045,"npc")
+  pushViewport(viewport(x=margin,y=margin,width=unit(1,"npc")-2*margin,height=unit(1,"npc")-2*margin,just=c("left","bottom")))
+  pushViewport(viewport(layout=grid.layout(nrow=4,ncol=4,widths=unit(c(1,0.01,0.2,0.09),units=c("null",rep("native",3))),heights=unit(c(0.04,0.79,0.025,0.05),units=rep("npc",4)),respect=TRUE)))
+  # Plot dendrogram using base plot function.
+  pushViewport(viewport(layout.pos.row=1:3,layout.pos.col=1))
+  #return(gridPLT())
+  gpl <- c(0.009,0.71,0.13,0.902)
+  par(oma=rep(0,4),mar=rep(0,4),ann=FALSE,omd=c(0,1,0,1),pty="m",mgp=rep(0,3),fig = gpl,xpd=NA,new=TRUE)
+  plot(dd,axes=FALSE,leaflab="none")
+  popViewport(1)
+  # Title.
+  pushViewport(viewport(layout.pos.row=1,layout.pos.col=1:3))
+  title <- grid.text("Link Communities Dendrogram",x = unit(0.5,"npc"),y = unit(2,"npc"),draw=FALSE,name="title")
+  title <- editGrob(title,gp = gpar(fontsize=14))
+  grid.draw(title)
+  popViewport(1)
+  # Plot link partition densities.
+  numzeros <- -1*log10(max(x$pdens[,2]))
+  if(numzeros <= 1){ # Prevent partition density axis from being rounded to 0.
+    rr <- 1
+  }else{
+    rr <- trunc(numzeros)+1
+  }
+  if(round(max(x$pdens[,2]), digits = rr) > max(x$pdens[,2])){
+    xscale_add <- round(max(x$pdens[,2]), digits = rr) + 0.05*max(x$pdens[,2]) # Add 5% to part density x-axis.
+    xaxs_max <- round(max(x$pdens[,2]), digits = rr)
+  }else{
+    xscale_add <- max(x$pdens[,2]) + 0.075*max(x$pdens[,2]) # 7.5% of max partition density added to x-axis.
+    xaxs_max <- round(max(x$pdens[,2]), digits = (rr+1))
+  }
+  pushViewport(viewport(layout.pos.row=2, layout.pos.col=3, xscale=c(0,xscale_add),yscale=c(0,1)))
+  ph <- x$pdens[,1]/max(x$pdens[,1])
+  max <- x$pdmax/max(x$pdens[,1])
+  
+  grid.lines(x$pdens[,2],ph,gp=gpar(col='blue',lwd=2),default.units="native")
+  xticks <- seq(0, xaxs_max, length.out=3)
+  xa <- grid.xaxis(at = xticks,draw=FALSE,name="xa")
+  xa <- editGrob(xa,gPath="ticks",y1 = unit(-0.02,"npc"))
+  xa <- editGrob(xa,gPath="labels",gp = gpar(fontsize=10),y = unit(-0.04,"npc"))
+  grid.draw(xa)
+  xl <- grid.text("Partition Density",x=unit(0.5, "npc"), y = unit(-0.08, "npc"),draw=FALSE,name="xl")
+  xl <- editGrob(xl,gp = gpar(fontsize=10))
+  grid.draw(xl)
+  popViewport(1)
+  pushViewport(viewport(layout.pos.row=2,layout.pos.col=1:3))
+  grid.lines(x=c(0,1),y=c(max,max),gp = gpar(col="red",lty=2,lwd=2))
+  popViewport(1)
+  pushViewport(viewport(layout.pos.row=2,layout.pos.col=4))
+  yticks <- c(0,0.2,0.4,0.6,0.8,1)
+  ya <- grid.yaxis(at = yticks,name="ya",draw=FALSE)
+  ya <- editGrob(ya,gPath="ticks",x1 = unit(0.1,"npc"))
+  ya <- editGrob(ya,gPath="labels",gp = gpar(fontsize=10),x = unit(0.2,"npc"))
+  ya <- editGrob(ya,gPath="labels",just = c("left","centre"))
+  if(max(x$pdens[,1]<1)){
+    yu <- seq(0,round(max(x$pdens[,1]),2),length.out=6)
+    roundS <- function(x){return(round(x,2))}
+    yu <- sapply(yu,roundS)
+    ya <- editGrob(ya,gPath="labels",label=as.character(yu))
+  }
+  grid.draw(ya)
+  yl <- grid.text("Height",x=unit(0.8, "npc"), y = unit(0.5, "npc"),rot=90,draw=FALSE,name="yl")
+  yl <- editGrob(yl,gp = gpar(fontsize=10))
+  grid.draw(yl)
+  popViewport(1)
+  # Summary statistics.
+  pushViewport(viewport(layout.pos.row=4,layout.pos.col=1))
+  summ <- paste("# edges = ",x$numbers[1],",   ","# nodes = ",x$numbers[2],"\n# clusters = ",x$numbers[3],",   Largest cluster = ",x$clustsizes[1]," nodes\nHclust method: ",x$hclust$method)
+  ne <- grid.text(summ,x=unit(0.5,"npc"),y=unit(0.1,"npc"),draw=FALSE,name="ne")
+  ne <- editGrob(ne,gp = gpar(fontsize=11))
+  grid.draw(ne)
+  popViewport(1)
+  # Return linkcomm object with dendrogram so we don't have to generate it again in the future.
+  if(is.null(x$dendr)){
+    x$dendr <- dd
+    return(x)
+  }
+  popViewport(0)
+  par(oldpar)
+}
+
+## Internal function plotLinkCommMembers from linkcomm package
+## (https://github.com/alextkalinka/linkcomm).
+plotLinkCommMembers <- function(x, nodes = head(names(x$numclusters),10), pal = brewer.pal(11,"Spectral"), shape = "rect", total=TRUE, fontsize=11, nspace = 3.5, maxclusters = 20)
+  # Plots community membership matrix using a community-specific colour scheme.
+  # x is a "linkcomm" object.
+{
+  # Construct community matrix.
+  comms <- unique(x$nodeclusters[as.character(x$nodeclusters[,1])%in%nodes,2]) # Community (cluster) IDs.
+  if(length(comms) > maxclusters){
+    comms <- comms[1:maxclusters]
+  }
+  commatrix <- getCommunityMatrix(x,nodes=nodes)
+  crf <- colorRampPalette(pal,bias=1)
+  cols <- crf(length(comms))
+  grid.newpage()
+  # Set margin.
+  if(total){
+    C <- 2; R <- 3
+    nodesums <- apply(commatrix,1,sum)
+    commsums <- apply(commatrix,2,sum)
+  }else{
+    C <- 1; R <- 2
+  }
+  margin<-unit(0.1,"lines")
+  pushViewport(viewport(x=1,y=1,width=unit(1,"npc")-2*margin,height=unit(1,"npc")-2*margin,just=c("right","top")))
+  pushViewport(viewport(layout=grid.layout(nrow=length(nodes)+R,ncol=length(comms)+C,widths=unit(c(nspace,rep(1,length(comms)+C-1)),rep("null",length(comms)+C)),heights=unit(rep(1,length(nodes)+R),rep("null",length(nodes)+R)),respect=TRUE)))
+  # Titles.
+  pushViewport(viewport(layout.pos.row=1,layout.pos.col=2:length(comms)+1))
+  ctitle <- grid.text("Community Membership",x = unit(0.5,"npc"),y = unit(0.5,"npc"),draw=FALSE,name="ctitle")
+  ctitle <- editGrob(ctitle,gp = gpar(fontsize=14))
+  grid.draw(ctitle)
+  popViewport(1)
+  # Draw membership coloured squares/circles/polygons.
+  for(i in 1:(length(nodes)+R-2)){
+    if(i != length(nodes)+1){
+      pushViewport(viewport(layout.pos.row=i+2,layout.pos.col=1))
+      nname <- grid.text(as.character(nodes[i]),x = unit(0.9,"npc"),y = unit(0.5,"npc"),draw=FALSE,name="nname")
+      nname <- editGrob(nname,gp = gpar(fontsize=fontsize),just="right")
+      grid.draw(nname)
+      popViewport(1)
+    }
+    for(j in 1:(length(comms)+C-1)){
+      if(total && j == length(comms)+1 && i != length(nodes)+1){
+        pushViewport(viewport(layout.pos.row=i+2,layout.pos.col=j+1))
+        ntot <- grid.text(nodesums[i],x = unit(0.5,"npc"),y = unit(0.5,"npc"),draw=FALSE,name="ntot")
+        ntot <- editGrob(ntot,gp = gpar(fontsize=12))
+        grid.draw(ntot)
+        popViewport(1)
+        if(i == 1){
+          pushViewport(viewport(layout.pos.row=2,layout.pos.col=j+1))
+          rt <- grid.text(expression(Sigma),x = unit(0.5,"npc"),y = unit(0.5,"npc"),draw=FALSE,name="rt")
+          rt <- editGrob(rt,gp = gpar(fontsize=12))
+          grid.draw(rt)
+          popViewport(1)
+        }
+      }else{
+        if(i == 1 && j != length(comms)+1){
+          pushViewport(viewport(layout.pos.row=2,layout.pos.col=j+1))
+          rtitle <- grid.text(comms[j],x = unit(0.5,"npc"),y = unit(0.5,"npc"),draw=FALSE,name="rtitle")
+          rtitle <- editGrob(rtitle,gp = gpar(fontsize=12))
+          grid.draw(rtitle)
+          popViewport(1)
+        }
+        if(total && i == length(nodes)+1 && j != length(comms)+1){
+          if(j==1){
+            pushViewport(viewport(layout.pos.row=i+2,layout.pos.col=1))
+            ct <- grid.text(expression(Sigma),x = unit(0.9,"npc"),y = unit(0.5,"npc"),draw=FALSE,name="ct")
+            ct <- editGrob(ct,gp = gpar(fontsize=12))
+            grid.draw(ct)
+            popViewport(1)
+          }
+          pushViewport(viewport(layout.pos.row=i+2,layout.pos.col=j+1))
+          ctot <- grid.text(commsums[j],x = unit(0.5,"npc"),y = unit(0.5,"npc"),draw=FALSE,name="ctot")
+          ctot <- editGrob(ctot,gp = gpar(fontsize=12))
+          grid.draw(ctot)
+          popViewport(1)
+        }else if(i != length(nodes)+1 && j != length(comms)+1){
+          if(commatrix[i,j] == 1){
+            fill <- cols[j]
+          }else{
+            fill <- "white"
+          }
+          if(shape=="rect"){
+            pushViewport(viewport(layout.pos.row=i+2,layout.pos.col=j+1))
+            grid.rect(gp=gpar(fill=fill,col="grey"),width = unit(0.9,"npc"), height = unit(0.9,"npc"),draw=TRUE)
+            popViewport(1)
+          }else if(shape=="circle"){
+            pushViewport(viewport(layout.pos.row=i+2,layout.pos.col=j+1))
+            grid.circle(x=0.5,y=0.5,r=0.45,gp=gpar(fill=fill,col="grey"),draw=TRUE)
+            popViewport(1)
+          }
+        }
+      }
+    }
+  }
+}
+
+## Internal function plotLinkCommDend from linkcomm package
+## (https://github.com/alextkalinka/linkcomm).
+plotLinkCommDend <- function(x, col=TRUE, pal = brewer.pal(9,"Set1"), height=x$pdmax, right = FALSE, labels=FALSE, plotcut=TRUE, droptrivial = TRUE, leaflab = "none", verbose = TRUE, ...)
+  # x is a "linkcomm" object.
+{
+  dd <- as.dendrogram(x$hclust)
+  if(col){
+    cl <- unlist(x$clusters)
+    crf <- colorRampPalette(pal,bias=1)
+    cols <- crf(length(x$clusters))
+    cols <- sample(cols,length(x$clusters),replace=FALSE)
+    numnodes <- nrow(x$hclust$merge) + length(which(x$hclust$merge[,1]<0)) + length(which(x$hclust$merge[,2]<0))
+    dd <- dendrapply(dd, .COL, height=height, clusters=cl, cols=cols, labels=labels, numnodes = numnodes, droptrivial = droptrivial, verbose = verbose)
+    cat("\n")
+    assign("i",0,environment(.COL))
+    assign("memb",0,environment(.COL))
+    assign("first",0,environment(.COL))
+    assign("left",0,environment(.COL))
+  }
+  if(right){
+    dd <- rev(dd)
+  }
+  plot(dd,ylab="Height", leaflab = leaflab, ...)
+  if(plotcut){
+    abline(h=height,col='red',lty=2,lwd=2)
+  }
+  #ll <- sapply(x$clusters,length)
+  #maxnodes <- length(unique(x$nodeclusters[x$nodeclusters[,2]%in%which(ll==max(ll)),1]))
+  summ <- paste("# clusters = ",length(x$clusters),"\nLargest cluster = ",x$clustsizes[1]," nodes")
+  mtext(summ, line = -28)
+}
+
+## Internal function from linkcomm package
+## (https://github.com/alextkalinka/linkcomm).
+.COL<-local({
+  
+  memb <- 0
+  first <- 0
+  i <- 0
+  left <- 0
+  
+  colorHclusters <<- function(x, height, clusters, cols, labels, numnodes, droptrivial, verbose)
+    # Adds colours to edges that belong to clusters below "height" in the dendrogram.
+    # Clusters gives leaf IDs for clusters that should be coloured.
+    # x is a node in the tree.
+  {
+    left <<- left + 1
+    if(verbose){
+      out <- paste(c("   Colouring dendrogram... ",floor((left/numnodes)*100),"%"),collapse="")
+      cat(out,"\r")
+      flush.console()
+    }
+    
+    if(round(attributes(x)$height,digits=5) > height){
+      return(x)
+    }else{
+      if(is.leaf(x)){
+        if(is.na(match(as.numeric(attributes(x)$label),clusters))){
+          if(!labels){
+            attributes(x)$label <- NULL
+          }
+          return(x)
+        }
+      }
+      a <- attributes(x)
+      if(memb == 0){
+        memb <<- attributes(x)$members
+        if(droptrivial == TRUE && memb == 2){
+          memb <<- 0
+          first <<- 1
+        }else{
+          i <<- i+1
+          first <<- 1 # Because we don't colour the edge leading to the first node in a cluster.
+        }
+      }
+      if(first == 0){
+        attr(x,"edgePar") <- c(a$edgePar,list(col = cols[i], lwd = 2))
+      }
+      if(is.leaf(x)){
+        if(!labels){
+          attributes(x)$label <- NULL
+        }
+        memb <<- memb-1
+      }
+      first <<- 0
+    }
+    
+    return(x)
+  }
+  
+})
+
+## Internal function plotLinkCommGraph from linkcomm package
+## (https://github.com/alextkalinka/linkcomm).
+plotLinkCommGraph <- function(x, clusterids = 1:length(x$clusters), nodes = NULL, layout = layout.fruchterman.reingold, pal = brewer.pal(7,"Set2"), random = TRUE, node.pies = TRUE, pie.local = TRUE, vertex.radius = 0.03, scale.vertices = 0.05, edge.color = NULL, vshape = "none", vsize = 15, ewidth = 3, margin = 0, vlabel.cex = 0.8, vlabel.color = "black", vlabel.family = "Helvetica", vertex.color = "palegoldenrod", vlabel = TRUE, col.nonclusters = "black", jitter = 0.2, circle = TRUE, printids = TRUE, cid.cex = 1, shownodesin = 0, showall = FALSE, verbose = TRUE, ...)
+  # x is a "linkcomm" object.
+{
+  if(length(nodes) > 0){
+    clusterids <- which.communities(x, nodes = nodes)
+  }
+  clusters <- x$clusters[clusterids]
+  miss <- setdiff(x$hclust$order,unlist(clusters))
+  crf <- colorRampPalette(pal,bias=1)
+  cols <- crf(length(clusters))
+  if(random){
+    cols <- sample(cols,length(clusters),replace=FALSE)
+  }
+  if(showall){
+    # Add single edge "clusters".
+    single <- setdiff(1:x$numbers[1],unlist(clusters))
+    ll <- length(clusters)
+    for(i in 1:length(single)){
+      clusters[[(i+ll)]] <- single[i]
+    }
+    cols <- append(cols, rep(col.nonclusters, length(single)))
+  }
+  drawcircle <- FALSE
+  if(inherits(layout,"character")){
+    if(layout == "spencer.circle"){
+      if(length(clusters) > length(x$clusters[1:x$numbers[3]])){
+        clusterids <- 1:x$numbers[3]
+      }
+      ord <- orderCommunities(x, clusterids = clusterids, verbose = FALSE)
+      clusters <- ord$ordered
+      clusterids <- ord$clusids
+      layout <- layout.spencer.circle(x, clusterids = clusterids, jitter = jitter, verbose = verbose)$nodes
+      drawcircle <- TRUE
+    }
+  }
+  names(cols) <- clusterids
+  if(length(unlist(clusters)) < nrow(x$edgelist) || length(miss) == 0){
+    # Convert old clus ids into new ones.
+    edges <- x$edgelist[unlist(clusters),]
+    ig <- graph.edgelist(edges, directed=x$directed)
+    clen <- sapply(clusters,length)
+    j<-1
+    # Colour edges according to community membership.
+    for(i in 1:length(clusters)){
+      newcids <- j:sum(clen[1:i])
+      E(ig)[newcids]$color <- cols[i]
+      j <- tail(newcids,1)+1
+    }
+  }else{
+    ig <- x$igraph
+    for(i in 1:length(clusters)){
+      E(ig)[clusters[[i]]]$color <- cols[i]
+    }
+  }
+  
+  if(shownodesin == 0){
+    vnames <- V(ig)$name
+  }else{ # Show nodes that belong to more than x number of communities.
+    vnames <- V(ig)$name
+    inds <- NULL
+    for(i in 1:length(vnames)){
+      if(x$numclusters[which(names(x$numclusters)==vnames[i])] < shownodesin){
+        inds <- append(inds,i)
+      }
+    }
+    vnames[inds] <- ""
+  }
+  if(vlabel==FALSE){
+    vnames = NA
+  }
+  
+  dev.hold(); on.exit(dev.flush())
+  oldpar <- par(no.readonly = TRUE)
+  par(mar = c(4,4,2,2))
+  
+  if(!node.pies){
+    plot(ig, layout=layout, vertex.shape=vshape, edge.width=ewidth, vertex.label=vnames, vertex.label.family=vlabel.family, vertex.label.color=vlabel.color, vertex.size=vsize, vertex.color=vertex.color, margin=margin, vertex.label.cex = vlabel.cex, ...)
+  }else{
+    nodes <- V(ig)$name
+    # Get node community membership by edges.
+    if(pie.local){
+      edge.memb <- numberEdgesIn(x, clusterids = clusterids, nodes = nodes)
+    }else{
+      edge.memb <- numberEdgesIn(x, nodes = nodes)
+    }
+    
+    cat("   Getting node layout...")
+    if(inherits(layout,"function")){
+      lay <- layout(ig)
+    }else{
+      lay <- layout
+    }
+    lay <- layout.norm(lay, xmin=-1, xmax=1, ymin=-1, ymax=1)
+    rownames(lay) <- V(ig)$name
+    cat("\n")
+    node.pies <- .nodePie(edge.memb=edge.memb, layout=lay, nodes=nodes, edges=100, radius=vertex.radius, scale=scale.vertices)
+    cat("\n")
+    # Plot graph.
+    if(is.null(edge.color)){
+      plot(ig, layout=lay, vertex.shape="none", vertex.label=NA, vertex.label.dist=1, edge.width=ewidth, vertex.label.color=vlabel.color, ...)
+    }else{
+      plot(ig, layout=lay, vertex.shape="none", vertex.label=NA, vertex.label.dist=1, edge.width=ewidth, vertex.label.color=vlabel.color, edge.color=edge.color, ...)
+    }
+    labels <- list()
+    # Plot node pies and node names.
+    for(i in 1:length(node.pies)){
+      yp <- NULL
+      for(j in 1:length(node.pies[[i]])){
+        seg.col <- cols[which(names(cols)==names(edge.memb[[i]])[j])]
+        polygon(node.pies[[i]][[j]][,1], node.pies[[i]][[j]][,2], col = seg.col)
+        yp <- append(yp, node.pies[[i]][[j]][,2])
+      }
+      lx <- lay[which(rownames(lay)==names(node.pies[i])),1] + 0.1
+      ly <- max(yp) + 0.02 # Highest point of node pie.
+      labels[[i]] <- c(lx, ly)
+    }
+    # Plot node names after nodes so they overlay them.
+    for(i in 1:length(labels)){
+      text(labels[[i]][1], labels[[i]][2], labels = vnames[which(nodes==names(node.pies[i]))], cex = vlabel.cex, col = vlabel.color)
+    }
+  }
+  
+  if(circle && drawcircle){
+    # Add circle for Spencer layout.
+    cx<-NULL; for(i in 1:100){cx[i]<-1.25*cos(i*(2*pi)/100)}
+    cy<-NULL; for(i in 1:100){cy[i]<-1.25*sin(i*(2*pi)/100)}
+    polygon(cx-0.08,cy-0.08, border="grey",lwd=2)
+    # Add community anchor points and cluster IDs.
+    for(i in 1:length(clusters)){
+      px <- 1.1*cos(i*(2*pi)/length(clusters))
+      py <- 1.1*sin(i*(2*pi)/length(clusters))
+      points(px-0.08,py-0.08, pch = 20, col = cols[i])
+      if(printids){
+        tx <- 1.3*cos(i*(2*pi)/length(clusters))
+        ty <- 1.3*sin(i*(2*pi)/length(clusters))
+        text(tx-0.08,ty-0.08, labels = clusterids[i], col = cols[i], cex = cid.cex, font=2)
+      }
+    }
+  }
+  par(oldpar)
+  
+}
+
+
+## Internal function layout.spencer.circle from linkcomm package
+## (https://github.com/alextkalinka/linkcomm).
+layout.spencer.circle <- function(x, clusterids = 1:x$numbers[3], verbose = TRUE, jitter = 0.2)
+  # Returns x-y node coordinates for Rob Spencer's circular layout of link communities together with x-y coordinates for the community anchors.
+  # x is a "linkcomm" object.
+{
+  clusters <- x$clusters[clusterids]
+  edges <- x$edgelist[unlist(clusters),]
+  ig <- graph.edgelist(edges, directed=FALSE)
+  # Put communities in dendrogram order.
+  clusters <- orderCommunities(x, clusterids = clusterids, verbose = verbose)$ordered
+  # Set up community anchor points in Cartesian coordinates around unit circle (communities evenly spaced).
+  xy_anchors <- matrix(0,length(clusters),2)
+  for(i in 1:length(clusters)){
+    xy_anchors[i,] <- c(cos(i*(2*pi)/length(clusters)), sin(i*(2*pi)/length(clusters)))
+  }
+  # Calculate community membership percentages per node.
+  nodes <- c(x$edgelist[unlist(clusters),1],x$edgelist[unlist(clusters),2])
+  node_names <- unique(nodes)
+  xy_nodes <- matrix(0,length(node_names),2)
+  for(i in 1:length(node_names)){
+    if(verbose){
+      mes <- paste(c("   Calculating node co-ordinates for Spencer circle...",floor(i/(length(node_names))*100),"%"),collapse="")
+      cat(mes,'\r')
+      flush.console()
+    }
+    freqs <- NULL
+    total <- length(which(nodes==node_names[i]))
+    for(j in 1:length(clusters)){
+      freqs <- length(which(c(x$edgelist[clusters[[j]],1],x$edgelist[clusters[[j]],2])==node_names[i]))/total
+      # Update x-y coordinates for this node.
+      xy_nodes[i,1] <- sum(xy_nodes[i,1], freqs*xy_anchors[j,1])
+      xy_nodes[i,2] <- sum(xy_nodes[i,2], freqs*xy_anchors[j,2])
+    }
+    # Add random jitter if this node has identical x-y coordinates to an earlier node.
+    if(duplicated(xy_nodes)[i]){
+      xy_nodes[i,1] <- sum(xy_nodes[i,1], runif(1, min = -jitter, max = jitter))
+      xy_nodes[i,2] <- sum(xy_nodes[i,2], runif(1, min = -jitter, max = jitter))
+    }
+  }
+  
+  rownames(xy_nodes) <- node_names
+  
+  xy_nodes <- xy_nodes[match(V(ig)$name,rownames(xy_nodes)),]
+  xy_nodes <- xy_nodes[!is.na(xy_nodes[,1]),]
+  
+  if(verbose){cat("\n")}
+  
+  xy <- list()
+  xy$nodes <- xy_nodes
+  xy$anchors <- xy_anchors
+  
+  return(xy)
+  
+}
+
+## Internal function plotLinkCommSummComm from linkcomm package
+## (https://github.com/alextkalinka/linkcomm).
+plotLinkCommSummComm <- function(x, clusterids = 1:x$numbers[3], summary = "conn", pie = FALSE, col = TRUE, pal = brewer.pal(11,"Spectral"), random = FALSE, verbose = TRUE, ...) 
+  # Plots pie or bar chart summarising sizes of communities in terms of nodes, link density, community connectedness, or community modularity.
+  # x is a "linkcomm" object.
+{
+  if(col){
+    crf <- colorRampPalette(pal,bias=1)
+    cols <- crf(length(clusterids))
+    if(random){
+      cols <- sample(cols,length(clusterids),replace=FALSE)
+    }
+  }else{
+    cols <- "lightblue"
+  }
+  # Extract number of nodes per community.
+  nums <- NULL
+  if(summary == "nodes"){
+    for(i in 1:length(clusterids)){
+      nums[i] <- length(unique(c(x$edgelist[x$clusters[[clusterids[i]]],1],x$edgelist[x$clusters[[clusterids[i]]],2])))
+    }
+    main <- "Node density per community"
+  }else if(summary == "ld"){
+    nums <- LinkDensities(x, clusterids = clusterids)
+    main <- "Link density per community"
+  }else{
+    nums <- getCommunityConnectedness(x, clusterids = clusterids, conn = summary, verbose = verbose)
+    if(summary == "conn"){
+      main <- "Community Connectedness"
+    }else{
+      main <- "Community Modularity"
+    }
+  }
+  names(nums) <- clusterids
+  
+  if(pie){
+    pie(nums, col = cols, main = main, ...)
+  }else{
+    barplot(nums, xlab = "Community", ylab = main, col = cols)
+    abline(h=0)
+  }
+  
+}
+
+
 ## Utility methods for identifying miRNA sponge interactions For input expression data, the
 ## columns are genes and the rows are samples.  For input miRTarget, the miRNA-target
 ## interactions could be miRNA-mRNA, miRNA-lncRNA, miRNA-circRNA, miRNA-pseudogene, etc.  For

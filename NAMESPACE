@@ -11,11 +11,13 @@
     export("sponge_sample_specific")
     export("sample_cor_network")
     importFrom("Rcpp", "evalCpp")
-    importFrom("grDevices", "dev.new")
-    importFrom("graphics", "legend")
+    importFrom("grDevices", "dev.new", "colorRampPalette", "dev.flush", "dev.hold")
+    importFrom("graphics", "legend", "abline", "barplot", "lines", "mtext", "par",
+                "plot.new", "points", "polygon", "text")
     importFrom("stats", "cor.test", "median", "na.omit", "p.adjust",
-    "pchisq", "phyper", "predict", "qnorm", "quantile")
-    importFrom("utils", "read.csv","combn", "write.table")
+    "pchisq", "phyper", "predict", "qnorm", "quantile", "as.dendrogram", "as.dist", "dendrapply", "hclust",
+                "is.leaf", "runif")
+    importFrom("utils", "read.csv","combn", "write.table", "flush.console", "head", "read.table", "tail")
     importFrom("parallel","makeCluster","detectCores",
     "stopCluster","clusterApply")
     importFrom("SPONGE","sponge_compute_p_values")
@@ -27,8 +29,9 @@
     importFrom("survival","coxph","survfit","survdiff")
     importFrom("corpcor","pcor.shrink")
     importFrom("MCL","mcl")
-    importFrom("linkcomm","getLinkCommunities")
     import("org.Hs.eg.db")
     import("doParallel")
+    import("RColorBrewer")
+    import("grid")
     importFrom("foreach", "foreach", "%dopar%")
          
