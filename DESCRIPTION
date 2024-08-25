@@ -2,8 +2,11 @@ Package: miRspongeR
 Type: Package
 Title: Identification and analysis of miRNA sponge regulation
 Version: 2.8.1
-Author: Junpeng Zhang
-Maintainer: Junpeng Zhang <zjp@dali.edu.cn>
+Authors@R: 
+    person(given = "Junpeng", 
+           family = "Zhang", 
+           role=c("aut", "cre"), 
+           email = "zjp@dali.edu.cn")
 Description: This package provides several functions to explore miRNA sponge 
     (also called ceRNA or miRNA decoy) regulation from putative miRNA-target interactions or/and 
     transcriptomics data (including bulk, single-cell and spatial gene expression data). 
@@ -14,7 +17,7 @@ Description: This package provides several functions to explore miRNA sponge
     By using a sample control variable strategy, it provides a function to infer sample-specific
     miRNA sponge interactions. In terms of sample-specific miRNA sponge interactions, 
     it implements three similarity methods to construct sample-sample correlation network. 
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.4.0)
 License: GPL-3
 URL: <https://github.com/zhangjunpeng411/miRspongeR>
 Encoding: UTF-8
@@ -22,7 +25,7 @@ LazyData: true
 biocViews: GeneExpression, BiomedicalInformatics, 
            NetworkEnrichment, Survival, Microarray, 
            Software, SingleCell, Spatial, RNASeq
-RoxygenNote: 6.0.1
+RoxygenNote: 7.3.2
 Imports: corpcor,
     SPONGE,
     parallel,
