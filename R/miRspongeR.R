@@ -1217,6 +1217,7 @@ plotLinkCommDend <- function(x, col=TRUE, pal = brewer.pal(9,"Set1"), height=x$p
   
 })
 
+
 ## Internal function plotLinkCommGraph from linkcomm package
 ## (https://github.com/alextkalinka/linkcomm).
 plotLinkCommGraph <- function(x, clusterids = 1:length(x$clusters), nodes = NULL, layout = layout.fruchterman.reingold, pal = brewer.pal(7,"Set2"), random = TRUE, node.pies = TRUE, pie.local = TRUE, vertex.radius = 0.03, scale.vertices = 0.05, edge.color = NULL, vshape = "none", vsize = 15, ewidth = 3, margin = 0, vlabel.cex = 0.8, vlabel.color = "black", vlabel.family = "Helvetica", vertex.color = "palegoldenrod", vlabel = TRUE, col.nonclusters = "black", jitter = 0.2, circle = TRUE, printids = TRUE, cid.cex = 1, shownodesin = 0, showall = FALSE, verbose = TRUE, ...)
