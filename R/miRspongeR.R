@@ -607,7 +607,7 @@ edge.duplicates <- function(network, verbose = TRUE)
   loops <- rep(0,ne)
   dups <- rep(0,ne)
   
-  out <- .C("edgeDuplicates",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(ne), loops = as.integer(loops), dups = as.integer(dups), as.logical(verbose))
+  out <- .C("edgeDuplicates",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(ne), loops = as.integer(loops), dups = as.integer(dups), as.logical(verbose), PACKAGE = "miRspongeR")
   
   if(verbose){cat("\n")}
   
@@ -709,9 +709,9 @@ getLinkCommunities <- function(network, hcmethod = "average", use.all.edges = FA
       emptyvec <- rep(1,(len*(len-1))/2)
       if(!is.null(wt)){ weighted <- TRUE}else{ wt <- 0; weighted <- FALSE}
       if(!use.all.edges){
-        dissvec <- .C("getEdgeSimilarities",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(len),rowlen=integer(1),weights=as.double(wt),as.logical(directed),as.double(dirweight),as.logical(weighted),as.logical(disk), dissvec = as.double(emptyvec), as.logical(bipartite), as.logical(verbose))$dissvec
+        dissvec <- .C("getEdgeSimilarities",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(len),rowlen=integer(1),weights=as.double(wt),as.logical(directed),as.double(dirweight),as.logical(weighted),as.logical(disk), dissvec = as.double(emptyvec), as.logical(bipartite), as.logical(verbose), PACKAGE = "miRspongeR")$dissvec
       }else{
-        dissvec <- .C("getEdgeSimilarities_all",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(len),as.integer(numnodes),rowlen=integer(1),weights=as.double(wt),as.logical(FALSE),as.double(dirweight),as.logical(weighted),as.logical(disk), dissvec = as.double(emptyvec), as.logical(bipartite), as.logical(verbose))$dissvec
+        dissvec <- .C("getEdgeSimilarities_all",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(len),as.integer(numnodes),rowlen=integer(1),weights=as.double(wt),as.logical(FALSE),as.double(dirweight),as.logical(weighted),as.logical(disk), dissvec = as.double(emptyvec), as.logical(bipartite), as.logical(verbose), PACKAGE = "miRspongeR")$dissvec
       }
       distmatrix <- matrix(1,len,len)
       distmatrix[lower.tri(distmatrix)] <- dissvec
@@ -746,18 +746,18 @@ getLinkCommunities <- function(network, hcmethod = "average", use.all.edges = FA
     disk <- TRUE
     if(!is.null(wt)){ weighted <- TRUE}else{ wt <- 0; weighted <- FALSE}
     if(!use.all.edges){
-      rowlen <- .C("getEdgeSimilarities",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(len),rowlen=integer(len-1),weights=as.double(wt),as.logical(directed),as.double(dirweight),as.logical(weighted),as.logical(disk), dissvec = double(1), as.logical(bipartite), as.logical(verbose))$rowlen
+      rowlen <- .C("getEdgeSimilarities",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(len),rowlen=integer(len-1),weights=as.double(wt),as.logical(directed),as.double(dirweight),as.logical(weighted),as.logical(disk), dissvec = double(1), as.logical(bipartite), as.logical(verbose), PACKAGE = "miRspongeR")$rowlen
     }else{
-      rowlen <- .C("getEdgeSimilarities_all",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(len),as.integer(numnodes),rowlen=integer(len-1),weights=as.double(wt),as.logical(FALSE),as.double(dirweight),as.logical(weighted),as.logical(disk), dissvec = double(1), as.logical(bipartite), as.logical(verbose))$rowlen
+      rowlen <- .C("getEdgeSimilarities_all",as.integer(edges[,1]),as.integer(edges[,2]),as.integer(len),as.integer(numnodes),rowlen=integer(len-1),weights=as.double(wt),as.logical(FALSE),as.double(dirweight),as.logical(weighted),as.logical(disk), dissvec = double(1), as.logical(bipartite), as.logical(verbose), PACKAGE = "miRspongeR")$rowlen
     }
     if(verbose){cat("\n")}
-    hcobj <- .C("hclustLinkComm",as.integer(len),as.integer(rowlen),heights = single(len-1),hca = integer(len-1),hcb = integer(len-1), as.logical(verbose))
+    hcobj <- .C("hclustLinkComm",as.integer(len),as.integer(rowlen),heights = single(len-1),hca = integer(len-1),hcb = integer(len-1), as.logical(verbose), PACKAGE = "miRspongeR")
     if(verbose){cat("\n")}
     hcedges<-list()
     hcedges$merge <- cbind(hcobj$hca, hcobj$hcb)
     hcedges$height <- hcobj$heights
     
-    hcedges$order <- .C("hclustPlotOrder",as.integer(len),as.integer(hcobj$hca),as.integer(hcobj$hcb),order=integer(len))$order
+    hcedges$order <- .C("hclustPlotOrder",as.integer(len),as.integer(hcobj$hca),as.integer(hcobj$hcb),order=integer(len), PACKAGE = "miRspongeR")$order
     hcedges$order <- rev(hcedges$order)
     hcedges$method <- "single"
     class(hcedges) <- "hclust"
@@ -771,7 +771,7 @@ getLinkCommunities <- function(network, hcmethod = "average", use.all.edges = FA
   clusnums <- sapply(hh, countClusters, ht = round(hcedges$height, digits = 5)) # Number of clusters at each height.
   numcl <- length(clusnums)
   
-  ldlist <- .C("getLinkDensities",as.integer(hcedges$merge[,1]), as.integer(hcedges$merge[,2]), as.integer(edges[,1]), as.integer(edges[,2]), as.integer(len), as.integer(clusnums), as.integer(numcl), pdens = double(length(hh)), heights = as.double(hh), pdmax = double(1), csize = integer(1), as.logical(removetrivial), as.logical(bipartite), as.integer(bip), as.logical(verbose))
+  ldlist <- .C("getLinkDensities",as.integer(hcedges$merge[,1]), as.integer(hcedges$merge[,2]), as.integer(edges[,1]), as.integer(edges[,2]), as.integer(len), as.integer(clusnums), as.integer(numcl), pdens = double(length(hh)), heights = as.double(hh), pdmax = double(1), csize = integer(1), as.logical(removetrivial), as.logical(bipartite), as.integer(bip), as.logical(verbose), PACKAGE = "miRspongeR")
   
   pdens <- c(0,ldlist$pdens)
   heights <- c(0,hh)
@@ -842,7 +842,7 @@ getLinkCommunities <- function(network, hcmethod = "average", use.all.edges = FA
   
   oo <- rep(0,lunn)
   
-  oo <- .C("getNumClusters", as.integer(iunn), as.integer(iecn), counts = as.integer(oo), as.integer(lunn), as.integer(nrows), as.logical(verbose))$counts
+  oo <- .C("getNumClusters", as.integer(iunn), as.integer(iecn), counts = as.integer(oo), as.integer(lunn), as.integer(nrows), as.logical(verbose), PACKAGE = "miRspongeR")$counts
   
   names(oo) <- unn
   

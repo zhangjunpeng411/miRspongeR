@@ -1,7 +1,7 @@
 Package: miRspongeR
 Type: Package
 Title: Identification and analysis of miRNA sponge regulation
-Version: 2.13.3
+Version: 2.13.4
 Authors@R: 
     person(given = "Junpeng", 
            family = "Zhang", 
