@@ -180,7 +180,7 @@ rest. Thus, 'miRspongeR' calculates a combined score by adding these seven score
 To evaluate the strength of each RNA-RNA pair, 'miRspongeR' further normalizes 
 the combined scores to obtain normalized scores with interval [0 1].
 
-```{r}
+```{r, eval=FALSE}
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRspongeR")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 MREs <- system.file("extdata", "MREs.csv", package="miRspongeR")
