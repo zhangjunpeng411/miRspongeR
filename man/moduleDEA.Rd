@@ -45,11 +45,13 @@ Junpeng Zhang (\url{https://www.researchgate.net/profile/Junpeng_Zhang3})
 }
 \examples{
 # Obtain miRNA-target interaction data file "miR2Target.csv" in csv format
+\dontrun{
 miR2Target <- system.file("extdata", "miR2Target.csv", package="miRspongeR")
 miRTarget <- read.csv(miR2Target, header=TRUE, sep=",")
 miRHomologyceRInt <- spongeMethod(miRTarget, method = "miRHomology")
 spongenetwork_Cluster <- netModule(miRHomologyceRInt[, 1:2])
 sponge_Module_DEA <- moduleDEA(spongenetwork_Cluster)
+}
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
