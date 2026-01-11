@@ -23,7 +23,7 @@
     importFrom("SPONGE","sponge_compute_p_values")
     importFrom("clusterProfiler","bitr","enrichGO",
     "enrichKEGG","compareCluster")
-    importFrom("DOSE","enrichDO","enrichDGN","enrichNCG")
+    importFrom("DOSE","enrichDO","enrichNCG")
     importFrom("ReactomePA","enrichPathway")
     import("igraph")
     importFrom("survival","coxph","survfit","survdiff")

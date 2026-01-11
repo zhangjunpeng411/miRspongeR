@@ -7,8 +7,7 @@ Disease enrichment analysis of modules
 \description{
 Disease enrichment analysis of modules. The disease ontology
 databases have three types including DO: Disease Ontology database
-(\url{http://disease-ontology.org/}), DGN: DisGeNET database
-(\url{http://www.disgenet.org/}), and NCG: Network of Cancer
+(\url{http://disease-ontology.org/}), and NCG: Network of Cancer
 Genes database (\url{http://ncg.kcl.ac.uk/}).
 }
 \usage{

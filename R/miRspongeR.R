@@ -3210,10 +3210,7 @@ moduleDEA <- function(Modulelist, OrgDb = "org.Hs.eg.db", padjustvaluecutoff = 0
 
     enrichDOs <- lapply(seq_along(Modulelist), function(i) enrichDO(entrezIDs[[i]], pvalueCutoff = padjustvaluecutoff,
         pAdjustMethod = padjustedmethod))
-
-    enrichDGNs <- lapply(seq_along(Modulelist), function(i) enrichDGN(entrezIDs[[i]], pvalueCutoff = padjustvaluecutoff,
-        pAdjustMethod = padjustedmethod))
-
+    
     enrichNCGs <- lapply(seq_along(Modulelist), function(i) enrichNCG(entrezIDs[[i]], pvalueCutoff = padjustvaluecutoff,
         pAdjustMethod = padjustedmethod))
 

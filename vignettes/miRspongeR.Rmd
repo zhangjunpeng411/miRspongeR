@@ -289,8 +289,7 @@ spongenetwork_Cluster
 # Disease and functional enrichment analysis of miRNA sponge modules
 
 'miRspongeR' implements 'moduleDEA' function to conduct disease enrichment analysis of modules. The disease databases used include DO: Disease 
-Ontology database (<http://disease-ontology.org/>), 
-DGN: DisGeNET database (<http://www.disgenet.org/>) 
+Ontology database (<http://disease-ontology.org/>),
 and NCG: Network of Cancer Genes database 
 (<http://ncg.kcl.ac.uk/>). Moreover, 'moduleFEA' function 
 is implemented to conduct functional GO, KEGG and Reactome 
