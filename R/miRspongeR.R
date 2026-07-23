@@ -3214,7 +3214,7 @@ moduleDEA <- function(Modulelist, OrgDb = "org.Hs.eg.db", padjustvaluecutoff = 0
     enrichNCGs <- lapply(seq_along(Modulelist), function(i) enrichNCG(entrezIDs[[i]], pvalueCutoff = padjustvaluecutoff,
         pAdjustMethod = padjustedmethod))
 
-    return(list(enrichDOs, enrichDGNs, enrichNCGs))
+    return(list(enrichDOs, enrichNCGs))
 }
 
 ## Functional GO, KEGG and Reactome enrichment analysis of modules
