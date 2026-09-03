@@ -1,7 +1,7 @@
 Package: miRspongeR
 Type: Package
 Title: Identification and analysis of miRNA sponge regulation
-Version: 2.17.3
+Version: 2.17.4
 Authors@R: 
     person(given = "Junpeng", 
            family = "Zhang", 
@@ -47,7 +47,7 @@ Imports: corpcor,
     doParallel
 Suggests:BiocStyle, 
     knitr,
-    rmarkdown (<= 2.7),
+    rmarkdown,
     testthat
 VignetteBuilder: knitr, rmarkdown
 BugReports: https://github.com/zhangjunpeng411/miRspongeR/issues
